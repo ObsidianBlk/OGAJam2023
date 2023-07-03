@@ -1,0 +1,121 @@
+[gd_scene load_steps=14 format=3 uid="uid://qx0q5hd2j2bf"]
+
+[ext_resource type="Script" path="res://objects/soldier/soldier.gd" id="1_1xifx"]
+[ext_resource type="Texture2D" uid="uid://wj0w6cyvmryn" path="res://assets/graphics/TeenieXeenie/teenyxeenies-alpha.png" id="1_er0tb"]
+[ext_resource type="SpriteFrames" uid="uid://np0vexhcgjtk" path="res://objects/soldier/red_soldier.tres" id="2_mqvnr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n2n5v"]
+atlas = ExtResource("1_er0tb")
+region = Rect2(48, 424, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cl8tq"]
+atlas = ExtResource("1_er0tb")
+region = Rect2(168, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rug3g"]
+atlas = ExtResource("1_er0tb")
+region = Rect2(0, 424, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3hkda"]
+atlas = ExtResource("1_er0tb")
+region = Rect2(168, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jdeii"]
+atlas = ExtResource("1_er0tb")
+region = Rect2(24, 424, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jmvn"]
+atlas = ExtResource("1_er0tb")
+region = Rect2(168, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1lwg"]
+atlas = ExtResource("1_er0tb")
+region = Rect2(72, 424, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_agddb"]
+atlas = ExtResource("1_er0tb")
+region = Rect2(168, 48, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3sbvg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n2n5v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cl8tq")
+}],
+"loop": true,
+"name": &"east",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rug3g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3hkda")
+}],
+"loop": true,
+"name": &"north",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jdeii")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4jmvn")
+}],
+"loop": true,
+"name": &"south",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1lwg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_agddb")
+}],
+"loop": true,
+"name": &"west",
+"speed": 16.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_acrl4"]
+radius = 2.0
+
+[node name="Soldier" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 33
+script = ExtResource("1_1xifx")
+max_speed = null
+
+[node name="Body" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_mqvnr")
+animation = &"move_west"
+offset = Vector2(0, -4)
+
+[node name="Muzzle" type="AnimatedSprite2D" parent="."]
+visible = false
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_3sbvg")
+animation = &"west"
+frame_progress = 0.0527854
+offset = Vector2(0, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+rotation = 1.5708
+shape = SubResource("CircleShape2D_acrl4")
+
+[node name="HitArea" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="HitArea"]
+position = Vector2(0, -4)
+polygon = PackedVector2Array(0, 0, 50, 100, -50, 100)
