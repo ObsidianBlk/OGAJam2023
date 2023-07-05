@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfh7uybmrxhp3"]
+
+[ext_resource type="SpriteFrames" uid="uid://bgrtcoupthhwj" path="res://objects/xeno/xeno_frames.tres" id="1_swwqj"]
+
+[node name="Enemy" type="CharacterBody2D"]
+
+[node name="ASprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("1_swwqj")
+animation = &"move_west"
+offset = Vector2(0, -4)

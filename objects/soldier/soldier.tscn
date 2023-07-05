@@ -90,7 +90,8 @@ radius = 2.0
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_1xifx")
-max_speed = null
+rof = null
+bps = null
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
@@ -112,10 +113,9 @@ rotation = 1.5708
 shape = SubResource("CircleShape2D_acrl4")
 
 [node name="HitArea" type="Area2D" parent="."]
-visible = false
 collision_layer = 0
 collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="HitArea"]
 position = Vector2(0, -4)
-polygon = PackedVector2Array(0, 0, 50, 100, -50, 100)
+polygon = PackedVector2Array(0, 0, 100, -50, 100, 50)

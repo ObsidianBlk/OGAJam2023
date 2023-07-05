@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bxj6ilf7kixh6"]
+[gd_scene load_steps=4 format=3 uid="uid://bxj6ilf7kixh6"]
 
 [ext_resource type="TileSet" uid="uid://5rssu1a6i47q" path="res://assets/graphics/TeenieXeenie/tilesets/tileset.tres" id="1_anjiu"]
 [ext_resource type="PackedScene" uid="uid://y30v0mbudvmv" path="res://objects/door_trigger/door_trigger.tscn" id="2_inuxa"]
+[ext_resource type="PackedScene" uid="uid://cws5p1fsi2vup" path="res://objects/xeno/xeno.tscn" id="3_77x6v"]
 
 [node name="TestLevel" type="Node2D"]
 
@@ -17,4 +18,19 @@ position = Vector2(124, 100)
 collision_layer = 2
 
 [node name="PlayerStart" type="Node2D" parent="." groups=["PlayerStart"]]
-position = Vector2(124, 80)
+position = Vector2(124, 36)
+
+[node name="Entities" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Xeno" parent="Entities" instance=ExtResource("3_77x6v")]
+position = Vector2(124, 66.9925)
+max_speed = 125.0
+
+[node name="Xeno2" parent="Entities" instance=ExtResource("3_77x6v")]
+position = Vector2(132, 80)
+max_speed = 125.0
+
+[node name="Xeno3" parent="Entities" instance=ExtResource("3_77x6v")]
+position = Vector2(117, 81)
+max_speed = 125.0

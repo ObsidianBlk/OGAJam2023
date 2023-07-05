@@ -13,6 +13,8 @@ signal interacted()
 const FRAMES_GREEN_SOLDIER : SpriteFrames = preload("res://objects/soldier/green_soldier.tres")
 const FRAMES_RED_SOLDIER : SpriteFrames = preload("res://objects/soldier/red_soldier.tres")
 
+const BULLET_HIT_NODE : PackedScene = preload("res://objects/bullet_hit/bullet_hit.tscn")
+
 const DIRECTIONAL_THRESHOLD : float = 0.1
 
 enum SOLDIER {Green=0, Red=1}
@@ -23,6 +25,9 @@ enum SOLDIER {Green=0, Red=1}
 @export var soldier : SOLDIER = SOLDIER.Red:				set = set_soldier
 @export var max_speed : float = 100.0:						set = set_max_speed
 
+@export var rof : float = 0.2
+@export var bps : int = 1
+
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
@@ -32,11 +37,14 @@ var _firing : bool = false
 var _facing : Vector2 = Vector2.DOWN
 var _direction : Vector2 = Vector2.ZERO
 
+var _enemies : Dictionary = {}
+
 # ------------------------------------------------------------------------------
 # Onready Variables
 # ------------------------------------------------------------------------------
 @onready var _body : AnimatedSprite2D = $Body
 @onready var _muzzle : AnimatedSprite2D = $Muzzle
+@onready var _hit_area : Area2D = $HitArea
 
 # ------------------------------------------------------------------------------
 # Setters
@@ -54,6 +62,9 @@ func set_max_speed(m : float) -> void:
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
+	if not Engine.is_editor_hint():
+		_hit_area.body_entered.connect(_on_body_entered)
+		_hit_area.body_exited.connect(_on_body_exited)
 	_UpdateViz()
 
 func _physics_process(_delta : float) -> void:
@@ -96,12 +107,18 @@ func _UpdateViz() -> void:
 	_muzzle.visible = _firing
 	_muzzle.play(facing)
 
+func _CastTo(pos : Vector2) -> Dictionary:
+	return  get_world_2d().direct_space_state.intersect_ray(
+		PhysicsRayQueryParameters2D.create(global_position, pos)
+	)
+
 # ------------------------------------------------------------------------------
 # Public Methods
 # ------------------------------------------------------------------------------
 func face_position(pos : Vector2) -> void:
 	if pos.is_equal_approx(position): return
 	_facing = position.direction_to(pos)
+	_hit_area.rotation = _facing.angle()
 	_UpdateViz()
 
 func move(dir : Vector2) -> void:
@@ -113,7 +130,44 @@ func get_direction() -> Vector2:
 func attack(active : bool = true) -> void:
 	_firing = active
 	_UpdateViz()
+	_attack_interval()
 
 func interact() -> void:
 	interacted.emit()
+
+# ------------------------------------------------------------------------------
+# Handler Methods
+# ------------------------------------------------------------------------------
+func _attack_interval() -> void:
+	if not _firing: return
+	var ename : Array = _enemies.keys()
+	var visible_enemies : Array = []
+	
+	for i in range(ename.size()):
+		if _enemies[ename[i]].get_ref() == null:
+			_enemies.erase(ename[i])
+		var enemy = _enemies[ename[i]].get_ref()
+		var result : Dictionary = _CastTo(enemy.global_position)
+		if result.collider == enemy:
+			visible_enemies.append(enemy)
+	
+	if visible_enemies.size() > 0:
+		for i in range(bps):
+			var idx : int = randi_range(0, visible_enemies.size() - 1)
+			# TODO: Use distance and an "accuracy" variable to determine chance to hit.
+			var enemy : Node2D = visible_enemies[idx]
+			enemy.damage(1.0)
+			var hit : Node2D = BULLET_HIT_NODE.instantiate()
+			hit.hit_type = 1
+			enemy.add_child(hit)
+	
+	get_tree().create_timer(rof).timeout.connect(_attack_interval, CONNECT_ONE_SHOT)
+
+func _on_body_entered(body : Node2D) -> void:
+	if not body.name in _enemies and body.has_method("damage"):
+		_enemies[body.name] = weakref(body)
+
+func _on_body_exited(body : Node2D) -> void:
+	if body.name in _enemies:
+		_enemies.erase(body.name)
 

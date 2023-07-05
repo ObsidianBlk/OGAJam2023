@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cws5p1fsi2vup"]
+
+[ext_resource type="Script" path="res://objects/xeno/xeno.gd" id="1_d35hy"]
+[ext_resource type="SpriteFrames" uid="uid://bgrtcoupthhwj" path="res://objects/xeno/xeno_frames.tres" id="2_4s36t"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wtluw"]
+radius = 2.0
+
+[node name="Xeno" type="CharacterBody2D"]
+collision_layer = 32
+collision_mask = 35
+script = ExtResource("1_d35hy")
+max_speed = null
+
+[node name="ASprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_4s36t")
+animation = &"move_west"
+offset = Vector2(0, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_wtluw")
