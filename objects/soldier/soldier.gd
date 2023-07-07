@@ -107,9 +107,9 @@ func _UpdateViz() -> void:
 	_muzzle.visible = _firing
 	_muzzle.play(facing)
 
-func _CastTo(pos : Vector2) -> Dictionary:
+func _CastTo(pos : Vector2, coll_mask : int = 4294967295) -> Dictionary:
 	return  get_world_2d().direct_space_state.intersect_ray(
-		PhysicsRayQueryParameters2D.create(global_position, pos)
+		PhysicsRayQueryParameters2D.create(global_position, pos, coll_mask)
 	)
 
 # ------------------------------------------------------------------------------
@@ -147,8 +147,8 @@ func _attack_interval() -> void:
 		if _enemies[ename[i]].get_ref() == null:
 			_enemies.erase(ename[i])
 		var enemy = _enemies[ename[i]].get_ref()
-		var result : Dictionary = _CastTo(enemy.global_position)
-		if result.collider == enemy:
+		var result : Dictionary = _CastTo(enemy.global_position, _hit_area.collision_mask)
+		if not result.is_empty() and result.collider == enemy:
 			visible_enemies.append(enemy)
 	
 	if visible_enemies.size() > 0:
@@ -165,9 +165,11 @@ func _attack_interval() -> void:
 
 func _on_body_entered(body : Node2D) -> void:
 	if not body.name in _enemies and body.has_method("damage"):
+		print("See Enemy: ", body.name)
 		_enemies[body.name] = weakref(body)
 
 func _on_body_exited(body : Node2D) -> void:
 	if body.name in _enemies:
+		print("No longer see: ", body.name)
 		_enemies.erase(body.name)
 

@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://cws5p1fsi2vup"]
+
+[ext_resource type="Script" path="res://objects/enemy/xeno/xeno.gd" id="1_x11lx"]
+[ext_resource type="SpriteFrames" uid="uid://bgrtcoupthhwj" path="res://objects/enemy/xeno/xeno_frames.tres" id="2_0ym2x"]
+[ext_resource type="Script" path="res://objects/enemy/sight_system_node2d.gd" id="2_xpqoh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wtluw"]
+radius = 2.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_04frt"]
+radius = 12.0
+
+[node name="Xeno" type="CharacterBody2D"]
+collision_layer = 32
+collision_mask = 35
+motion_mode = 1
+script = ExtResource("1_x11lx")
+
+[node name="SightSystemNode2D" type="Node2D" parent="." node_paths=PackedStringArray("sight_area")]
+script = ExtResource("2_xpqoh")
+sight_area = NodePath("../SightArea")
+render_detection_lines = true
+
+[node name="ASprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_0ym2x")
+animation = &"move_west"
+offset = Vector2(0, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_wtluw")
+
+[node name="NavAgent" type="NavigationAgent2D" parent="."]
+
+[node name="SightArea" type="Area2D" parent="."]
+rotation = 1.5708
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SightArea"]
+polygon = PackedVector2Array(0, 0, 5, -10, 250, -50, 250, 50, 5, 10)
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("CircleShape2D_04frt")
+
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]

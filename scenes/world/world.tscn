@@ -30,9 +30,8 @@ render_target_update_mode = 4
 
 [node name="Soldier" parent="CanvasLayer/CSubView/GameView" instance=ExtResource("2_hl507")]
 position = Vector2(36, 33)
-max_speed = 100.0
-rof = null
-bps = null
+rof = 0.2
+bps = 1
 
 [node name="Player" type="Node" parent="CanvasLayer/CSubView/GameView/Soldier"]
 script = ExtResource("3_d1sqg")

@@ -2,7 +2,7 @@
 
 [ext_resource type="TileSet" uid="uid://5rssu1a6i47q" path="res://assets/graphics/TeenieXeenie/tilesets/tileset.tres" id="1_anjiu"]
 [ext_resource type="PackedScene" uid="uid://y30v0mbudvmv" path="res://objects/door_trigger/door_trigger.tscn" id="2_inuxa"]
-[ext_resource type="PackedScene" uid="uid://cws5p1fsi2vup" path="res://objects/xeno/xeno.tscn" id="3_77x6v"]
+[ext_resource type="PackedScene" uid="uid://cws5p1fsi2vup" path="res://objects/enemy/xeno/xeno.tscn" id="3_77x6v"]
 
 [node name="TestLevel" type="Node2D"]
 
@@ -25,12 +25,9 @@ y_sort_enabled = true
 
 [node name="Xeno" parent="Entities" instance=ExtResource("3_77x6v")]
 position = Vector2(124, 66.9925)
-max_speed = 125.0
 
 [node name="Xeno2" parent="Entities" instance=ExtResource("3_77x6v")]
 position = Vector2(132, 80)
-max_speed = 125.0
 
 [node name="Xeno3" parent="Entities" instance=ExtResource("3_77x6v")]
 position = Vector2(117, 81)
-max_speed = 125.0
