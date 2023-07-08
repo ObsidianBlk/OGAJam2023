@@ -19,6 +19,7 @@ script = ExtResource("1_x11lx")
 [node name="SightSystemNode2D" type="Node2D" parent="." node_paths=PackedStringArray("sight_area")]
 script = ExtResource("2_xpqoh")
 sight_area = NodePath("../SightArea")
+collision_mask = 3
 render_detection_lines = true
 
 [node name="ASprite2D" type="AnimatedSprite2D" parent="."]
@@ -32,6 +33,10 @@ position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_wtluw")
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
+target_desired_distance = 8.0
+path_max_distance = 20.0
+path_postprocessing = 1
+debug_enabled = true
 
 [node name="SightArea" type="Area2D" parent="."]
 rotation = 1.5708

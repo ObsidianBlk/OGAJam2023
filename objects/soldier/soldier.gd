@@ -165,11 +165,9 @@ func _attack_interval() -> void:
 
 func _on_body_entered(body : Node2D) -> void:
 	if not body.name in _enemies and body.has_method("damage"):
-		print("See Enemy: ", body.name)
 		_enemies[body.name] = weakref(body)
 
 func _on_body_exited(body : Node2D) -> void:
 	if body.name in _enemies:
-		print("No longer see: ", body.name)
 		_enemies.erase(body.name)
 

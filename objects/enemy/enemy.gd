@@ -38,17 +38,17 @@ func _ready() -> void:
 	_UpdateViz()
 
 
-func _physics_process(_delta : float) -> void:
-	if _direction.length_squared() > DIRECTIONAL_THRESHOLD:
-		velocity = _direction * max_speed
-	else:
-		velocity = lerp(velocity, Vector2.ZERO, 0.7)
-	
-	if move_and_slide():
-		collided.emit(get_last_slide_collision(), get_slide_collision_count())
-	
-	_action = &"move" if velocity.length() > 0.1 else &"idle"
-	_UpdateViz()
+#func _physics_process(_delta : float) -> void:
+#	if _direction.length_squared() > DIRECTIONAL_THRESHOLD:
+#		velocity = _direction * max_speed
+#	else:
+#		velocity = lerp(velocity, Vector2.ZERO, 0.7)
+#
+#	if move_and_slide():
+#		collided.emit(get_last_slide_collision(), get_slide_collision_count())
+#
+#	_action = &"move" if velocity.length() > 0.1 else &"idle"
+#	_UpdateViz()
 
 # ------------------------------------------------------------------------------
 # Private Methods

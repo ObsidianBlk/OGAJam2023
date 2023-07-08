@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bxj6ilf7kixh6"]
+[gd_scene load_steps=6 format=3 uid="uid://bxj6ilf7kixh6"]
 
 [ext_resource type="TileSet" uid="uid://5rssu1a6i47q" path="res://assets/graphics/TeenieXeenie/tilesets/tileset.tres" id="1_anjiu"]
+[ext_resource type="Script" path="res://scenes/levels/level.gd" id="1_wj7ik"]
 [ext_resource type="PackedScene" uid="uid://y30v0mbudvmv" path="res://objects/door_trigger/door_trigger.tscn" id="2_inuxa"]
+[ext_resource type="PackedScene" uid="uid://cws5p1fsi2vup" path="res://objects/enemy/xeno/xeno.tscn" id="3_la4sf"]
+[ext_resource type="Script" path="res://scripts/nodes/nav_point.gd" id="4_e5s81"]
 
 [node name="TestLevel" type="Node2D"]
+script = ExtResource("1_wj7ik")
 
 [node name="TileMap" type="TileMap" parent="."]
 texture_filter = 1
@@ -14,17 +18,50 @@ layer_0/tile_data = PackedInt32Array(1703955, 262144, 14, 1638419, 262144, 13, 1
 
 [node name="DoorOuter" parent="TileMap" instance=ExtResource("2_inuxa")]
 position = Vector2(172, 148)
+collision_mask = 34
 orientation = 1
+trigger_area = 20.0
+auto_open = true
+nav_point_group = "Corridore"
+nav_point_color = Color(0.603922, 0.803922, 0.196078, 1)
 
 [node name="DoorHall" parent="TileMap" instance=ExtResource("2_inuxa")]
 position = Vector2(292, 125)
+nav_point_group = ""
+nav_point_color = Color(0.603922, 0.803922, 0.196078, 1)
 
 [node name="DoorFactory" parent="TileMap" instance=ExtResource("2_inuxa")]
 position = Vector2(332, 51)
 orientation = 1
+nav_point_group = ""
+nav_point_color = Color(0.603922, 0.803922, 0.196078, 1)
 
 [node name="PlayerStart" type="Node2D" parent="." groups=["PlayerStart"]]
 position = Vector2(95, 151)
 
 [node name="Entities" type="Node2D" parent="."]
 y_sort_enabled = true
+
+[node name="Xeno" parent="Entities" instance=ExtResource("3_la4sf")]
+position = Vector2(84, 117)
+nav_point_group = "Corridore"
+
+[node name="OuterArea_01" type="Node2D" parent="."]
+position = Vector2(116, 99)
+script = ExtResource("4_e5s81")
+group_name = "Outer_Area"
+
+[node name="OuterArea_02" type="Node2D" parent="."]
+position = Vector2(82, 154)
+script = ExtResource("4_e5s81")
+group_name = "Outer_Area"
+
+[node name="OuterArea_03" type="Node2D" parent="."]
+position = Vector2(131, 204)
+script = ExtResource("4_e5s81")
+group_name = "Outer_Area"
+
+[node name="OuterArea_04" type="Node2D" parent="."]
+position = Vector2(348, 148)
+script = ExtResource("4_e5s81")
+group_name = "Corridore"

@@ -26,3 +26,13 @@ func set_control_mode(mode : CTRLMode) -> void:
 func get_control_mode() -> CTRLMode:
 	return _control_mode
 
+func get_random_nav_point_in_group(nav_group : String) -> NavPoint:
+	if nav_group.is_empty(): return null
+	var ng : StringName = StringName("np_%s"%[nav_group])
+	var np_nodes : Array = get_tree().get_nodes_in_group(ng)
+	if np_nodes.size() > 0:
+		var idx = randi_range(0, np_nodes.size() - 1)
+		if is_instance_of(np_nodes[idx], NavPoint):
+			return np_nodes[idx]
+	return null
+

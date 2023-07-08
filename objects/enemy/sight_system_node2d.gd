@@ -18,8 +18,9 @@ const COLOR_SEEN : Color = Color.GREEN
 # Export Variables
 # ------------------------------------------------------------------------------
 @export_category("Sight System Node2D")
-@export var sight_area : Area2D = null:					set = set_sight_area
-@export var detect_range_per_second : float = 30.0:		set = set_detect_range_per_second
+@export var sight_area : Area2D = null:						set = set_sight_area
+@export_flags_2d_physics var collision_mask : int = 1
+@export var detect_range_per_second : float = 30.0:			set = set_detect_range_per_second
 @export var render_detection_lines : bool = false
 
 
@@ -86,7 +87,7 @@ func _physics_process(delta : float) -> void:
 			continue
 		
 		# Check if there's a line-of-sight on the target
-		var result : Dictionary = _CanSee(target, sight_area.collision_mask)
+		var result : Dictionary = _CanSee(target, collision_mask)
 		if result.is_empty():
 			# If no line-of-sight, reset detection system
 			_spotted[sname].detect_dist = 0.0
