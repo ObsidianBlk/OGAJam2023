@@ -15,6 +15,8 @@ collision_layer = 32
 collision_mask = 35
 motion_mode = 1
 script = ExtResource("1_x11lx")
+search_degrees_per_second = null
+debug = null
 
 [node name="SightSystemNode2D" type="Node2D" parent="." node_paths=PackedStringArray("sight_area")]
 script = ExtResource("2_xpqoh")
@@ -33,10 +35,10 @@ position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_wtluw")
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
+path_desired_distance = 8.0
 target_desired_distance = 8.0
 path_max_distance = 20.0
 path_postprocessing = 1
-debug_enabled = true
 
 [node name="SightArea" type="Area2D" parent="."]
 rotation = 1.5708

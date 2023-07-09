@@ -22,18 +22,16 @@ collision_mask = 34
 orientation = 1
 trigger_area = 20.0
 auto_open = true
-nav_point_group = "Corridore"
+nav_point_group = "Outer_Area"
 nav_point_color = Color(0.603922, 0.803922, 0.196078, 1)
 
 [node name="DoorHall" parent="TileMap" instance=ExtResource("2_inuxa")]
 position = Vector2(292, 125)
-nav_point_group = ""
 nav_point_color = Color(0.603922, 0.803922, 0.196078, 1)
 
 [node name="DoorFactory" parent="TileMap" instance=ExtResource("2_inuxa")]
 position = Vector2(332, 51)
 orientation = 1
-nav_point_group = ""
 nav_point_color = Color(0.603922, 0.803922, 0.196078, 1)
 
 [node name="PlayerStart" type="Node2D" parent="." groups=["PlayerStart"]]
@@ -44,7 +42,9 @@ y_sort_enabled = true
 
 [node name="Xeno" parent="Entities" instance=ExtResource("3_la4sf")]
 position = Vector2(84, 117)
-nav_point_group = "Corridore"
+nav_point_group = "Outer_Area"
+search_degrees_per_second = 10.0
+debug = true
 
 [node name="OuterArea_01" type="Node2D" parent="."]
 position = Vector2(116, 99)
@@ -64,4 +64,4 @@ group_name = "Outer_Area"
 [node name="OuterArea_04" type="Node2D" parent="."]
 position = Vector2(348, 148)
 script = ExtResource("4_e5s81")
-group_name = "Corridore"
+group_name = "Outer_Area"

@@ -9,8 +9,6 @@ resource_local_to_scene = true
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_v311x")
-nav_point_group = null
-nav_point_color = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_dl2lj")
