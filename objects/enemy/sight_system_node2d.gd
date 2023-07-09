@@ -21,7 +21,7 @@ const COLOR_SEEN : Color = Color.GREEN
 @export var sight_area : Area2D = null:						set = set_sight_area
 @export_flags_2d_physics var collision_mask : int = 1
 @export var detect_range_per_second : float = 30.0:			set = set_detect_range_per_second
-@export var render_detection_lines : bool = false
+@export var render_detection_lines : bool = false:			set = set_render_detection_lines
 
 
 # ------------------------------------------------------------------------------
@@ -37,7 +37,6 @@ func set_sight_area(a : Area2D) -> void:
 		_DisconnectSightArea()
 		sight_area = a
 		_ConnectSightArea()
-
 
 func set_detect_range_per_second(drps : float) -> void:
 	if drps > 0.0 and drps != detect_range_per_second:
@@ -143,7 +142,8 @@ func _CanSee(obj : Node2D, coll_mask : int = 4294967295) -> Dictionary:
 # ------------------------------------------------------------------------------
 # Public Methods
 # ------------------------------------------------------------------------------
-
+func can_see(obj : Node2D) -> bool:
+	return not _CanSee(obj, collision_mask).is_empty()
 
 
 # ------------------------------------------------------------------------------

@@ -135,6 +135,9 @@ func attack(active : bool = true) -> void:
 func interact() -> void:
 	interacted.emit()
 
+func damage(_amount : float) -> void:
+	print("Ouch!")
+
 # ------------------------------------------------------------------------------
 # Handler Methods
 # ------------------------------------------------------------------------------
