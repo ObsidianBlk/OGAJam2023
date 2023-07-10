@@ -22,6 +22,7 @@ func is_activated() -> bool:
 func set_activated(a : bool) -> void:
 	if a != _activated:
 		_activated = a
+		if Engine.is_editor_hint(): return
 		if _activated:
 			activated.emit()
 		else:

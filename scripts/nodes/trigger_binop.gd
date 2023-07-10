@@ -1,5 +1,6 @@
+@tool
 extends Trigger
-class_name BinOpTrigger
+class_name TriggerBinOp
 
 
 # ------------------------------------------------------------------------------
@@ -23,12 +24,20 @@ var _input_states : Dictionary = {}
 # Setters
 # ------------------------------------------------------------------------------
 func set_inputs(ip : Array[Trigger]) -> void:
-	pass
+	inputs = ip
+	_UpdateInputConnections()
 
 # ------------------------------------------------------------------------------
 # Override Methods
 # ------------------------------------------------------------------------------
+func _ready() -> void:
+	_UpdateInputConnections()
+
+# ------------------------------------------------------------------------------
+# Private Methods
+# ------------------------------------------------------------------------------
 func _UpdateInputConnections() -> void:
+	if Engine.is_editor_hint(): return
 	var active : Dictionary = {}
 	for idx in range(inputs.size()):
 		# Store the trigger name in a dictionary for the second pass...
@@ -82,7 +91,8 @@ func _CheckActiveState() -> void:
 				deactivated.emit()
 
 func _CheckAnd(negate : bool) -> bool:
-	for info in _input_states:
+	for key in _input_states:
+		var info : Dictionary = _input_states[key]
 		if info.node.get_ref() == null:
 			continue
 		if info.activated == false:
@@ -90,7 +100,8 @@ func _CheckAnd(negate : bool) -> bool:
 	return false if negate else true
 
 func _CheckOr(negate : bool) -> bool:
-	for info in _input_states:
+	for key in _input_states:
+		var info : Dictionary = _input_states[key]
 		if info.node.get_ref() == null:
 			continue
 		if info.activated == true:
@@ -99,7 +110,8 @@ func _CheckOr(negate : bool) -> bool:
 
 func _CheckXor() -> bool:
 	var found_one = false
-	for info in _input_states:
+	for key in _input_states:
+		var info : Dictionary = _input_states[key]
 		if info.node.get_ref() == null:
 			continue
 		if info.activated == true:
@@ -109,7 +121,7 @@ func _CheckXor() -> bool:
 	return found_one
 
 # ------------------------------------------------------------------------------
-# Private Methods
+# Public Methods
 # ------------------------------------------------------------------------------
 func set_activated(a : bool) -> void:
 	if inputs.size() <= 0:
