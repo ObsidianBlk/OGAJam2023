@@ -85,9 +85,11 @@ func _Process_Start(delta : float) -> void:
 		STATE.Nest:
 			_State_Nest(delta)
 		STATE.Searching:
-			_State_Searching(delta)
+			pass
+			#_State_Searching(delta)
 		STATE.Patrolling:
-			_State_Patrolling(delta)
+			pass
+			#_State_Patrolling(delta)
 		STATE.Hunting:
 			_State_Hunting(delta)
 	#_TrackNavPoints(delta)
@@ -179,7 +181,8 @@ func _State_Hunting(delta : float) -> void:
 	
 	if not MEM_HUNTING in _state_mem:
 		_state_mem[MEM_HUNTING] = {
-			"update_time_remaining": 0.0
+			"update_time_remaining" : 0.0,
+			"time_lost" : 0.0
 		}
 		set_speed_multiplier(1.0)
 	var mem : Dictionary = _state_mem[MEM_HUNTING]
@@ -191,42 +194,51 @@ func _State_Hunting(delta : float) -> void:
 		print("Hunting Update: ", target.name, " | Nav Active: ", _nav_active)
 		mem.update_time_remaining = 0.1
 		if _sight_system.can_see(target):
-			print("Can see ", target.name)
+			print("Can see ", target.name, " @", target.global_position)
+			mem.time_lost = 0.0
 			nav_req["target"] = target.global_position
-		elif _nav_active == false:
-			print("Cannot see target")
+	if _nav_active == false:
+		print("Cannot See Target")
+		mem.time_lost += delta
+		if mem.time_lost >= 10.0:
+			print("Giving Up")
 			_state_mem.erase(MEM_HUNTING)
 			_hunt_target = weakref(null)
+			set_direction(Vector2.ZERO)
 			_state = STATE.Searching
+			return
 	_ProcessNavigation(nav_req)
+	#print(_direction, _nav_active)
 
 # ------------------------------------------------------------------------------
 # Private Methods
 # ------------------------------------------------------------------------------
 func _ProcessNavigation(request : Dictionary = {}) -> void:
 	if not _nav_active and request.is_empty(): return
-	if _state == STATE.Hunting:
-		print("Hunt Navigation")
 	
 	if not request.is_empty():
+		print("New Target Requested")
 		var target = _nav_agent.target_position
 		if "target" in request and typeof(request["target"]) == TYPE_VECTOR2:
 			target = request["target"]
 		if not _nav_agent.target_position.is_equal_approx(target):
+			print("Updating Nav Agent to: ", target)
 			_nav_active = true
 			_nav_agent.target_position = target
 			set_direction(Vector2.ZERO)
-	elif _nav_active:
+			return
+		else:
+			print("New Target Rejected")
+
+	if _nav_active:
 		if not _nav_agent.is_target_reachable():
-			if _state == STATE.Hunting:
-				print("Unreachable!")
+			print("Target not reachable")
 			_nav_active = false
 			set_direction(Vector2.ZERO)
 		else:
 			var target_pos : Vector2 = _nav_agent.get_next_path_position()
-			if not target_pos.is_equal_approx(_nav_last_position):
-				_direction = global_position.direction_to(target_pos)
-				_nav_last_position = target_pos
+			_direction = global_position.direction_to(target_pos)
+			#_nav_last_position = target_pos
 
 # ------------------------------------------------------------------------------
 # Public Methods
@@ -241,9 +253,9 @@ func _on_nav_path_changed() -> void:
 	if not MEM_PATROLLING in _state_mem: return
 	var mem : Dictionary = _state_mem[MEM_PATROLLING]
 	
-	var target_pos : Vector2 = _nav_agent.get_next_path_position()
-	_direction = global_position.direction_to(target_pos)
-	_nav_last_position = target_pos
+	#var target_pos : Vector2 = _nav_agent.get_next_path_position()
+	#_direction = global_position.direction_to(target_pos)
+	#_nav_last_position = target_pos
 
 
 func _on_nav_finished() -> void:
@@ -263,6 +275,7 @@ func _on_nav_finished() -> void:
 			_state_mem.erase(MEM_PATROLLING)
 		STATE.Hunting:
 			var target : Node2D = _hunt_target.get_ref()
+			print("Target: ", target)
 			if target == null or not _sight_system.can_see(target):
 				_sight_system.render_detection_lines = true
 				_hunt_target = weakref(null)
