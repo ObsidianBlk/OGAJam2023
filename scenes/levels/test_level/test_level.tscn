@@ -1,14 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://bxj6ilf7kixh6"]
+[gd_scene load_steps=9 format=3 uid="uid://bxj6ilf7kixh6"]
 
 [ext_resource type="TileSet" uid="uid://5rssu1a6i47q" path="res://assets/graphics/TeenieXeenie/tilesets/tileset.tres" id="1_anjiu"]
-[ext_resource type="Script" path="res://scenes/levels/level.gd" id="1_wj7ik"]
+[ext_resource type="Script" path="res://scenes/levels/test_level/test_level.gd" id="1_qijd6"]
 [ext_resource type="PackedScene" uid="uid://cws5p1fsi2vup" path="res://objects/enemy/xeno/xeno.tscn" id="3_la4sf"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_door.gd" id="3_osram"]
 [ext_resource type="Script" path="res://scripts/nodes/nav_point.gd" id="4_e5s81"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_interact.gd" id="4_fy37o"]
+[ext_resource type="PackedScene" uid="uid://qx0q5hd2j2bf" path="res://objects/soldier/soldier.tscn" id="5_f1l7d"]
+[ext_resource type="Script" path="res://scripts/nodes/player.gd" id="6_q485d"]
 
 [node name="TestLevel" type="Node2D"]
-script = ExtResource("1_wj7ik")
+script = ExtResource("1_qijd6")
 
 [node name="TileMap" type="TileMap" parent="."]
 texture_filter = 1
@@ -54,6 +56,14 @@ position = Vector2(95, 151)
 
 [node name="Entities" type="Node2D" parent="."]
 y_sort_enabled = true
+
+[node name="Soldier" parent="Entities" instance=ExtResource("5_f1l7d")]
+position = Vector2(3, 158)
+
+[node name="Player" type="Node" parent="Entities/Soldier"]
+script = ExtResource("6_q485d")
+
+[node name="Camera2D" type="Camera2D" parent="Entities/Soldier"]
 
 [node name="Xeno" parent="Entities" instance=ExtResource("3_la4sf")]
 position = Vector2(84, 117)

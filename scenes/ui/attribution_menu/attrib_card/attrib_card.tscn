@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3 uid="uid://irwhgwl2d6pu"]
+
+[ext_resource type="Script" path="res://scenes/ui/attribution_menu/attrib_card/attrib_card.gd" id="1_qvoqd"]
+
+[node name="AttribCard" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_qvoqd")
+
+[node name="VBC" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Layout" type="GridContainer" parent="VBC"]
+layout_mode = 2
+columns = 2
+
+[node name="LblName" type="Label" parent="VBC/Layout"]
+layout_mode = 2
+text = "Name:"
+
+[node name="LblNameValue" type="Label" parent="VBC/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "No Name"
+
+[node name="LblAuthor" type="Label" parent="VBC/Layout"]
+layout_mode = 2
+text = "Author:"
+
+[node name="LblAuthorValue" type="Label" parent="VBC/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "No Name"
+
+[node name="LblURL" type="Label" parent="VBC/Layout"]
+layout_mode = 2
+text = "URL:"
+
+[node name="LinkResource" type="LinkButton" parent="VBC/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Google"
+uri = "https://google.com"
+
+[node name="TextureLicenseType" type="TextureRect" parent="VBC/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 4
+
+[node name="LinkLicense" type="LinkButton" parent="VBC/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CC0"
+uri = "https://google.com"
+
+[node name="ModificationNotice" type="VBoxContainer" parent="VBC"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBC/ModificationNotice"]
+layout_mode = 2
+
+[node name="LbLModificationNotice" type="Label" parent="VBC/ModificationNotice"]
+layout_mode = 2
+text = "This resource was modified for this project."
