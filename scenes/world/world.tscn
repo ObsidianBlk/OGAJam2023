@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhj8lgx54yvdt"]
+[gd_scene load_steps=6 format=3 uid="uid://bhj8lgx54yvdt"]
 
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_v32fp"]
 [ext_resource type="PackedScene" uid="uid://qx0q5hd2j2bf" path="res://objects/soldier/soldier.tscn" id="2_hl507"]
+[ext_resource type="PackedScene" uid="uid://cajjow4ykmrrh" path="res://scenes/menu_background/menu_background.tscn" id="2_nhw1a"]
 [ext_resource type="Script" path="res://scripts/nodes/player.gd" id="3_d1sqg"]
 [ext_resource type="PackedScene" uid="uid://bxj6ilf7kixh6" path="res://scenes/levels/test_level/test_level.tscn" id="4_vl1dm"]
 
@@ -25,6 +26,9 @@ handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(288, 162)
 render_target_update_mode = 4
+
+[node name="MenuBackground" parent="CanvasLayer/CSubView/GameView" instance=ExtResource("2_nhw1a")]
+layer = -1
 
 [node name="TestLevel" parent="CanvasLayer/CSubView/GameView" instance=ExtResource("4_vl1dm")]
 
