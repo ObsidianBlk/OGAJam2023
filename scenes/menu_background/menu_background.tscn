@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://cajjow4ykmrrh"]
+
+[ext_resource type="Shader" path="res://shaders/planet/PlanetUnder.gdshader" id="1_1uu1a"]
+[ext_resource type="Script" path="res://scenes/menu_background/HellPlanet.gd" id="1_dxwkn"]
+[ext_resource type="Shader" path="res://shaders/planet/Craters.gdshader" id="2_odvie"]
+[ext_resource type="Shader" path="res://shaders/planet/LavaRivers.gdshader" id="3_mo75s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jq7d0"]
+shader = ExtResource("1_1uu1a")
+shader_parameter/rotation = 1.0
+shader_parameter/light_origin = Vector2(0.39, 0.39)
+shader_parameter/dither_size = 5.857
+shader_parameter/light_border_1 = 0.4
+shader_parameter/light_border_2 = 0.6
+shader_parameter/color1 = Color(0.560784, 0.301961, 0.239216, 1)
+shader_parameter/color2 = Color(0.321569, 0.2, 0.25098, 1)
+shader_parameter/color3 = Color(0.239216, 0.160784, 0.211765, 1)
+shader_parameter/should_dither = false
+shader_parameter/pixels = 40.0
+shader_parameter/size = 8.0
+shader_parameter/OCTAVES = 4
+shader_parameter/seed = 1.0
+shader_parameter/time = 93.5401
+shader_parameter/time_speed = 0.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_11wgw"]
+shader = ExtResource("2_odvie")
+shader_parameter/rotation = 1.0
+shader_parameter/light_origin = Vector2(0.39, 0.39)
+shader_parameter/dither_size = 2.0
+shader_parameter/light_border_1 = 0.4
+shader_parameter/light_border_2 = 0.6
+shader_parameter/color1 = Color(0.231373, 0.2, 0.25098, 1)
+shader_parameter/color2 = Color(0.239216, 0.160784, 0.211765, 1)
+shader_parameter/color3 = Color(0, 0, 0, 1)
+shader_parameter/should_dither = false
+shader_parameter/pixels = 40.0
+shader_parameter/size = 8.0
+shader_parameter/OCTAVES = 5
+shader_parameter/seed = 1.0
+shader_parameter/time = 93.5401
+shader_parameter/time_speed = 0.2
+shader_parameter/light_border = 0.4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0ylv"]
+shader = ExtResource("3_mo75s")
+shader_parameter/rotation = 1.0
+shader_parameter/light_origin = Vector2(0.39, 0.39)
+shader_parameter/dither_size = 2.0
+shader_parameter/light_border_1 = 0.4
+shader_parameter/light_border_2 = 0.6
+shader_parameter/color1 = Color(1, 0.541176, 0.2, 1)
+shader_parameter/color2 = Color(0.415686, 0.415686, 0.415686, 1)
+shader_parameter/color3 = Color(0, 0.843137, 0.843137, 1)
+shader_parameter/should_dither = false
+shader_parameter/pixels = 50.0
+shader_parameter/size = 10.0
+shader_parameter/OCTAVES = 5
+shader_parameter/seed = 1.0
+shader_parameter/time = 93.5401
+shader_parameter/time_speed = 0.2
+shader_parameter/river_cutoff = 0.443
+
+[node name="MenuBackground" type="CanvasLayer"]
+
+[node name="HellPlanet" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_dxwkn")
+
+[node name="PlanetUnder" type="ColorRect" parent="HellPlanet"]
+material = SubResource("ShaderMaterial_jq7d0")
+layout_mode = 2
+
+[node name="Craters" type="ColorRect" parent="HellPlanet"]
+material = SubResource("ShaderMaterial_11wgw")
+layout_mode = 2
+
+[node name="Rivers" type="ColorRect" parent="HellPlanet"]
+material = SubResource("ShaderMaterial_n0ylv")
+layout_mode = 2
