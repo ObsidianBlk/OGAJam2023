@@ -1,5 +1,5 @@
 @tool
-extends "res://objects/enemy/enemy.gd"
+extends Enemy
 
 
 # ------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ func _Process_End(delta : float) -> void:
 # ------------------------------------------------------------------------------
 func _State_Nest(_delta : float) -> void:
 	# TODO: Actually handle this state. For now, just bounce to Patrolling
-	_state = STATE.Patrolling
+	_ChangeState(STATE.Patrolling)
 
 func _State_Searching(delta : float) -> void:
 	var dlength : float = _direction.length()
@@ -143,7 +143,8 @@ func _State_Searching(delta : float) -> void:
 		else:
 			_facing_offset = 0.0
 			_state_mem.erase(MEM_SEARCHING)
-			_state = STATE.Patrolling if _rng.randf() < 0.95 else STATE.Nest
+			var nstate : STATE = STATE.Patrolling if _rng.randf() < 0.95 else STATE.Nest
+			_ChangeState(nstate)
 	elif MEM_PATROLLING in _state_mem or _rng.randf() < 0.005:
 		if not MEM_PATROLLING in _state_mem:
 			print("Adding a patrol to my search!")
@@ -170,13 +171,13 @@ func _State_Patrolling(_delta : float) -> void:
 	_ProcessNavigation(nav_req)
 
 	if not MEM_SEARCHING in _state_mem and _rng.randf() < 0.005:
-		_state = STATE.Searching
+		_ChangeState(STATE.Searching)
 
 
 func _State_Hunting(delta : float) -> void:
 	var target : Node2D = _hunt_target.get_ref()
 	if target == null:
-		_state = STATE.Patrolling
+		_ChangeState(STATE.Patrolling)
 		return
 	
 	if not MEM_HUNTING in _state_mem:
@@ -204,8 +205,7 @@ func _State_Hunting(delta : float) -> void:
 			print("Giving Up")
 			_state_mem.erase(MEM_HUNTING)
 			_hunt_target = weakref(null)
-			set_direction(Vector2.ZERO)
-			_state = STATE.Searching
+			_ChangeState(STATE.Searching)
 			return
 	_ProcessNavigation(nav_req)
 	#print(_direction, _nav_active)
@@ -213,6 +213,21 @@ func _State_Hunting(delta : float) -> void:
 # ------------------------------------------------------------------------------
 # Private Methods
 # ------------------------------------------------------------------------------
+func _ChangeState(new_state : STATE) -> void:
+	if new_state == _state: return
+	match new_state:
+		STATE.Nest:
+			pass
+		STATE.Searching:
+			if not MEM_PATROLLING in _state_mem:
+				_nav_active = false
+				set_direction(Vector2.ZERO)
+		STATE.Patrolling:
+			pass
+		STATE.Hunting:
+			pass
+	_state = new_state
+
 func _ProcessNavigation(request : Dictionary = {}) -> void:
 	if not _nav_active and request.is_empty(): return
 	
@@ -266,10 +281,10 @@ func _on_nav_finished() -> void:
 		STATE.Patrolling:
 			var rnd : float = _rng.randf()
 			if rnd < -0.08: # Remove the negative to reactivate
-				_state = STATE.Nest
+				_ChangeState(STATE.Nest)
 			elif rnd < -0.3:
 				_state_mem.erase(MEM_PATROLLING)
-				_state = STATE.Searching
+				_ChangeState(STATE.Searching)
 		STATE.Searching:
 			# Patrolling done, let's let searching finish.
 			_state_mem.erase(MEM_PATROLLING)
@@ -277,16 +292,20 @@ func _on_nav_finished() -> void:
 			var target : Node2D = _hunt_target.get_ref()
 			print("Target: ", target)
 			if target == null or not _sight_system.can_see(target):
+				print("Ending Hunt")
 				_sight_system.render_detection_lines = true
 				_hunt_target = weakref(null)
 				_state_mem.erase(MEM_HUNTING)
-				_state = STATE.Searching
+				_ChangeState.call_deferred(STATE.Searching)
 
 func _on_sight_system_detected(body : Node2D, distance : float) -> void:
 	if _hunt_target.get_ref() == null and body.has_method("damage"):
 		_hunt_target = weakref(body)
-		_state = STATE.Hunting
+		_ChangeState.call_deferred(STATE.Hunting)
 		_sight_system.render_detection_lines = false
+
+func _on_sight_system_lost_detection():
+	pass # Replace with function body.
 
 func _on_attack_area_body_entered(body : Node2D) -> void:
 	pass

@@ -7,6 +7,7 @@ class_name SightSystemNode2D
 # ------------------------------------------------------------------------------
 signal spotted(body)
 signal detected(body, distance)
+signal lost_detection()
 
 # ------------------------------------------------------------------------------
 # Constants
@@ -20,6 +21,7 @@ const COLOR_SEEN : Color = Color.GREEN
 @export_category("Sight System Node2D")
 @export var sight_area : Area2D = null:						set = set_sight_area
 @export_flags_2d_physics var collision_mask : int = 1
+@export var memory_seconds : float = 5.0
 @export var detect_range_per_second : float = 30.0:			set = set_detect_range_per_second
 @export var render_detection_lines : bool = false:			set = set_render_detection_lines
 
@@ -28,6 +30,8 @@ const COLOR_SEEN : Color = Color.GREEN
 # Variables
 # ------------------------------------------------------------------------------
 var _spotted : Dictionary = {}
+var _detected : WeakRef = weakref(null)
+var _detect_memory_time : float = 0.0
 
 # ------------------------------------------------------------------------------
 # Setters
@@ -55,10 +59,11 @@ func _ready() -> void:
 	_ConnectSightArea()
 
 func _draw() -> void:
-	if not render_detection_lines:
+	if not render_detection_lines or _detected.get_ref() != null:
 		return
 	
 	for sname in _spotted:
+		if _spotted[sname].detect_dist <= 0.0: continue
 		var target : Node2D = _spotted[sname].node.get_ref()
 		if target == null: continue
 		var dist : float = global_position.distance_to(target.global_position)
@@ -76,6 +81,20 @@ func _draw() -> void:
 
 func _physics_process(delta : float) -> void:
 	if sight_area == null: return
+	
+	if _detected.get_ref() != null:
+		var d : Node2D = _detected.get_ref()
+		if not _CanSee(d, collision_mask):
+			if _detect_memory_time <= 0.0:
+				lost_detection.emit()
+			_detect_memory_time += delta
+			if memory_seconds <= 0.0 or _detect_memory_time >= memory_seconds:
+				_detect_memory_time = 0.0
+				_detected = weakref(null)
+		elif _detect_memory_time > 0.0:
+			var dist : float = global_position.distance_to(d.global_position)
+			detected.emit(d, dist)
+			_detect_memory_time = 0.0
 	
 	var snames : Array = _spotted.keys()
 	for sname in snames:
@@ -104,8 +123,10 @@ func _physics_process(delta : float) -> void:
 		_spotted[sname].detect_dist += delta * detect_range_per_second
 		# If the detected distance is gte the actual distance, the target is spotted!!
 		if dist <= _spotted[sname].detect_dist:
-			detected.emit(target, dist)
-			_spotted.erase(sname)
+			if _detected.get_ref() == null:
+				_detected = weakref(target)
+				detected.emit(target, dist)
+				_spotted.erase(sname)
 	
 	if render_detection_lines:
 		queue_redraw()

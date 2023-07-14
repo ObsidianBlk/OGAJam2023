@@ -53,5 +53,6 @@ collision_mask = 2
 shape = SubResource("CircleShape2D_04frt")
 
 [connection signal="detected" from="SightSystem" to="." method="_on_sight_system_detected"]
+[connection signal="lost_detection" from="SightSystem" to="." method="_on_sight_system_lost_detection"]
 [connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
 [connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]
