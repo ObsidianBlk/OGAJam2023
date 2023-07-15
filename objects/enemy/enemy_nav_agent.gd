@@ -41,7 +41,7 @@ func _ready() -> void:
 	add_child(_timer)
 
 
-func _physics_process(delta : float) -> void:
+func _physics_process(_delta : float) -> void:
 	if not _active: return
 	_UpdatePathPosition.call_deferred()
 
@@ -95,7 +95,7 @@ func activate(enable : bool) -> void:
 				_owner.get_ref().set_direction(Vector2.ZERO)
 			_timer.stop()
 
-func is_active() -> bool:
+func is_activated() -> bool:
 	return _active
 
 # ------------------------------------------------------------------------------

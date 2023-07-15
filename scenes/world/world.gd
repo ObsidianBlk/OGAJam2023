@@ -23,6 +23,8 @@ var _level : GameLevel = null
 # ------------------------------------------------------------------------------
 @onready var _game_view : SubViewport = $CanvasLayer/CSubView/GameView
 @onready var _ui : CanvasLayer = $UI
+@onready var _heat_haze : ColorRect = %HeatHaze
+@onready var _hud : Control = %HUD
 
 
 # ------------------------------------------------------------------------------
@@ -55,8 +57,9 @@ func _SetBackground(background_name : StringName) -> void:
 
 func _DropCurrentLevel() -> void:
 	if _level == null or _game_view == null: return
-	# TODO: Disconnect any connected signals
-	# TODO: Any predrop operations I may come up with
+	if _level.temprature_changed.is_connected(_on_temprature_changed):
+		_level.temprature_changed.disconnect(_on_temprature_changed)
+	_heat_haze.enable(false)
 	_game_view.remove_child(_level)
 	_level.queue_free()
 	_level = null
@@ -75,15 +78,22 @@ func _LoadLevel(level_path : String) -> int:
 		
 		_DropCurrentLevel()
 		_level = level
-		# TODO: Connect any signals
+		if not _level.temprature_changed.is_connected(_on_temprature_changed):
+			_level.temprature_changed.connect(_on_temprature_changed)
 		_game_view.add_child(_level)
-		# TODO: Handle any post load setup work
+		_hud.set_level(_level)
+		_on_temprature_changed(_level.initial_temprature)
 		return OK
 	return ERR_FILE_NOT_FOUND
 
 # ------------------------------------------------------------------------------
 # Handler Methods
 # ------------------------------------------------------------------------------
+func _on_temprature_changed(temprature : float) -> void:
+	if not _heat_haze.is_enabled():
+		_heat_haze.enable(true)
+	_heat_haze.set_temprature(temprature)
+
 func _on_ui_requested(request : Dictionary) -> void:
 	if "action" in request:
 		match request.action:

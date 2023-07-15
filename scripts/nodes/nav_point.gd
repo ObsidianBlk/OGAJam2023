@@ -23,7 +23,8 @@ func set_group_name(gn : String) -> void:
 		remove_from_group(_group_name)
 		group_name = gn
 		_group_name = StringName("np_%s"%[group_name])
-		add_to_group(_group_name)
+		if is_inside_tree():
+			add_to_group(_group_name)
 
 func set_group_color(c : Color) -> void:
 	if c != group_color:

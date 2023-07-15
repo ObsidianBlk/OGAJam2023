@@ -68,10 +68,6 @@ func _ready() -> void:
 	_SetBodySprite($ASprite2D)
 	super._ready()
 
-func _draw() -> void:
-	if not (debug and _nav_agent.is_active()): return
-	var target_pos : Vector2 = _nav_agent.target_position - global_position
-	draw_line(Vector2.ZERO, target_pos, Color.VIOLET, 1, true)
 
 # ------------------------------------------------------------------------------
 # Private Overrideable Methods
@@ -90,7 +86,6 @@ func _Process_Start(delta : float) -> void:
 
 func _Process_End(delta : float) -> void:
 	_sight_area.rotation = fmod(_facing.angle() + _facing_offset, PI * 2)
-	queue_redraw()
 	super._Process_End(delta)
 
 
@@ -169,8 +164,7 @@ func _State_Patrolling(_delta : float) -> void:
 		mem.nav_point = weakref(nav_point)
 		_SetNavTargetPosition.call_deferred(nav_point.global_position, true)
 	
-	var nav_req : Dictionary = {}
-	if not _nav_agent.is_active():
+	if not _nav_agent.is_activated():
 		if mem.nav_point.get_ref() == null:
 			CalcNavPoint.call()
 		elif mem.reset == true:
@@ -213,7 +207,7 @@ func _ChangeState(new_state : STATE) -> void:
 func _SetNavTargetPosition(target_position : Vector2, activate : bool = true) -> void:
 	if not _nav_agent.target_position.is_equal_approx(target_position):
 		_nav_agent.target_position = target_position
-		if _nav_agent.is_active() != activate:
+		if _nav_agent.is_activated() != activate:
 			_nav_agent.activate(activate)
 
 # ------------------------------------------------------------------------------
@@ -250,7 +244,7 @@ func _on_nav_finished() -> void:
 			print("Hunting done")
 			_ChangeState.call_deferred(STATE.Searching)
 
-func _on_sight_system_detected(body : Node2D, distance : float) -> void:
+func _on_sight_system_detected(body : Node2D, _distance : float) -> void:
 	if _hunt_target.get_ref() == null:
 		if body.has_method("damage"):
 			print("Detected target")
@@ -265,10 +259,10 @@ func _on_sight_system_lost_detection():
 		_hunt_target = weakref(null)
 		_nav_agent.follow_target(null)
 
-func _on_attack_area_body_entered(body : Node2D) -> void:
+func _on_attack_area_body_entered(_target_body : Node2D) -> void:
 	pass
 
-func _on_attack_area_body_exited(body : Node2D) -> void:
+func _on_attack_area_body_exited(_target_body : Node2D) -> void:
 	pass
 
 

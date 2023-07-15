@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://qx0q5hd2j2bf"]
+[gd_scene load_steps=15 format=3 uid="uid://qx0q5hd2j2bf"]
 
 [ext_resource type="Script" path="res://objects/soldier/soldier.gd" id="1_1xifx"]
 [ext_resource type="Texture2D" uid="uid://wj0w6cyvmryn" path="res://assets/graphics/TeenieXeenie/teenyxeenies-alpha.png" id="1_er0tb"]
 [ext_resource type="SpriteFrames" uid="uid://np0vexhcgjtk" path="res://objects/soldier/red_soldier.tres" id="2_mqvnr"]
+[ext_resource type="Texture2D" uid="uid://cslq4bqm0hcd" path="res://assets/graphics/light_maps/soldier_light.png" id="4_0ygbh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n2n5v"]
 atlas = ExtResource("1_er0tb")
@@ -119,3 +120,10 @@ collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="HitArea"]
 polygon = PackedVector2Array(0, 0, 100, -50, 100, 50)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+light_mask = 3
+texture_filter = 1
+blend_mode = 2
+shadow_enabled = true
+texture = ExtResource("4_0ygbh")

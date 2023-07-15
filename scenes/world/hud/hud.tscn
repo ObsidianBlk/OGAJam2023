@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://0juaa8x8tsoy"]
+
+[ext_resource type="Script" path="res://scenes/world/hud/hud.gd" id="1_j1xua"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j1xua")
+
+[node name="TempGage" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="TempGage"]
+layout_mode = 2
+text = "Temprature:"
+
+[node name="TGage" type="ProgressBar" parent="TempGage"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 24)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 250.0
+show_percentage = false

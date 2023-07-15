@@ -1,9 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://cws5p1fsi2vup"]
+[gd_scene load_steps=8 format=3 uid="uid://cws5p1fsi2vup"]
 
 [ext_resource type="Script" path="res://objects/enemy/xeno/xeno.gd" id="1_x11lx"]
 [ext_resource type="SpriteFrames" uid="uid://bgrtcoupthhwj" path="res://objects/enemy/xeno/xeno_frames.tres" id="2_0ym2x"]
 [ext_resource type="Script" path="res://objects/enemy/sight_system_node2d.gd" id="2_xpqoh"]
 [ext_resource type="Script" path="res://objects/enemy/enemy_nav_agent.gd" id="4_ii3vo"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_cjp74"]
+light_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wtluw"]
 radius = 2.0
@@ -18,6 +21,9 @@ motion_mode = 1
 script = ExtResource("1_x11lx")
 
 [node name="SightSystem" type="Node2D" parent="." node_paths=PackedStringArray("sight_area")]
+light_mask = 0
+visibility_layer = 2
+material = SubResource("CanvasItemMaterial_cjp74")
 script = ExtResource("2_xpqoh")
 sight_area = NodePath("../SightArea")
 collision_mask = 3

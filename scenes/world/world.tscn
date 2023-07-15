@@ -1,9 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhj8lgx54yvdt"]
+[gd_scene load_steps=10 format=3 uid="uid://bhj8lgx54yvdt"]
 
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_v32fp"]
+[ext_resource type="Texture2D" uid="uid://bx3gbb7o8rkyb" path="res://icon.svg" id="2_hom5a"]
 [ext_resource type="Script" path="res://scenes/world/UI.gd" id="2_rusku"]
 [ext_resource type="PackedScene" uid="uid://biva8hem1kstm" path="res://scenes/ui/main_menu/main_menu.tscn" id="3_7vb7q"]
+[ext_resource type="Shader" path="res://shaders/HeatHaze.gdshader" id="3_lo2vw"]
 [ext_resource type="PackedScene" uid="uid://b0f8hpm088b0k" path="res://scenes/ui/attribution_menu/attribution_menu.tscn" id="4_j7w8s"]
+[ext_resource type="Script" path="res://scenes/world/HeatHaze.gd" id="4_yvee6"]
+[ext_resource type="PackedScene" uid="uid://0juaa8x8tsoy" path="res://scenes/world/hud/hud.tscn" id="5_qjqg6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_prkyi"]
+shader = ExtResource("3_lo2vw")
+shader_parameter/enabled = false
+shader_parameter/strength = 0.001
+shader_parameter/speed = 1.0
+shader_parameter/frequency = 1.0
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_v32fp")
@@ -25,6 +36,30 @@ handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(288, 162)
 render_target_update_mode = 4
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_hom5a")
+
+[node name="HeatHaze" type="ColorRect" parent="CanvasLayer"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_prkyi")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_yvee6")
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource("5_qjqg6")]
+unique_name_in_owner = true
+mouse_filter = 2
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 10
