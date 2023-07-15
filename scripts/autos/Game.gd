@@ -39,6 +39,32 @@ func get_random_nav_point_in_group(nav_group : String, exclude : NavPoint = null
 				return get_random_nav_point_in_group(nav_group, exclude)
 	return null
 
+func get_random_reachable_nav_point_in_group(nav_group : String, map : RID, from : Vector2, exclude : NavPoint = null) -> NavPoint:
+	var reachable : Array = get_reachable_nav_points_in_group(nav_group, map, from)
+	if reachable.size() > 0:
+		var idx : int = randi_range(0, reachable.size() - 1)
+		if reachable[idx] != exclude:
+			return reachable[idx]
+		elif reachable.size() > 1:
+			return get_random_reachable_nav_point_in_group(nav_group, map, from, exclude)
+	return null
+
+func get_reachable_nav_points_in_group(nav_group : String, map : RID, from : Vector2) -> Array:
+	if nav_group.is_empty(): return []
+	if not NavigationServer2D.map_is_active(map): return []
+	var reachable : Array = []
+	
+	var ng : StringName = StringName("np_%s"%[nav_group])
+	var np_nodes : Array = get_tree().get_nodes_in_group(ng)
+	for nav in np_nodes:
+		if not is_instance_of(nav, NavPoint): continue
+		var path : PackedVector2Array = NavigationServer2D.map_get_path(
+			map, from, nav.global_position, true
+		)
+		if path.size() > 0 and path[path.size() - 1] == nav.global_position:
+			reachable.append(nav)
+	return reachable
+
 func get_closest_nav_point_reachable_in_group(nav_group : String, map : RID, from : Vector2, to : Vector2) -> NavPoint:
 	if nav_group.is_empty(): return null
 	if not NavigationServer2D.map_is_active(map): return null

@@ -34,9 +34,6 @@ var _rng : RandomNumberGenerator = RandomNumberGenerator.new()
 var _state : STATE = STATE.Patrolling
 var _state_mem : Dictionary = {}
 
-var _nav_active : bool = false
-var _nav_last_position : Vector2 = Vector2.ZERO
-
 var _face_direction : bool = true
 var _facing_offset : float = 0.0
 
@@ -45,7 +42,7 @@ var _hunt_target : WeakRef = weakref(null)
 # ------------------------------------------------------------------------------
 # Onready Variables
 # ------------------------------------------------------------------------------
-@onready var _nav_agent : NavigationAgent2D = $NavAgent
+@onready var _nav_agent : EnemyNavigationAgent = $NavAgent
 @onready var _sight_area : Area2D = $SightArea
 @onready var _attack_area : Area2D = $AttackArea
 @onready var _sight_system : SightSystemNode2D = $SightSystem
@@ -65,7 +62,6 @@ func set_debug(d : bool) -> void:
 # ------------------------------------------------------------------------------
 func _ready() -> void:
 	_rng.randomize()
-	_nav_agent.path_changed.connect(_on_nav_path_changed)
 	_nav_agent.navigation_finished.connect(_on_nav_finished)
 	_nav_agent.debug_enabled = debug
 	_SetSpriteFrames(FRAMES_XENO)
@@ -73,7 +69,7 @@ func _ready() -> void:
 	super._ready()
 
 func _draw() -> void:
-	if not (debug and _nav_active): return
+	if not (debug and _nav_agent.is_active()): return
 	var target_pos : Vector2 = _nav_agent.target_position - global_position
 	draw_line(Vector2.ZERO, target_pos, Color.VIOLET, 1, true)
 
@@ -85,11 +81,9 @@ func _Process_Start(delta : float) -> void:
 		STATE.Nest:
 			_State_Nest(delta)
 		STATE.Searching:
-			pass
-			#_State_Searching(delta)
+			_State_Searching(delta)
 		STATE.Patrolling:
-			pass
-			#_State_Patrolling(delta)
+			_State_Patrolling(delta)
 		STATE.Hunting:
 			_State_Hunting(delta)
 	#_TrackNavPoints(delta)
@@ -132,6 +126,9 @@ func _State_Searching(delta : float) -> void:
 	_facing_offset = angle
 	if dlength <= 0.01:
 		set_facing(mem.facing.rotated(angle))
+	else:
+		print("Offset Only")
+		mem.facing = _direction.normalized()
 	
 	if weight == 1.0:
 		if mem.offset != 0.0:
@@ -145,70 +142,50 @@ func _State_Searching(delta : float) -> void:
 			_state_mem.erase(MEM_SEARCHING)
 			var nstate : STATE = STATE.Patrolling if _rng.randf() < 0.95 else STATE.Nest
 			_ChangeState(nstate)
-	elif MEM_PATROLLING in _state_mem or _rng.randf() < 0.005:
-		if not MEM_PATROLLING in _state_mem:
-			print("Adding a patrol to my search!")
-		_State_Patrolling(delta)
+#	elif MEM_PATROLLING in _state_mem or _rng.randf() < 0.005:
+#		if not MEM_PATROLLING in _state_mem:
+#			print("Adding a patrol to my search!")
+#		_State_Patrolling(delta)
 
 func _State_Patrolling(_delta : float) -> void:
 	#print("Patrolling: ", _direction)
 	if not MEM_PATROLLING in _state_mem:
+		print("New Patrolling memory")
 		_state_mem[MEM_PATROLLING] = {
-			"nav_point": weakref(null)
+			"nav_point": weakref(null),
+			"reset": false
 		}
 	if not MEM_SEARCHING in _state_mem:
 		set_speed_multiplier(0.25)
 	
 	var mem : Dictionary = _state_mem[MEM_PATROLLING]
-	
-	var nav_req : Dictionary = {}
-	if not _nav_active:
-		var nav_point = Game.get_random_nav_point_in_group(nav_point_group, mem.nav_point.get_ref())
+	var CalcNavPoint : Callable = func():
+		print("Setting Nav Point")
+		var map : RID = _nav_agent.get_navigation_map()
+		var nav_point = Game.get_random_reachable_nav_point_in_group(
+			nav_point_group, map, global_position, mem.nav_point.get_ref()
+		)
 		if nav_point == null: return
 		mem.nav_point = weakref(nav_point)
-		nav_req["target"] = nav_point.global_position
+		_SetNavTargetPosition.call_deferred(nav_point.global_position, true)
 	
-	_ProcessNavigation(nav_req)
+	var nav_req : Dictionary = {}
+	if not _nav_agent.is_active():
+		if mem.nav_point.get_ref() == null:
+			CalcNavPoint.call()
+		elif mem.reset == true:
+			if _nav_agent.target_position.is_equal_approx(mem.nav_point.get_ref().global_position):
+				CalcNavPoint.call()
+			else:
+				_nav_agent.target_position = mem.nav_point.get_ref().global_position
 
 	if not MEM_SEARCHING in _state_mem and _rng.randf() < 0.005:
+		print("Patrolling add search")
 		_ChangeState(STATE.Searching)
 
 
-func _State_Hunting(delta : float) -> void:
-	var target : Node2D = _hunt_target.get_ref()
-	if target == null:
-		_ChangeState(STATE.Patrolling)
-		return
-	
-	if not MEM_HUNTING in _state_mem:
-		_state_mem[MEM_HUNTING] = {
-			"update_time_remaining" : 0.0,
-			"time_lost" : 0.0
-		}
-		set_speed_multiplier(1.0)
-	var mem : Dictionary = _state_mem[MEM_HUNTING]
-	
-	mem.update_time_remaining -= delta
-	
-	var nav_req : Dictionary = {}
-	if mem.update_time_remaining <= 0.0:
-		print("Hunting Update: ", target.name, " | Nav Active: ", _nav_active)
-		mem.update_time_remaining = 0.1
-		if _sight_system.can_see(target):
-			print("Can see ", target.name, " @", target.global_position)
-			mem.time_lost = 0.0
-			nav_req["target"] = target.global_position
-	if _nav_active == false:
-		print("Cannot See Target")
-		mem.time_lost += delta
-		if mem.time_lost >= 10.0:
-			print("Giving Up")
-			_state_mem.erase(MEM_HUNTING)
-			_hunt_target = weakref(null)
-			_ChangeState(STATE.Searching)
-			return
-	_ProcessNavigation(nav_req)
-	#print(_direction, _nav_active)
+func _State_Hunting(_delta : float) -> void:
+	set_speed_multiplier(1.0)
 
 # ------------------------------------------------------------------------------
 # Private Methods
@@ -220,40 +197,24 @@ func _ChangeState(new_state : STATE) -> void:
 			pass
 		STATE.Searching:
 			if not MEM_PATROLLING in _state_mem:
-				_nav_active = false
-				set_direction(Vector2.ZERO)
+				print("Searching State")
+				_nav_agent.activate(false)
+			else:
+				_state_mem[MEM_PATROLLING].reset = true
+				print("Searching/Patrolling State")
 		STATE.Patrolling:
+			print("Patrolling State")
 			pass
 		STATE.Hunting:
-			pass
+			print("Hunting State")
+			_nav_agent.activate(true)
 	_state = new_state
 
-func _ProcessNavigation(request : Dictionary = {}) -> void:
-	if not _nav_active and request.is_empty(): return
-	
-	if not request.is_empty():
-		print("New Target Requested")
-		var target = _nav_agent.target_position
-		if "target" in request and typeof(request["target"]) == TYPE_VECTOR2:
-			target = request["target"]
-		if not _nav_agent.target_position.is_equal_approx(target):
-			print("Updating Nav Agent to: ", target)
-			_nav_active = true
-			_nav_agent.target_position = target
-			set_direction(Vector2.ZERO)
-			return
-		else:
-			print("New Target Rejected")
-
-	if _nav_active:
-		if not _nav_agent.is_target_reachable():
-			print("Target not reachable")
-			_nav_active = false
-			set_direction(Vector2.ZERO)
-		else:
-			var target_pos : Vector2 = _nav_agent.get_next_path_position()
-			_direction = global_position.direction_to(target_pos)
-			#_nav_last_position = target_pos
+func _SetNavTargetPosition(target_position : Vector2, activate : bool = true) -> void:
+	if not _nav_agent.target_position.is_equal_approx(target_position):
+		_nav_agent.target_position = target_position
+		if _nav_agent.is_active() != activate:
+			_nav_agent.activate(activate)
 
 # ------------------------------------------------------------------------------
 # Public Methods
@@ -264,21 +225,16 @@ func _ProcessNavigation(request : Dictionary = {}) -> void:
 # ------------------------------------------------------------------------------
 # Handler Methods
 # ------------------------------------------------------------------------------
-func _on_nav_path_changed() -> void:
-	if not MEM_PATROLLING in _state_mem: return
-	var mem : Dictionary = _state_mem[MEM_PATROLLING]
-	
-	#var target_pos : Vector2 = _nav_agent.get_next_path_position()
-	#_direction = global_position.direction_to(target_pos)
-	#_nav_last_position = target_pos
-
+func _on_nav_target_unreachable() -> void:
+	print("Target is unreachable")
 
 func _on_nav_finished() -> void:
 	print("Finished")
-	_nav_active = false
-	set_direction(Vector2.ZERO)
 	match _state:
 		STATE.Patrolling:
+			print("Patrolling done")
+			_nav_agent.activate(false)
+			_state_mem.erase(MEM_PATROLLING)
 			var rnd : float = _rng.randf()
 			if rnd < -0.08: # Remove the negative to reactivate
 				_ChangeState(STATE.Nest)
@@ -286,26 +242,28 @@ func _on_nav_finished() -> void:
 				_state_mem.erase(MEM_PATROLLING)
 				_ChangeState(STATE.Searching)
 		STATE.Searching:
+			print("Searching active... probably finished patrolling")
+			_nav_agent.activate(false)
 			# Patrolling done, let's let searching finish.
 			_state_mem.erase(MEM_PATROLLING)
 		STATE.Hunting:
-			var target : Node2D = _hunt_target.get_ref()
-			print("Target: ", target)
-			if target == null or not _sight_system.can_see(target):
-				print("Ending Hunt")
-				_sight_system.render_detection_lines = true
-				_hunt_target = weakref(null)
-				_state_mem.erase(MEM_HUNTING)
-				_ChangeState.call_deferred(STATE.Searching)
+			print("Hunting done")
+			_ChangeState.call_deferred(STATE.Searching)
 
 func _on_sight_system_detected(body : Node2D, distance : float) -> void:
-	if _hunt_target.get_ref() == null and body.has_method("damage"):
-		_hunt_target = weakref(body)
-		_ChangeState.call_deferred(STATE.Hunting)
-		_sight_system.render_detection_lines = false
+	if _hunt_target.get_ref() == null:
+		if body.has_method("damage"):
+			print("Detected target")
+			_hunt_target = weakref(body)
+			_nav_agent.follow_target(body)
+			_ChangeState.call_deferred(STATE.Hunting)
+		else:
+			_sight_system.drop_detected()
 
 func _on_sight_system_lost_detection():
-	pass # Replace with function body.
+	if _hunt_target.get_ref() != null:
+		_hunt_target = weakref(null)
+		_nav_agent.follow_target(null)
 
 func _on_attack_area_body_entered(body : Node2D) -> void:
 	pass

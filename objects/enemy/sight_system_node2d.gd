@@ -166,6 +166,8 @@ func _CanSee(obj : Node2D, coll_mask : int = 4294967295) -> Dictionary:
 func can_see(obj : Node2D) -> bool:
 	return not _CanSee(obj, collision_mask).is_empty()
 
+func drop_detected() -> void:
+	_detected = weakref(null)
 
 # ------------------------------------------------------------------------------
 # Handler Methods
