@@ -122,7 +122,7 @@ func _State_Searching(delta : float) -> void:
 	if dlength <= 0.01:
 		set_facing(mem.facing.rotated(angle))
 	else:
-		print("Offset Only")
+		_DebugPrint("Offset Only")
 		mem.facing = _direction.normalized()
 	
 	if weight == 1.0:
@@ -145,7 +145,7 @@ func _State_Searching(delta : float) -> void:
 func _State_Patrolling(_delta : float) -> void:
 	#print("Patrolling: ", _direction)
 	if not MEM_PATROLLING in _state_mem:
-		print("New Patrolling memory")
+		_DebugPrint("New Patrolling memory")
 		_state_mem[MEM_PATROLLING] = {
 			"nav_point": weakref(null),
 			"reset": false
@@ -155,7 +155,7 @@ func _State_Patrolling(_delta : float) -> void:
 	
 	var mem : Dictionary = _state_mem[MEM_PATROLLING]
 	var CalcNavPoint : Callable = func():
-		print("Setting Nav Point")
+		_DebugPrint("Setting Nav Point")
 		var map : RID = _nav_agent.get_navigation_map()
 		var nav_point = Game.get_random_reachable_nav_point_in_group(
 			nav_point_group, map, global_position, mem.nav_point.get_ref()
@@ -174,7 +174,7 @@ func _State_Patrolling(_delta : float) -> void:
 				_nav_agent.target_position = mem.nav_point.get_ref().global_position
 
 	if not MEM_SEARCHING in _state_mem and _rng.randf() < 0.005:
-		print("Patrolling add search")
+		_DebugPrint("Patrolling add search")
 		_ChangeState(STATE.Searching)
 
 
@@ -184,6 +184,10 @@ func _State_Hunting(_delta : float) -> void:
 # ------------------------------------------------------------------------------
 # Private Methods
 # ------------------------------------------------------------------------------
+func _DebugPrint(msg : String) -> void:
+	if debug == true:
+		print(msg)
+
 func _ChangeState(new_state : STATE) -> void:
 	if new_state == _state: return
 	match new_state:
@@ -191,16 +195,16 @@ func _ChangeState(new_state : STATE) -> void:
 			pass
 		STATE.Searching:
 			if not MEM_PATROLLING in _state_mem:
-				print("Searching State")
+				_DebugPrint("Searching State")
 				_nav_agent.activate(false)
 			else:
 				_state_mem[MEM_PATROLLING].reset = true
-				print("Searching/Patrolling State")
+				_DebugPrint("Searching/Patrolling State")
 		STATE.Patrolling:
-			print("Patrolling State")
+			_DebugPrint("Patrolling State")
 			pass
 		STATE.Hunting:
-			print("Hunting State")
+			_DebugPrint("Hunting State")
 			_nav_agent.activate(true)
 	_state = new_state
 
@@ -220,13 +224,13 @@ func _SetNavTargetPosition(target_position : Vector2, activate : bool = true) ->
 # Handler Methods
 # ------------------------------------------------------------------------------
 func _on_nav_target_unreachable() -> void:
-	print("Target is unreachable")
+	_DebugPrint("Target is unreachable")
 
 func _on_nav_finished() -> void:
-	print("Finished")
+	_DebugPrint("Finished")
 	match _state:
 		STATE.Patrolling:
-			print("Patrolling done")
+			_DebugPrint("Patrolling done")
 			_nav_agent.activate(false)
 			_state_mem.erase(MEM_PATROLLING)
 			var rnd : float = _rng.randf()
@@ -236,18 +240,18 @@ func _on_nav_finished() -> void:
 				_state_mem.erase(MEM_PATROLLING)
 				_ChangeState(STATE.Searching)
 		STATE.Searching:
-			print("Searching active... probably finished patrolling")
+			_DebugPrint("Searching active... probably finished patrolling")
 			_nav_agent.activate(false)
 			# Patrolling done, let's let searching finish.
 			_state_mem.erase(MEM_PATROLLING)
 		STATE.Hunting:
-			print("Hunting done")
+			_DebugPrint("Hunting done")
 			_ChangeState.call_deferred(STATE.Searching)
 
 func _on_sight_system_detected(body : Node2D, _distance : float) -> void:
 	if _hunt_target.get_ref() == null:
 		if body.has_method("damage"):
-			print("Detected target")
+			_DebugPrint("Detected target")
 			_hunt_target = weakref(body)
 			_nav_agent.follow_target(body)
 			_ChangeState.call_deferred(STATE.Hunting)

@@ -81,17 +81,20 @@ func _draw() -> void:
 
 func _physics_process(delta : float) -> void:
 	if sight_area == null: return
-	
+
 	if _detected.get_ref() != null:
 		var d : Node2D = _detected.get_ref()
-		if not _CanSee(d, collision_mask):
+		if _CanSee(d, collision_mask) != d:
 			if _detect_memory_time <= 0.0:
+				print("Lost Sight")
 				lost_detection.emit()
 			_detect_memory_time += delta
 			if memory_seconds <= 0.0 or _detect_memory_time >= memory_seconds:
 				_detect_memory_time = 0.0
 				_detected = weakref(null)
+				print("Detected Target lost")
 		elif _detect_memory_time > 0.0:
+			print("Redetected")
 			var dist : float = global_position.distance_to(d.global_position)
 			detected.emit(d, dist)
 			_detect_memory_time = 0.0
@@ -105,8 +108,9 @@ func _physics_process(delta : float) -> void:
 			continue
 		
 		# Check if there's a line-of-sight on the target
-		var result : Dictionary = _CanSee(target, collision_mask)
-		if result.is_empty():
+
+		var result_obj : Node2D = _CanSee(target, collision_mask)
+		if result_obj != target:
 			# If no line-of-sight, reset detection system
 			_spotted[sname].detect_dist = 0.0
 			# If the target left the field of view (sight_area), clear from the dictionary
@@ -154,17 +158,20 @@ func _CastTo(pos : Vector2, coll_mask : int = 4294967295) -> Dictionary:
 		PhysicsRayQueryParameters2D.create(global_position, pos, coll_mask)
 	)
 
-func _CanSee(obj : Node2D, coll_mask : int = 4294967295) -> Dictionary:
+func _CanSee(obj : Node2D, coll_mask : int = 4294967295) -> Node2D:
+	# Going to fudge this... if result is empty, assume it can see the target.
+	#  Otherwise, if result returns a collider, check if it's <obj>
 	var result : Dictionary = _CastTo(obj.global_position, coll_mask)
-	if not result.is_empty() and result.collider == obj:
-		return result
-	return {}
+	if not result.is_empty():
+		if result.collider != obj:
+			return result.collider
+	return obj
 
 # ------------------------------------------------------------------------------
 # Public Methods
 # ------------------------------------------------------------------------------
 func can_see(obj : Node2D) -> bool:
-	return not _CanSee(obj, collision_mask).is_empty()
+	return _CanSee(obj, collision_mask) == obj
 
 func drop_detected() -> void:
 	_detected = weakref(null)
@@ -174,8 +181,10 @@ func drop_detected() -> void:
 # ------------------------------------------------------------------------------
 func _on_body_entered(body : Node2D) -> void:
 	if body.name in _spotted:
+		print("Re-Spotted: ", body.name)
 		_spotted[body.name].in_sight = true
 	else:
+		print("Spotted: ", body.name)
 		_spotted[body.name] = {
 			"node": weakref(body),
 			"in_sight": true,

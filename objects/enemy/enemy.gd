@@ -158,6 +158,6 @@ func get_direction() -> Vector2:
 	return _direction
 
 func damage(_amount : float) -> void:
-	print("Ouch!")
+	pass
 
 
