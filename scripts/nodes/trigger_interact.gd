@@ -5,7 +5,7 @@ class_name TriggerInteract
 # ------------------------------------------------------------------------------
 # Signals
 # ------------------------------------------------------------------------------
-signal link_triggered(activated)
+signal link_state_changed(state)
 
 # ------------------------------------------------------------------------------
 # Export Variables
@@ -25,6 +25,7 @@ var _area : Area2D = null
 var _collision : CollisionShape2D = null
 
 var _blocked : bool = false
+var _triggered : bool = false
 var _link_states : Dictionary = {}
 
 # ------------------------------------------------------------------------------
@@ -53,7 +54,7 @@ func _ready() -> void:
 
 # ------------------------------------------------------------------------------
 # Private Methods
-# ------------------------------------------------------------------------------
+# -----------_ResetTimer()-------------------------------------------------------------------
 func _UpdateArea() -> void:
 	if _area == null:
 		_area = Area2D.new()
@@ -82,17 +83,33 @@ func _UpdateLinks() -> void:
 		if not links[idx].name in _link_states:
 			_link_states[links[idx].name] = weakref(links[idx])
 		
-		if not links[idx].link_triggered.is_connected(_on_link_triggered):
-			links[idx].link_triggered.connect(_on_link_triggered)
+		if not links[idx].link_state_changed.is_connected(_on_link_state_changed):
+			links[idx].link_state_changed.connect(_on_link_state_changed)
 	
 	var keys : Array = _link_states.keys()
 	for key in keys:
 		var link : TriggerInteract = _link_states[key].get_ref()
 		if link == null or not key in active:
 			if link != null:
-				if link.link_triggered.is_connected(_on_link_triggered):
-					link.link_triggered.disconnect(_on_link_triggered)
+				if link.link_state_changed.is_connected(_on_link_state_changed):
+					link.link_state_changed.disconnect(_on_link_state_changed)
 			_link_states.erase(key)
+
+func _ResetTimer() -> void:
+	if not once and reset_delay > 0.0:
+		_blocked = true
+		link_state_changed.emit({"blocked": _blocked})
+		get_tree().create_timer(reset_delay).timeout.connect(
+			(func():
+				_blocked = false
+				set_activated(not _activated)
+				),
+			CONNECT_ONE_SHOT
+		)
+
+func _DictHasPropType(d : Dictionary, prop : String, type : int) -> bool:
+	if not prop in d: return false
+	return typeof(d[prop]) == type
 
 # ------------------------------------------------------------------------------
 # Public Methods
@@ -101,17 +118,37 @@ func set_activated(a : bool) -> void:
 	var old = _activated
 	super.set_activated(a)
 	if _activated != old:
-		link_triggered.emit(_activated)
+		link_state_changed.emit({
+			"activated": _activated,
+			"blocked": _blocked,
+			"triggered": _triggered
+		})
+
+func reset() -> void:
+	_triggered = false
+	link_state_changed.emit({"triggered":_triggered})
 
 # ------------------------------------------------------------------------------
 # Handler Methods
 # ------------------------------------------------------------------------------
-func _on_link_triggered(act: bool) -> void:
-	_activated = act
-	if _activated:
-		activated.emit()
-	else:
-		deactivated.emit()
+func _on_link_state_changed(state : Dictionary) -> void:
+	if _DictHasPropType(state, "blocked", TYPE_BOOL):
+		_blocked = state.blocked
+	if _DictHasPropType(state, "triggered", TYPE_BOOL):
+		_triggered = state.triggered
+		if once:
+			if _triggered:
+				if _area.body_entered.is_connected(_on_body_entered):
+					_area.body_entered.disconnect(_on_body_entered)
+			else:
+				if not _area.body_entered.is_connected(_on_body_entered):
+					_area.body_entered.connect(_on_body_entered)
+	if _DictHasPropType(state, "activated", TYPE_BOOL):
+		_activated = state.activated
+		if _activated:
+			activated.emit()
+		else:
+			deactivated.emit()
 
 func _on_body_entered(body : Node2D) -> void:
 	if body.has_signal("interacted"):
@@ -125,12 +162,14 @@ func _on_body_exited(body : Node2D) -> void:
 
 func _on_interacted() -> void:
 	if _blocked: return
+	_triggered = true
 	if once:
 		if _area.body_entered.is_connected(_on_body_entered):
 			_area.body_entered.disconnect(_on_body_entered)
-		if _area.body_exited.is_connected(_on_body_exited):
-			_area.body_exited.disconnect(_on_body_exited)
-	set_activated(!_activated)
-	if _activated and reset_delay > 0.0:
-		_blocked = true
-		get_tree().create_timer(reset_delay).timeout.connect((func (): set_activated(false)), CONNECT_ONE_SHOT)
+		# NOTE: Don't disconnect the body_exited signal, so as to clean connected signals from bodies that
+		# may have been connected prior to this triggering.
+		#if _area.body_exited.is_connected(_on_body_exited):
+		#	_area.body_exited.disconnect(_on_body_exited)
+	set_activated(not _activated)
+	if _activated:
+		_ResetTimer()
