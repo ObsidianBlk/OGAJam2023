@@ -11,6 +11,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_prkyi"]
 shader = ExtResource("3_lo2vw")
+shader_parameter/use_screen_texture = true
 shader_parameter/enabled = false
 shader_parameter/strength = 0.001
 shader_parameter/speed = 1.0

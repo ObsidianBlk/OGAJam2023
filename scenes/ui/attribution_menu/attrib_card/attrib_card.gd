@@ -17,6 +17,8 @@ const CC_BADGE : Dictionary = {
 	"by-nc-sa.eu": preload("res://assets/graphics/ccbadges/by-nc-sa.eu.png"),
 	"by-nc-nd.eu": preload("res://assets/graphics/ccbadges/by-nc-nd.eu.png")
 }
+const OGA_CONTENT_BASE : String = "https://opengameart.org/content"
+
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
@@ -51,7 +53,11 @@ func _DisplayData() -> void:
 	if "author" in _data:
 		_lbl_author_value.text = _data.author
 	if "resource_url" in _data:
-		_link_resource.text = _data.resource_url
+		if _data.resource_url.begins_with(OGA_CONTENT_BASE):
+			_link_resource.text = "https://...%s"%[_data.resource_url.substr(OGA_CONTENT_BASE.length())]
+			_link_resource.tooltip_text = _data.resource_url
+		else:
+			_link_resource.text = _data.resource_url
 		_link_resource.uri = _data.resource_url
 	if "license_url" in _data:
 		_link_license.uri = _data.license_url

@@ -1,7 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://b0f8hpm088b0k"]
+[gd_scene load_steps=7 format=3 uid="uid://b0f8hpm088b0k"]
 
 [ext_resource type="Theme" uid="uid://8hqlogsadb8w" path="res://Main.theme" id="1_e570o"]
 [ext_resource type="Script" path="res://scenes/ui/attribution_menu/attribution_menu.gd" id="1_ergev"]
+[ext_resource type="Texture2D" uid="uid://dk4yt2rvmpsa7" path="res://assets/graphics/asset_ui_scifi/TitlePanel02.png" id="3_natu5"]
+[ext_resource type="Texture2D" uid="uid://0331qwe4v14h" path="res://assets/graphics/asset_ui_scifi/Grid.png" id="4_7c2vk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sqql3"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.25098)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_75uc7"]
+texture = ExtResource("4_7c2vk")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+modulate_color = Color(1, 0.304, 0.28, 0.392157)
 
 [node name="AttributionMenu" type="MarginContainer"]
 anchors_preset = 15
@@ -12,29 +32,65 @@ grow_vertical = 2
 theme = ExtResource("1_e570o")
 script = ExtResource("1_ergev")
 
-[node name="CPanel" type="PanelContainer" parent="."]
+[node name="VBC" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 0
-theme_type_variation = &"Panel_SciFi_B"
+theme_override_constants/separation = -12
 
-[node name="Layout" type="VBoxContainer" parent="CPanel"]
+[node name="TitleBar" type="MarginContainer" parent="VBC"]
+z_index = 1
 layout_mode = 2
 
-[node name="CScroll" type="ScrollContainer" parent="CPanel/Layout"]
+[node name="TextureRect" type="TextureRect" parent="VBC/TitleBar"]
+layout_mode = 2
+texture = ExtResource("3_natu5")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="VBC/TitleBar"]
+layout_mode = 2
+theme_type_variation = &"Title_Label"
+text = "Attributions"
+horizontal_alignment = 1
+
+[node name="CPanel" type="PanelContainer" parent="VBC"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_type_variation = &"Panel_SciFi_B"
+
+[node name="Layout" type="VBoxContainer" parent="VBC/CPanel"]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="VBC/CPanel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="ScrollPanel" type="PanelContainer" parent="VBC/CPanel/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_sqql3")
+
+[node name="Panel" type="Panel" parent="VBC/CPanel/Layout/ScrollPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_75uc7")
+
+[node name="CScroll" type="ScrollContainer" parent="VBC/CPanel/Layout/ScrollPanel"]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="AttribCards" type="VBoxContainer" parent="CPanel/Layout/CScroll"]
+[node name="AttribCards" type="VBoxContainer" parent="VBC/CPanel/Layout/ScrollPanel/CScroll"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Buttons" type="HBoxContainer" parent="CPanel/Layout"]
+[node name="Buttons" type="HBoxContainer" parent="VBC/CPanel/Layout"]
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="BtnBack" type="Button" parent="CPanel/Layout/Buttons"]
+[node name="BtnBack" type="Button" parent="VBC/CPanel/Layout/Buttons"]
 layout_mode = 2
 theme_type_variation = &"Button_SciFi_A"
 text = "Back"
 
-[connection signal="pressed" from="CPanel/Layout/Buttons/BtnBack" to="." method="_on_btn_back_pressed"]
+[connection signal="pressed" from="VBC/CPanel/Layout/Buttons/BtnBack" to="." method="_on_btn_back_pressed"]

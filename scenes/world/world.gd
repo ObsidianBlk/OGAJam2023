@@ -10,6 +10,19 @@ const BACKGROUNDS : Dictionary = {
 
 const INITIAL_LEVEL_PATH : String = "res://scenes/levels/test_level/test_level.tscn"
 
+const NICE_PLANET_SEEDS : Array = [
+	1.0, 1.192, 1.448, 1.704,
+	2.281, 2.345,
+	2.537, 2.601, 2.793,
+	3.306, 3.37, 3.691, 3.947,
+	4.203, 4.459, 4.587,
+	5.1, 5.292, 5.42, 5.612, 5.868,
+	6.189, 6.253, 6.702,
+	7.022, 7.086, 7.278, 7.534,
+	8.175, 8.431, 8.495, 8.751, 8.943,
+	9.199, 9.327, 9.519
+]
+
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
@@ -33,13 +46,17 @@ var _level : GameLevel = null
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
-	_planet_seed = randf_range(0.0, 10000.0)
+	_planet_seed = _GetNicePlanetSeed()
 	if _background_request != &"":
 		_SetBackground(_background_request)
 
 # ------------------------------------------------------------------------------
 # Private Methods
 # ------------------------------------------------------------------------------
+func _GetNicePlanetSeed() -> float:
+	var idx : int = randi_range(0, NICE_PLANET_SEEDS.size() - 1)
+	return NICE_PLANET_SEEDS[idx]
+
 func _SetBackground(background_name : StringName) -> void:
 	if _game_view == null:
 		_background_request = background_name

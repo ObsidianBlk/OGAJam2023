@@ -6,9 +6,9 @@ extends Control
 # Export Variables
 # ------------------------------------------------------------------------------
 @export_category("Hell Planet")
-@export_range(0, 10) var planet_seed = 1.0:						set = set_planet_seed
-@export_range(-1.0, 1.0) var time_speed = 0.2:				set = set_time_speed
-@export_range(0.0, 6.28) var planet_rotation = 1.0:			set = set_planet_rotation
+@export_range(0, 10) var planet_seed : float = 1.0:			set = set_planet_seed
+@export_range(-1.0, 1.0) var time_speed : float = 0.2:		set = set_time_speed
+@export_range(0.0, 6.28) var planet_rotation : float = 1.0:	set = set_planet_rotation
 
 
 # ------------------------------------------------------------------------------
@@ -73,4 +73,3 @@ func _UpdateSize() -> void:
 	var ctrl_size : Vector2 = get_size()
 	var pixels = min(ctrl_size.x, ctrl_size.y)
 	_UpdateShaderParam("pixels", pixels)
-	#_UpdateShaderParam("size", )

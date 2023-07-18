@@ -19,7 +19,7 @@ var _attrib_data : Dictionary = {}
 # ------------------------------------------------------------------------------
 # Onready Variables
 # ------------------------------------------------------------------------------
-@onready var _attrib_cards : Control = $CPanel/Layout/CScroll/AttribCards
+@onready var _attrib_cards : Control = %AttribCards
 
 # ------------------------------------------------------------------------------
 # Override Methods

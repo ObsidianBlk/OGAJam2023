@@ -1,11 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://cajjow4ykmrrh"]
+[gd_scene load_steps=17 format=3 uid="uid://cajjow4ykmrrh"]
 
 [ext_resource type="Shader" path="res://shaders/planet/PlanetUnder.gdshader" id="1_1uu1a"]
 [ext_resource type="Script" path="res://scenes/menu_background/menu_background.gd" id="1_aqhbf"]
 [ext_resource type="Shader" path="res://shaders/Starfield.gdshader" id="1_dp7he"]
 [ext_resource type="Script" path="res://scenes/menu_background/HellPlanet.gd" id="1_dxwkn"]
 [ext_resource type="Shader" path="res://shaders/planet/Craters.gdshader" id="2_odvie"]
+[ext_resource type="Script" path="res://scenes/menu_background/PlanetCtrl.gd" id="3_73opl"]
 [ext_resource type="Shader" path="res://shaders/planet/LavaRivers.gdshader" id="3_mo75s"]
+[ext_resource type="Shader" path="res://shaders/HeatHaze_Label.gdshader" id="7_u2gon"]
+[ext_resource type="FontFile" uid="uid://dac3i1l2a2cdw" path="res://assets/fonts/gravitate_brk/gravitat.ttf" id="8_lhitl"]
+[ext_resource type="FontFile" uid="uid://ck0byx6aeopno" path="res://assets/fonts/gravitate_brk/graviseg.ttf" id="9_ap7wh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gopsw"]
 shader = ExtResource("1_dp7he")
@@ -28,11 +32,11 @@ shader_parameter/color1 = Color(0.560784, 0.301961, 0.239216, 1)
 shader_parameter/color2 = Color(0.321569, 0.2, 0.25098, 1)
 shader_parameter/color3 = Color(0.239216, 0.160784, 0.211765, 1)
 shader_parameter/should_dither = true
-shader_parameter/pixels = 355.0
+shader_parameter/pixels = 400.0
 shader_parameter/size = 8.0
 shader_parameter/OCTAVES = 4
-shader_parameter/seed = 1.0
-shader_parameter/time = 213.333
+shader_parameter/seed = 9.519
+shader_parameter/time = 3011.46
 shader_parameter/time_speed = 0.04
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_11wgw"]
@@ -46,11 +50,11 @@ shader_parameter/color1 = Color(0.231373, 0.2, 0.25098, 1)
 shader_parameter/color2 = Color(0.239216, 0.160784, 0.211765, 1)
 shader_parameter/color3 = Color(0, 0, 0, 1)
 shader_parameter/should_dither = true
-shader_parameter/pixels = 355.0
+shader_parameter/pixels = 400.0
 shader_parameter/size = 8.0
 shader_parameter/OCTAVES = 5
-shader_parameter/seed = 1.0
-shader_parameter/time = 213.333
+shader_parameter/seed = 9.519
+shader_parameter/time = 3011.46
 shader_parameter/time_speed = 0.04
 shader_parameter/light_border = 0.4
 
@@ -65,13 +69,33 @@ shader_parameter/color1 = Color(1, 0.541176, 0.2, 1)
 shader_parameter/color2 = Color(0.415686, 0.415686, 0.415686, 1)
 shader_parameter/color3 = Color(0, 0.843137, 0.843137, 1)
 shader_parameter/should_dither = true
-shader_parameter/pixels = 355.0
+shader_parameter/pixels = 400.0
 shader_parameter/size = 10.0
 shader_parameter/OCTAVES = 5
-shader_parameter/seed = 1.0
-shader_parameter/time = 213.333
+shader_parameter/seed = 9.519
+shader_parameter/time = 3011.46
 shader_parameter/time_speed = 0.04
 shader_parameter/river_cutoff = 0.443
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d7mu4"]
+shader = ExtResource("7_u2gon")
+shader_parameter/font_color = Color(0.152941, 0.129412, 0.168627, 1)
+shader_parameter/font_outline = false
+shader_parameter/font_outline_color = Color(0.141176, 0.0784314, 0.105882, 1)
+shader_parameter/font_outline_thickness = 1.0
+shader_parameter/strength = 0.003
+shader_parameter/speed = 8.0
+shader_parameter/frequency = 100.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dohta"]
+shader = ExtResource("7_u2gon")
+shader_parameter/font_color = Color(1, 0.321569, 0.2, 1)
+shader_parameter/font_outline = false
+shader_parameter/font_outline_color = Color(1, 1, 1, 1)
+shader_parameter/font_outline_thickness = 1.0
+shader_parameter/strength = 0.002
+shader_parameter/speed = 10.0
+shader_parameter/frequency = 90.0
 
 [node name="MenuBackground" type="CanvasLayer"]
 script = ExtResource("1_aqhbf")
@@ -87,24 +111,69 @@ grow_vertical = 2
 material = SubResource("ShaderMaterial_gopsw")
 layout_mode = 2
 
-[node name="Planet" type="AspectRatioContainer" parent="."]
-offset_right = 441.0
-offset_bottom = 355.0
+[node name="PlanetCtrl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_73opl")
+center_offset = Vector2(0, 100)
 
-[node name="HellPlanet" type="MarginContainer" parent="Planet"]
+[node name="Planet" type="AspectRatioContainer" parent="PlanetCtrl"]
+offset_left = 383.0
+offset_top = 123.0
+offset_right = 783.0
+offset_bottom = 523.0
+
+[node name="HellPlanet" type="MarginContainer" parent="PlanetCtrl/Planet"]
+unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("1_dxwkn")
+planet_seed = 9.519
 time_speed = 0.04
 planet_rotation = 0.3
 
-[node name="PlanetUnder" type="ColorRect" parent="Planet/HellPlanet"]
+[node name="PlanetUnder" type="ColorRect" parent="PlanetCtrl/Planet/HellPlanet"]
 material = SubResource("ShaderMaterial_jq7d0")
 layout_mode = 2
 
-[node name="Craters" type="ColorRect" parent="Planet/HellPlanet"]
+[node name="Craters" type="ColorRect" parent="PlanetCtrl/Planet/HellPlanet"]
 material = SubResource("ShaderMaterial_11wgw")
 layout_mode = 2
 
-[node name="Rivers" type="ColorRect" parent="Planet/HellPlanet"]
+[node name="Rivers" type="ColorRect" parent="PlanetCtrl/Planet/HellPlanet"]
 material = SubResource("ShaderMaterial_n0ylv")
 layout_mode = 2
+
+[node name="TitleContainer" type="CenterContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="Title" type="MarginContainer" parent="TitleContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Label" type="Label" parent="TitleContainer/Title"]
+material = SubResource("ShaderMaterial_d7mu4")
+layout_mode = 2
+theme_override_colors/font_color = Color(0.152941, 0.129412, 0.168627, 1)
+theme_override_colors/font_outline_color = Color(0.654902, 0.654902, 0.654902, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("8_lhitl")
+theme_override_font_sizes/font_size = 36
+text = "Planet F-451"
+
+[node name="Label2" type="Label" parent="TitleContainer/Title"]
+material = SubResource("ShaderMaterial_dohta")
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.541176, 0.2, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("9_ap7wh")
+theme_override_font_sizes/font_size = 36
+text = "Planet F-451"

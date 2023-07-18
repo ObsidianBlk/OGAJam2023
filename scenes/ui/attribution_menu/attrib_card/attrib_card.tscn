@@ -13,37 +13,30 @@ script = ExtResource("1_qvoqd")
 [node name="VBC" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Layout" type="GridContainer" parent="VBC"]
+[node name="LblNameValue" type="Label" parent="VBC"]
+unique_name_in_owner = true
 layout_mode = 2
-columns = 2
+theme_type_variation = &"Title_Label"
+text = "No Name"
+horizontal_alignment = 1
 
-[node name="LblName" type="Label" parent="VBC/Layout"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBC"]
 layout_mode = 2
-text = "Name:"
 
-[node name="LblNameValue" type="Label" parent="VBC/Layout"]
+[node name="LblAuthorValue" type="Label" parent="VBC/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "No Name"
 
-[node name="LblAuthor" type="Label" parent="VBC/Layout"]
-layout_mode = 2
-text = "Author:"
-
-[node name="LblAuthorValue" type="Label" parent="VBC/Layout"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "No Name"
-
-[node name="LblURL" type="Label" parent="VBC/Layout"]
-layout_mode = 2
-text = "URL:"
-
-[node name="LinkResource" type="LinkButton" parent="VBC/Layout"]
+[node name="LinkResource" type="LinkButton" parent="VBC/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Google"
 uri = "https://google.com"
+
+[node name="Layout" type="GridContainer" parent="VBC"]
+layout_mode = 2
+columns = 2
 
 [node name="TextureLicenseType" type="TextureRect" parent="VBC/Layout"]
 unique_name_in_owner = true

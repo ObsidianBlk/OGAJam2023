@@ -17,7 +17,7 @@ script = ExtResource("1_wnpg3")
 
 [node name="MPL" type="PointLight2D" parent="."]
 unique_name_in_owner = true
-color = Color(0.168636, 0.98197, 0, 1)
+color = Color(0.168634, 0.98197, 0, 1)
 energy = 1.13396
 texture = ExtResource("1_2nqta")
 script = ExtResource("2_obhue")

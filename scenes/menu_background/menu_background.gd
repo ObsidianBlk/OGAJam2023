@@ -9,7 +9,7 @@ var _seed : float = 1.0
 # ------------------------------------------------------------------------------
 # Onready Variables
 # ------------------------------------------------------------------------------
-@onready var _hell_planet : Control = $Planet/HellPlanet
+@onready var _hell_planet : Control = %HellPlanet
 
 # ------------------------------------------------------------------------------
 # Override Methods
