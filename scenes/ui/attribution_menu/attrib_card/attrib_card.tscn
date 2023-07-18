@@ -1,10 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://irwhgwl2d6pu"]
+[gd_scene load_steps=3 format=3 uid="uid://irwhgwl2d6pu"]
 
+[ext_resource type="Theme" uid="uid://8hqlogsadb8w" path="res://Main.theme" id="1_5s8vd"]
 [ext_resource type="Script" path="res://scenes/ui/attribution_menu/attrib_card/attrib_card.gd" id="1_qvoqd"]
 
 [node name="AttribCard" type="PanelContainer"]
 offset_right = 40.0
 offset_bottom = 40.0
+theme = ExtResource("1_5s8vd")
+theme_type_variation = &"Panel_SciFi_C"
 script = ExtResource("1_qvoqd")
 
 [node name="VBC" type="VBoxContainer" parent="."]

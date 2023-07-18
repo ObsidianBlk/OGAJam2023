@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0f8hpm088b0k"]
+[gd_scene load_steps=3 format=3 uid="uid://b0f8hpm088b0k"]
 
+[ext_resource type="Theme" uid="uid://8hqlogsadb8w" path="res://Main.theme" id="1_e570o"]
 [ext_resource type="Script" path="res://scenes/ui/attribution_menu/attribution_menu.gd" id="1_ergev"]
 
 [node name="AttributionMenu" type="MarginContainer"]
@@ -8,11 +9,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_e570o")
 script = ExtResource("1_ergev")
 
 [node name="CPanel" type="PanelContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 0
+theme_type_variation = &"Panel_SciFi_B"
 
 [node name="Layout" type="VBoxContainer" parent="CPanel"]
 layout_mode = 2
@@ -31,6 +34,7 @@ size_flags_vertical = 0
 
 [node name="BtnBack" type="Button" parent="CPanel/Layout/Buttons"]
 layout_mode = 2
+theme_type_variation = &"Button_SciFi_A"
 text = "Back"
 
 [connection signal="pressed" from="CPanel/Layout/Buttons/BtnBack" to="." method="_on_btn_back_pressed"]

@@ -16,6 +16,8 @@ const INITIAL_LEVEL_PATH : String = "res://scenes/levels/test_level/test_level.t
 var _background : CanvasLayer = null
 var _background_request : StringName = &""
 
+var _planet_seed : float = 1.0
+
 var _level : GameLevel = null
 
 # ------------------------------------------------------------------------------
@@ -31,6 +33,7 @@ var _level : GameLevel = null
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
+	_planet_seed = randf_range(0.0, 10000.0)
 	if _background_request != &"":
 		_SetBackground(_background_request)
 
@@ -53,6 +56,8 @@ func _SetBackground(background_name : StringName) -> void:
 		if background_name != &"":
 			_background = BACKGROUNDS[background_name].instantiate()
 			if _background != null:
+				if _background.has_method("set_seed"):
+					_background.set_seed(_planet_seed)
 				_game_view.add_child(_background)
 
 func _DropCurrentLevel() -> void:
