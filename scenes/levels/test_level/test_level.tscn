@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bxj6ilf7kixh6"]
+[gd_scene load_steps=11 format=3 uid="uid://bxj6ilf7kixh6"]
 
 [ext_resource type="TileSet" uid="uid://5rssu1a6i47q" path="res://assets/graphics/TeenieXeenie/tilesets/tileset.tres" id="1_anjiu"]
 [ext_resource type="Script" path="res://scenes/levels/test_level/test_level.gd" id="1_qijd6"]
 [ext_resource type="PackedScene" uid="uid://cws5p1fsi2vup" path="res://objects/enemy/xeno/xeno.tscn" id="3_la4sf"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_door.gd" id="3_osram"]
+[ext_resource type="PackedScene" uid="uid://b66rd02vw7a1k" path="res://objects/cooler_unit/cooler_unit.tscn" id="4_d7j3r"]
 [ext_resource type="Script" path="res://scripts/nodes/nav_point.gd" id="4_e5s81"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_interact.gd" id="4_fy37o"]
 [ext_resource type="PackedScene" uid="uid://qx0q5hd2j2bf" path="res://objects/soldier/soldier.tscn" id="5_f1l7d"]
@@ -13,6 +14,7 @@
 [node name="TestLevel" type="Node2D"]
 script = ExtResource("1_qijd6")
 canvas_modulate_node_path = NodePath("CanvasModulate")
+color = Color(0.0980392, 0.0980392, 0.0980392, 1)
 
 [node name="TileMap" type="TileMap" parent="."]
 texture_filter = 1
@@ -37,6 +39,28 @@ radius = 1.0
 collision_mask = 0
 input = NodePath("../../Triggers/HallDoorA")
 
+[node name="LargeChamberDoor" type="Node2D" parent="TileMap"]
+position = Vector2(332, 51)
+script = ExtResource("3_osram")
+orientation = 1
+collision_mask = 34
+auto_open = true
+
+[node name="OverlayMap" type="TileMap" parent="TileMap"]
+tile_set = ExtResource("1_anjiu")
+format = 2
+
+[node name="CoolerUnit" parent="TileMap/OverlayMap" node_paths=PackedStringArray("trigger") instance=ExtResource("4_d7j3r")]
+position = Vector2(388, 82)
+trigger = NodePath("TriggerInteract")
+
+[node name="TriggerInteract" type="Node2D" parent="TileMap/OverlayMap/CoolerUnit"]
+position = Vector2(0, 20)
+script = ExtResource("4_fy37o")
+radius = 8.0
+collision_mask = 34
+reset_delay = 0.1
+
 [node name="Triggers" type="Node2D" parent="."]
 
 [node name="HallDoorA" type="Node2D" parent="Triggers" node_paths=PackedStringArray("links")]
@@ -60,7 +84,7 @@ position = Vector2(95, 151)
 y_sort_enabled = true
 
 [node name="Soldier" parent="Entities" instance=ExtResource("5_f1l7d")]
-position = Vector2(3, 158)
+position = Vector2(402, 112)
 
 [node name="Player" type="Node" parent="Entities/Soldier"]
 script = ExtResource("6_q485d")
@@ -92,8 +116,7 @@ script = ExtResource("4_e5s81")
 group_name = "Outer_Area"
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-visible = false
-color = Color(0.0962047, 0.0962048, 0.0962047, 1)
+color = Color(0.168627, 0.168627, 0.168627, 1)
 
 [node name="MapLights" type="Node2D" parent="."]
 

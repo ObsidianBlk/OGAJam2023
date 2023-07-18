@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://b66rd02vw7a1k"]
+
+[ext_resource type="Texture2D" uid="uid://b5f0bpjnhn8sa" path="res://assets/graphics/light_maps/door_light.png" id="1_2nqta"]
+[ext_resource type="Script" path="res://objects/cooler_unit/cooler_unit.gd" id="1_wnpg3"]
+[ext_resource type="Script" path="res://scripts/nodes/ModulatingPointLight.gd" id="2_obhue"]
+
+[sub_resource type="Curve" id="Curve_uai5r"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.385135, 0.484211), 0.0, 0.0, 0, 0, Vector2(0.837838, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_2pp4q"]
+offsets = PackedFloat32Array(0.00377358, 0.173585, 0.467925, 0.675472, 0.89434, 1)
+colors = PackedColorArray(0, 0.564706, 1, 1, 0, 0.564706, 1, 1, 0.0166667, 1, 0, 1, 1, 0.883333, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1)
+
+[node name="CoolerUnit" type="Node2D"]
+script = ExtResource("1_wnpg3")
+
+[node name="MPL" type="PointLight2D" parent="."]
+unique_name_in_owner = true
+color = Color(0.168636, 0.98197, 0, 1)
+energy = 1.13396
+texture = ExtResource("1_2nqta")
+script = ExtResource("2_obhue")
+curve = SubResource("Curve_uai5r")
+base_energy = 2.0
+gradient = SubResource("Gradient_2pp4q")
+modulation_offset = 0.5
+loop = false
+loop_time = 0.0

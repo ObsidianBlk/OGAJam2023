@@ -14,6 +14,7 @@ signal cooling_source_removed(source_name)
 # ------------------------------------------------------------------------------
 @export_category("Game Level")
 @export_node_path("CanvasModulate") var canvas_modulate_node_path : NodePath = ^""
+@export var color : Color = Color.WHITE
 @export var initial_temprature : float = 55.0
 @export var temprature_dps : float = 1.0
 
@@ -30,7 +31,8 @@ func _ready() -> void:
 	_temprature = initial_temprature
 	var cm = get_node_or_null(canvas_modulate_node_path)
 	if is_instance_of(cm, CanvasModulate):
-		cm.visible = true
+		cm.color = color
+		#cm.visible = true
 
 func _physics_process(delta : float) -> void:
 	_temprature += temprature_dps * delta
