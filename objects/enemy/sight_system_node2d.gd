@@ -86,15 +86,12 @@ func _physics_process(delta : float) -> void:
 		var d : Node2D = _detected.get_ref()
 		if _CanSee(d, collision_mask) != d:
 			if _detect_memory_time <= 0.0:
-				print("Lost Sight")
 				lost_detection.emit()
 			_detect_memory_time += delta
 			if memory_seconds <= 0.0 or _detect_memory_time >= memory_seconds:
 				_detect_memory_time = 0.0
 				_detected = weakref(null)
-				print("Detected Target lost")
 		elif _detect_memory_time > 0.0:
-			print("Redetected")
 			var dist : float = global_position.distance_to(d.global_position)
 			detected.emit(d, dist)
 			_detect_memory_time = 0.0
@@ -188,10 +185,8 @@ func detect_if_not(body : Node2D) -> void:
 # ------------------------------------------------------------------------------
 func _on_body_entered(body : Node2D) -> void:
 	if body.name in _spotted:
-		print("Re-Spotted: ", body.name)
 		_spotted[body.name].in_sight = true
 	else:
-		print("Spotted: ", body.name)
 		_spotted[body.name] = {
 			"node": weakref(body),
 			"in_sight": true,

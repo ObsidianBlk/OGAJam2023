@@ -129,7 +129,6 @@ func _State_Searching(delta : float) -> void:
 	if dlength <= 0.01:
 		set_facing(mem.facing.rotated(angle))
 	else:
-		_DebugPrint("Offset Only")
 		mem.facing = _direction.normalized()
 	
 	if weight == 1.0:
@@ -144,10 +143,8 @@ func _State_Searching(delta : float) -> void:
 			_state_mem.erase(MEM_SEARCHING)
 			var nstate : STATE = STATE.Patrolling if _rng.randf() < 0.95 else STATE.Nest
 			_ChangeState(nstate)
-#	elif MEM_PATROLLING in _state_mem or _rng.randf() < 0.005:
-#		if not MEM_PATROLLING in _state_mem:
-#			print("Adding a patrol to my search!")
-#		_State_Patrolling(delta)
+	elif MEM_PATROLLING in _state_mem or _rng.randf() < 0.005:
+		_State_Patrolling(delta)
 
 func _State_Patrolling(_delta : float) -> void:
 	#print("Patrolling: ", _direction)
@@ -186,7 +183,23 @@ func _State_Patrolling(_delta : float) -> void:
 
 
 func _State_Hunting(_delta : float) -> void:
+	print("Hunting")
 	set_speed_multiplier(1.0)
+	var target : Node2D = _hunt_target.get_ref()
+	if target == null:
+		print("Searching due to no target")
+		_ChangeState(STATE.Searching)
+		return
+	
+	if not _nav_agent.is_activated() and not _sight_system.can_see(target):
+		print("Searching due to unseeable target")
+		_ChangeState(STATE.Searching)
+		return
+	
+	# TODO: There seems to be a point where target following is lost
+	#  Figure out why!
+	if target.name in _attackable_bodies:
+		_ChangeState(STATE.Attacking)
 
 func _State_Attacking(delta : float) -> void:
 	var target : Node2D = _hunt_target.get_ref()
@@ -197,6 +210,12 @@ func _State_Attacking(delta : float) -> void:
 	if not target.name in _attackable_bodies:
 		_ChangeState(STATE.Hunting)
 		return
+	
+	if target.has_method("is_alive"):
+		if not target.is_alive():
+			_ReleaseHuntTarget()
+			_ChangeState(STATE.Patrolling)
+			return
 	
 	if _attack_delay < ATTACK_RATE:
 		_attack_delay += delta
@@ -214,13 +233,23 @@ func _DebugPrint(msg : String) -> void:
 	if debug == true:
 		print(msg)
 
+func _ClearStateMemory() -> void:
+	_state_mem.erase(MEM_PATROLLING)
+	_state_mem.erase(MEM_SEARCHING)
+	_state_mem.erase(MEM_NEST)
+
+func _ReleaseHuntTarget() -> void:
+	_hunt_target = weakref(null)
+	_nav_agent.follow_target(null)
+
 func _ChangeState(new_state : STATE) -> void:
 	if new_state == _state: return
 	match new_state:
 		STATE.Dead:
+			_ClearStateMemory()
 			_nav_agent.activate(false)
 		STATE.Nest:
-			pass
+			_ClearStateMemory()
 		STATE.Searching:
 			if not MEM_PATROLLING in _state_mem:
 				_DebugPrint("Searching State")
@@ -233,8 +262,10 @@ func _ChangeState(new_state : STATE) -> void:
 			pass
 		STATE.Hunting:
 			_DebugPrint("Hunting State")
+			_ClearStateMemory()
 			_nav_agent.activate(true)
 		STATE.Attacking:
+			_ClearStateMemory()
 			_nav_agent.activate(false)
 			_attack_delay = ATTACK_RATE
 	_state = new_state
@@ -283,7 +314,8 @@ func _on_nav_finished() -> void:
 			_state_mem.erase(MEM_PATROLLING)
 		STATE.Hunting:
 			_DebugPrint("Hunting done")
-			_ChangeState.call_deferred(STATE.Searching)
+			_nav_agent.activate(false)
+			#_ChangeState.call_deferred(STATE.Searching)
 
 func _on_sight_system_detected(body : Node2D, _distance : float) -> void:
 	if _hunt_target.get_ref() == null:
@@ -297,17 +329,18 @@ func _on_sight_system_detected(body : Node2D, _distance : float) -> void:
 				_ChangeState.call_deferred(STATE.Hunting)
 		else:
 			_sight_system.drop_detected()
+	elif _hunt_target.get_ref().name == body.name and body.name in _attackable_bodies:
+		_ChangeState.call_deferred(STATE.Attacking)
 
 func _on_sight_system_lost_detection():
 	if _hunt_target.get_ref() != null:
-		_hunt_target = weakref(null)
-		_nav_agent.follow_target(null)
+		_ReleaseHuntTarget()
 
 func _on_attack_area_body_entered(body : Node2D) -> void:
 	_CleanAttackableBodiesDict()
 	if body.has_method("damage") and not body.name in _attackable_bodies:
-		_sight_system.detect_if_not.call_deferred(body)
 		_attackable_bodies[body.name] = weakref(body)
+		_sight_system.detect_if_not.call_deferred(body)
 
 func _on_attack_area_body_exited(body : Node2D) -> void:
 	_CleanAttackableBodiesDict()

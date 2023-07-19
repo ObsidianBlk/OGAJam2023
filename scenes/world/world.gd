@@ -104,6 +104,7 @@ func _LoadLevel(level_path : String) -> int:
 			_level.temprature_changed.connect(_on_temprature_changed)
 		_game_view.add_child(_level)
 		_hud.set_level(_level)
+		_level.initialize()
 		_on_temprature_changed(_level.initial_temprature)
 		return OK
 	return ERR_FILE_NOT_FOUND

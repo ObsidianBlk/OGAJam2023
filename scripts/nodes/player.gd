@@ -29,6 +29,8 @@ func _unhandled_input(event : InputEvent) -> void:
 	if _control == null: return
 	
 	_CheckControlModeFromEvent(event)
+	if not _control.visible: return
+	
 	if Game.get_control_mode() == Game.CTRLMode.Mouse:
 		if is_instance_of(event, InputEventMouseMotion):
 			_control.face_position(_control.get_local_mouse_position() + _control.position)

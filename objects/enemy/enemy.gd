@@ -10,7 +10,7 @@ signal collided(last_collision, collision_count)
 # ------------------------------------------------------------------------------
 # Constants and ENUMS
 # ------------------------------------------------------------------------------
-const DEATH_BURST : PackedScene = preload("res://objects/enemy/enemy_burst/enemy_burst.tscn")
+const DEATH_BURST : PackedScene = preload("res://objects/death_burst/death_burst.tscn")
 const ATTACK_HIT_NODE : PackedScene = preload("res://objects/bullet_hit/bullet_hit.tscn")
 const DIRECTIONAL_THRESHOLD : float = 0.1
 
@@ -65,7 +65,6 @@ func _Process_Velocity(delta : float) -> void:
 	if _direction.length_squared() > DIRECTIONAL_THRESHOLD:
 		#var weight : float = 1.0 if not _face_direction else _CalculateFacing(delta)
 		var weight : float = _CalculateFacing(delta)
-		#print("Weight: ", weight, " | Multiplier: ", _speed_multiplier)
 		velocity = _direction * max_speed * weight * _speed_multiplier
 	else:
 		velocity = lerp(velocity, Vector2.ZERO, 0.7)
@@ -144,6 +143,7 @@ func _SpawnDeathBurst() -> void:
 	var parent = get_parent()
 	if parent == null: return
 	var burst = DEATH_BURST.instantiate()
+	burst.death_type = 1
 	parent.add_child(burst)
 	burst.global_position = global_position
 

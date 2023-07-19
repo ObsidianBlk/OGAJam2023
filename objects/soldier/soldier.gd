@@ -14,6 +14,7 @@ signal interacted()
 const FRAMES_GREEN_SOLDIER : SpriteFrames = preload("res://objects/soldier/green_soldier.tres")
 const FRAMES_RED_SOLDIER : SpriteFrames = preload("res://objects/soldier/red_soldier.tres")
 
+const DEATH_BURST : PackedScene = preload("res://objects/death_burst/death_burst.tscn")
 const BULLET_HIT_NODE : PackedScene = preload("res://objects/bullet_hit/bullet_hit.tscn")
 
 const DIRECTIONAL_THRESHOLD : float = 0.1
@@ -117,6 +118,14 @@ func _CastTo(pos : Vector2, coll_mask : int = 4294967295) -> Dictionary:
 		PhysicsRayQueryParameters2D.create(global_position, pos, coll_mask)
 	)
 
+func _SpawnDeathBurst() -> void:
+	var parent = get_parent()
+	if parent == null: return
+	var burst = DEATH_BURST.instantiate()
+	burst.death_type = 0
+	parent.add_child(burst)
+	burst.global_position = global_position
+
 # ------------------------------------------------------------------------------
 # Public Methods
 # ------------------------------------------------------------------------------
@@ -144,12 +153,15 @@ func damage(_amount : int) -> void:
 	if _health <= 0: return
 	_health -= _amount
 	if _health <= 0:
-		pass
+		visible = false
+		_SpawnDeathBurst()
+	health_changed.emit(_health, max_health)
 
 func is_alive() -> bool:
 	return _health > 0
 
 func revive() -> void:
+	visible = true
 	_health = max_health
 	health_changed.emit(_health, max_health)
 
