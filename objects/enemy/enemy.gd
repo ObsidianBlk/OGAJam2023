@@ -11,6 +11,7 @@ signal collided(last_collision, collision_count)
 # Constants and ENUMS
 # ------------------------------------------------------------------------------
 const DEATH_BURST : PackedScene = preload("res://objects/enemy/enemy_burst/enemy_burst.tscn")
+const ATTACK_HIT_NODE : PackedScene = preload("res://objects/bullet_hit/bullet_hit.tscn")
 const DIRECTIONAL_THRESHOLD : float = 0.1
 
 # ------------------------------------------------------------------------------
@@ -18,8 +19,10 @@ const DIRECTIONAL_THRESHOLD : float = 0.1
 # ------------------------------------------------------------------------------
 @export_category("Enemy")
 @export var max_speed : float = 125.0
-@export var max_health : int = 1000
+@export var max_health : int = 200
 
+@export var max_damage_per_attack : int = 30
+@export_range(0.0, 1.0) var accuracy : float = 0.8
 
 # ------------------------------------------------------------------------------
 # Variables
@@ -144,6 +147,10 @@ func _SpawnDeathBurst() -> void:
 	parent.add_child(burst)
 	burst.global_position = global_position
 
+func _CalculateAttackDamage() -> int:
+	var variance : int = floor((1.0 - accuracy) * float(max_damage_per_attack))
+	return max_damage_per_attack - randi_range(0, variance)
+
 # ------------------------------------------------------------------------------
 # Public Methods
 # ------------------------------------------------------------------------------
@@ -165,11 +172,15 @@ func set_direction(d : Vector2) -> void:
 func get_direction() -> Vector2:
 	return _direction
 
+func is_alive() -> bool:
+	return _health > 0
+
 func damage(amount : int) -> void:
 	if _health <= 0: return
 	_health -= amount
 	if _health <= 0:
 		_SpawnDeathBurst()
+		Game.xeno_killed()
 		_Despawn.call_deferred()
 
 

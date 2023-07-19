@@ -28,6 +28,7 @@ var _cooling_source : Dictionary = {}
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
+	Game.reset_xeno_count()
 	_temprature = initial_temprature
 	var cm = get_node_or_null(canvas_modulate_node_path)
 	if is_instance_of(cm, CanvasModulate):

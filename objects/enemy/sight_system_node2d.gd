@@ -176,6 +176,13 @@ func can_see(obj : Node2D) -> bool:
 func drop_detected() -> void:
 	_detected = weakref(null)
 
+func detect_if_not(body : Node2D) -> void:
+	if _detected.get_ref() != null: return
+	if _CanSee(body, collision_mask) == body:
+		var dist : float = global_position.distance_to(body.global_position)
+		_detected = weakref(body)
+		detected.emit(body, dist)
+
 # ------------------------------------------------------------------------------
 # Handler Methods
 # ------------------------------------------------------------------------------

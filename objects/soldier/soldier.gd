@@ -4,6 +4,7 @@ extends CharacterBody2D
 # ------------------------------------------------------------------------------
 # Signals
 # ------------------------------------------------------------------------------
+signal health_changed(current_health, max_health)
 signal collided(last_collision, collision_count)
 signal interacted()
 
@@ -24,10 +25,11 @@ enum SOLDIER {Green=0, Red=1}
 # ------------------------------------------------------------------------------
 @export var soldier : SOLDIER = SOLDIER.Red:				set = set_soldier
 @export var max_speed : float = 100.0:						set = set_max_speed
+@export var max_health : int = 100
 
 @export var rof : float = 0.2
 @export var bps : int = 1
-@export var max_damage_per_shot : int = 500
+@export var max_damage_per_shot : int = 50
 @export_range(0.0, 1.0) var accuracy : float = 0.5
 
 # ------------------------------------------------------------------------------
@@ -40,6 +42,7 @@ var _facing : Vector2 = Vector2.DOWN
 var _direction : Vector2 = Vector2.ZERO
 
 var _enemies : Dictionary = {}
+var _health : int = 0
 
 # ------------------------------------------------------------------------------
 # Onready Variables
@@ -137,8 +140,18 @@ func attack(active : bool = true) -> void:
 func interact() -> void:
 	interacted.emit()
 
-func damage(_amount : float) -> void:
-	print("Ouch!")
+func damage(_amount : int) -> void:
+	if _health <= 0: return
+	_health -= _amount
+	if _health <= 0:
+		pass
+
+func is_alive() -> bool:
+	return _health > 0
+
+func revive() -> void:
+	_health = max_health
+	health_changed.emit(_health, max_health)
 
 # ------------------------------------------------------------------------------
 # Handler Methods
@@ -166,7 +179,7 @@ func _attack_interval() -> void:
 				max_damage_per_shot - randf_range(0.0, dmg_variance)
 			)
 			var hit : Node2D = BULLET_HIT_NODE.instantiate()
-			hit.hit_type = 1
+			hit.hit_type = 0
 			enemy.add_child(hit)
 	
 	get_tree().create_timer(rof).timeout.connect(_attack_interval, CONNECT_ONE_SHOT)

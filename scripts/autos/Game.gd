@@ -4,6 +4,7 @@ extends Node
 # Signals
 # ------------------------------------------------------------------------------
 signal control_mode_changed(mode)
+signal xeno_kills_changed(count)
 
 # ------------------------------------------------------------------------------
 # Constants and ENUMs
@@ -15,10 +16,20 @@ enum CTRLMode {Mouse=0, Joypad=1}
 # ------------------------------------------------------------------------------
 var _control_mode : CTRLMode = CTRLMode.Mouse:		set = set_control_mode
 
+var _xenos_killed : int = 0
+
 
 # ------------------------------------------------------------------------------
 # Public Methods
 # ------------------------------------------------------------------------------
+func reset_xeno_count() -> void:
+	_xenos_killed = 0
+	xeno_kills_changed.emit(_xenos_killed)
+
+func xeno_killed() -> void:
+	_xenos_killed += 1
+	xeno_kills_changed.emit(_xenos_killed)
+
 func set_control_mode(mode : CTRLMode) -> void:
 	_control_mode = mode
 	control_mode_changed.emit(_control_mode)

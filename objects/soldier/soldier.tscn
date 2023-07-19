@@ -92,8 +92,6 @@ collision_layer = 2
 collision_mask = 33
 motion_mode = 1
 script = ExtResource("1_1xifx")
-max_damage_per_shot = null
-accuracy = null
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

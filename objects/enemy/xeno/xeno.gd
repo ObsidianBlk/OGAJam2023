@@ -16,7 +16,9 @@ const MEM_SEARCHING : String = "searching"
 const MEM_PATROLLING : String = "patrolling"
 const MEM_HUNTING : String = "hunting"
 
-enum STATE {Nest = 0, Searching = 1, Patrolling = 2, Hunting = 3, Dead = 4}
+const ATTACK_RATE : float = 1.0
+
+enum STATE {Nest = 0, Searching = 1, Patrolling = 2, Hunting = 3, Attacking = 4, Dead = 5}
 
 # ------------------------------------------------------------------------------
 # Export Variables
@@ -37,7 +39,10 @@ var _state_mem : Dictionary = {}
 var _face_direction : bool = true
 var _facing_offset : float = 0.0
 
+var _attackable_bodies : Dictionary = {}
 var _hunt_target : WeakRef = weakref(null)
+
+var _attack_delay : float = 0.0
 
 # ------------------------------------------------------------------------------
 # Onready Variables
@@ -82,6 +87,8 @@ func _Process_Start(delta : float) -> void:
 			_State_Patrolling(delta)
 		STATE.Hunting:
 			_State_Hunting(delta)
+		STATE.Attacking:
+			_State_Attacking(delta)
 	#_TrackNavPoints(delta)
 
 func _Process_End(delta : float) -> void:
@@ -181,6 +188,25 @@ func _State_Patrolling(_delta : float) -> void:
 func _State_Hunting(_delta : float) -> void:
 	set_speed_multiplier(1.0)
 
+func _State_Attacking(delta : float) -> void:
+	var target : Node2D = _hunt_target.get_ref()
+	if target == null:
+		_ChangeState(STATE.Searching)
+		return
+
+	if not target.name in _attackable_bodies:
+		_ChangeState(STATE.Hunting)
+		return
+	
+	if _attack_delay < ATTACK_RATE:
+		_attack_delay += delta
+	else:
+		target.damage(_CalculateAttackDamage())
+		_attack_delay -= ATTACK_RATE
+		var hit : Node2D = ATTACK_HIT_NODE.instantiate()
+		hit.hit_type = 1
+		target.add_child(hit)
+
 # ------------------------------------------------------------------------------
 # Private Methods
 # ------------------------------------------------------------------------------
@@ -208,6 +234,9 @@ func _ChangeState(new_state : STATE) -> void:
 		STATE.Hunting:
 			_DebugPrint("Hunting State")
 			_nav_agent.activate(true)
+		STATE.Attacking:
+			_nav_agent.activate(false)
+			_attack_delay = ATTACK_RATE
 	_state = new_state
 
 func _SetNavTargetPosition(target_position : Vector2, activate : bool = true) -> void:
@@ -215,6 +244,12 @@ func _SetNavTargetPosition(target_position : Vector2, activate : bool = true) ->
 		_nav_agent.target_position = target_position
 		if _nav_agent.is_activated() != activate:
 			_nav_agent.activate(activate)
+
+func _CleanAttackableBodiesDict() -> void:
+	var keys : Array = _attackable_bodies.keys()
+	for key in keys:
+		if _attackable_bodies[key].get_ref() == null:
+			_attackable_bodies.erase(key)
 
 # ------------------------------------------------------------------------------
 # Public Methods
@@ -256,7 +291,10 @@ func _on_sight_system_detected(body : Node2D, _distance : float) -> void:
 			_DebugPrint("Detected target")
 			_hunt_target = weakref(body)
 			_nav_agent.follow_target(body)
-			_ChangeState.call_deferred(STATE.Hunting)
+			if body.name in _attackable_bodies:
+				_ChangeState.call_deferred(STATE.Attacking)
+			else:
+				_ChangeState.call_deferred(STATE.Hunting)
 		else:
 			_sight_system.drop_detected()
 
@@ -265,8 +303,13 @@ func _on_sight_system_lost_detection():
 		_hunt_target = weakref(null)
 		_nav_agent.follow_target(null)
 
-func _on_attack_area_body_entered(_target_body : Node2D) -> void:
-	pass
+func _on_attack_area_body_entered(body : Node2D) -> void:
+	_CleanAttackableBodiesDict()
+	if body.has_method("damage") and not body.name in _attackable_bodies:
+		_sight_system.detect_if_not.call_deferred(body)
+		_attackable_bodies[body.name] = weakref(body)
 
-func _on_attack_area_body_exited(_target_body : Node2D) -> void:
-	pass
+func _on_attack_area_body_exited(body : Node2D) -> void:
+	_CleanAttackableBodiesDict()
+	if body.name in _attackable_bodies:
+		_attackable_bodies.erase(body.name)
