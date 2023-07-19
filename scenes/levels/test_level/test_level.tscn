@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bxj6ilf7kixh6"]
+[gd_scene load_steps=15 format=3 uid="uid://bxj6ilf7kixh6"]
 
 [ext_resource type="TileSet" uid="uid://5rssu1a6i47q" path="res://assets/graphics/TeenieXeenie/tilesets/tileset.tres" id="1_anjiu"]
 [ext_resource type="Script" path="res://scenes/levels/test_level/test_level.gd" id="1_qijd6"]
@@ -10,6 +10,22 @@
 [ext_resource type="PackedScene" uid="uid://qx0q5hd2j2bf" path="res://objects/soldier/soldier.tscn" id="5_f1l7d"]
 [ext_resource type="Script" path="res://scripts/nodes/player.gd" id="6_q485d"]
 [ext_resource type="Texture2D" uid="uid://b5f0bpjnhn8sa" path="res://assets/graphics/light_maps/door_light.png" id="9_w0fq2"]
+[ext_resource type="Shader" path="res://shaders/Lava.gdshader" id="11_0pvo3"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_na485"]
+noise_type = 0
+seed = 12
+fractal_type = 3
+fractal_octaves = 2
+fractal_ping_pong_strength = 5.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_iepeq"]
+noise = SubResource("FastNoiseLite_na485")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_61py4"]
+shader = ExtResource("11_0pvo3")
+shader_parameter/timeScaleFactor = 0.04
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_iepeq")
 
 [node name="TestLevel" type="Node2D"]
 script = ExtResource("1_qijd6")
@@ -139,3 +155,15 @@ texture = ExtResource("9_w0fq2")
 position = Vector2(172, 154)
 color = Color(0.164706, 0.831373, 0, 1)
 texture = ExtResource("9_w0fq2")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Lava" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_61py4")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
