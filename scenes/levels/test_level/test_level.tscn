@@ -100,7 +100,9 @@ position = Vector2(95, 151)
 y_sort_enabled = true
 
 [node name="Soldier" parent="Entities" instance=ExtResource("5_f1l7d")]
-position = Vector2(402, 112)
+position = Vector2(17, 161)
+max_damage_per_shot = 500
+accuracy = 0.5
 
 [node name="Player" type="Node" parent="Entities/Soldier"]
 script = ExtResource("6_q485d")
@@ -110,6 +112,7 @@ script = ExtResource("6_q485d")
 [node name="Xeno" parent="Entities" instance=ExtResource("3_la4sf")]
 position = Vector2(84, 117)
 nav_point_group = "Outer_Area"
+max_health = 1000
 
 [node name="OuterArea_01" type="Node2D" parent="."]
 position = Vector2(116, 99)

@@ -16,7 +16,7 @@ const MEM_SEARCHING : String = "searching"
 const MEM_PATROLLING : String = "patrolling"
 const MEM_HUNTING : String = "hunting"
 
-enum STATE {Nest = 0, Searching = 1, Patrolling = 2, Hunting = 3}
+enum STATE {Nest = 0, Searching = 1, Patrolling = 2, Hunting = 3, Dead = 4}
 
 # ------------------------------------------------------------------------------
 # Export Variables
@@ -191,6 +191,8 @@ func _DebugPrint(msg : String) -> void:
 func _ChangeState(new_state : STATE) -> void:
 	if new_state == _state: return
 	match new_state:
+		STATE.Dead:
+			_nav_agent.activate(false)
 		STATE.Nest:
 			pass
 		STATE.Searching:
@@ -268,5 +270,3 @@ func _on_attack_area_body_entered(_target_body : Node2D) -> void:
 
 func _on_attack_area_body_exited(_target_body : Node2D) -> void:
 	pass
-
-

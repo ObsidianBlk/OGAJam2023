@@ -10,6 +10,7 @@ signal collided(last_collision, collision_count)
 # ------------------------------------------------------------------------------
 # Constants and ENUMS
 # ------------------------------------------------------------------------------
+const DEATH_BURST : PackedScene = preload("res://objects/enemy/enemy_burst/enemy_burst.tscn")
 const DIRECTIONAL_THRESHOLD : float = 0.1
 
 # ------------------------------------------------------------------------------
@@ -17,6 +18,7 @@ const DIRECTIONAL_THRESHOLD : float = 0.1
 # ------------------------------------------------------------------------------
 @export_category("Enemy")
 @export var max_speed : float = 125.0
+@export var max_health : int = 1000
 
 
 # ------------------------------------------------------------------------------
@@ -32,11 +34,14 @@ var _speed_multiplier : float = 1.0
 var _body : AnimatedSprite2D = null
 var _sprite_frames : SpriteFrames = null
 
+var _health : int = 0
+
 
 # ------------------------------------------------------------------------------
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
+	_health = max_health
 	_UpdateViz()
 
 
@@ -70,12 +75,19 @@ func _Process_End(_delta : float) -> void:
 	_action = &"move" if velocity.length() > 0.1 else &"idle"
 	_UpdateViz()
 
+func _Despawn() -> void:
+	var parent = get_parent()
+	if parent != null:
+		parent.remove_child(self)
+		queue_free()
+
 # ------------------------------------------------------------------------------
 # Private Methods
 # ------------------------------------------------------------------------------
 
 func _SetBodySprite(body_sprite : AnimatedSprite2D) -> void:
-	_body = body_sprite
+	if body_sprite != _body:
+		_body = body_sprite
 
 func _SetSpriteFrames(sf : SpriteFrames) -> void:
 	_sprite_frames = sf
@@ -103,16 +115,6 @@ func _CalculateFacing(delta : float) -> float:
 	_facing = nfacing
 	return weight
 
-#func _CastTo(pos : Vector2, coll_mask : int = 4294967295) -> Dictionary:
-#	return  get_world_2d().direct_space_state.intersect_ray(
-#		PhysicsRayQueryParameters2D.create(global_position, pos, coll_mask)
-#	)
-#
-#func _CanSee(obj : Node2D) -> Dictionary:
-#	var result : Dictionary = _CastTo(obj.global_position)
-#	if result.collider == obj:
-#		return result
-#	return {}
 
 func _VecToFacingName(f : Vector2) -> StringName:
 	var angle : float = rad_to_deg(f.angle()) + 180.0
@@ -135,6 +137,12 @@ func _UpdateViz() -> void:
 	var facing : StringName = _VecToFacingName(_facing)
 	_body.play("%s_%s"%[_action, facing])
 
+func _SpawnDeathBurst() -> void:
+	var parent = get_parent()
+	if parent == null: return
+	var burst = DEATH_BURST.instantiate()
+	parent.add_child(burst)
+	burst.global_position = global_position
 
 # ------------------------------------------------------------------------------
 # Public Methods
@@ -157,7 +165,11 @@ func set_direction(d : Vector2) -> void:
 func get_direction() -> Vector2:
 	return _direction
 
-func damage(_amount : float) -> void:
-	pass
+func damage(amount : int) -> void:
+	if _health <= 0: return
+	_health -= amount
+	if _health <= 0:
+		_SpawnDeathBurst()
+		_Despawn.call_deferred()
 
 

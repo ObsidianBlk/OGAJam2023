@@ -19,6 +19,7 @@ collision_layer = 32
 collision_mask = 35
 motion_mode = 1
 script = ExtResource("1_x11lx")
+max_health = null
 
 [node name="SightSystem" type="Node2D" parent="." node_paths=PackedStringArray("sight_area")]
 light_mask = 0
@@ -32,7 +33,7 @@ render_detection_lines = true
 [node name="ASprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = ExtResource("2_0ym2x")
-animation = &"move_west"
+animation = &"idle_east"
 offset = Vector2(0, -4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

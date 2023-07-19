@@ -27,6 +27,8 @@ enum SOLDIER {Green=0, Red=1}
 
 @export var rof : float = 0.2
 @export var bps : int = 1
+@export var max_damage_per_shot : int = 500
+@export_range(0.0, 1.0) var accuracy : float = 0.5
 
 # ------------------------------------------------------------------------------
 # Variables
@@ -159,7 +161,10 @@ func _attack_interval() -> void:
 			var idx : int = randi_range(0, visible_enemies.size() - 1)
 			# TODO: Use distance and an "accuracy" variable to determine chance to hit.
 			var enemy : Node2D = visible_enemies[idx]
-			enemy.damage(1.0)
+			var dmg_variance : int = floor((1.0 - accuracy) * float(max_damage_per_shot))
+			enemy.damage(
+				max_damage_per_shot - randf_range(0.0, dmg_variance)
+			)
 			var hit : Node2D = BULLET_HIT_NODE.instantiate()
 			hit.hit_type = 1
 			enemy.add_child(hit)

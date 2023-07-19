@@ -32,11 +32,11 @@ shader_parameter/color1 = Color(0.560784, 0.301961, 0.239216, 1)
 shader_parameter/color2 = Color(0.321569, 0.2, 0.25098, 1)
 shader_parameter/color3 = Color(0.239216, 0.160784, 0.211765, 1)
 shader_parameter/should_dither = true
-shader_parameter/pixels = 400.0
+shader_parameter/pixels = 550.8
 shader_parameter/size = 8.0
 shader_parameter/OCTAVES = 4
 shader_parameter/seed = 9.519
-shader_parameter/time = 3011.46
+shader_parameter/time = 11.0903
 shader_parameter/time_speed = 0.04
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_11wgw"]
@@ -50,11 +50,11 @@ shader_parameter/color1 = Color(0.231373, 0.2, 0.25098, 1)
 shader_parameter/color2 = Color(0.239216, 0.160784, 0.211765, 1)
 shader_parameter/color3 = Color(0, 0, 0, 1)
 shader_parameter/should_dither = true
-shader_parameter/pixels = 400.0
+shader_parameter/pixels = 550.8
 shader_parameter/size = 8.0
 shader_parameter/OCTAVES = 5
 shader_parameter/seed = 9.519
-shader_parameter/time = 3011.46
+shader_parameter/time = 11.0903
 shader_parameter/time_speed = 0.04
 shader_parameter/light_border = 0.4
 
@@ -69,11 +69,11 @@ shader_parameter/color1 = Color(1, 0.541176, 0.2, 1)
 shader_parameter/color2 = Color(0.415686, 0.415686, 0.415686, 1)
 shader_parameter/color3 = Color(0, 0.843137, 0.843137, 1)
 shader_parameter/should_dither = true
-shader_parameter/pixels = 400.0
+shader_parameter/pixels = 550.8
 shader_parameter/size = 10.0
 shader_parameter/OCTAVES = 5
 shader_parameter/seed = 9.519
-shader_parameter/time = 3011.46
+shader_parameter/time = 11.0903
 shader_parameter/time_speed = 0.04
 shader_parameter/river_cutoff = 0.443
 
@@ -122,10 +122,11 @@ script = ExtResource("3_73opl")
 center_offset = Vector2(0, 100)
 
 [node name="Planet" type="AspectRatioContainer" parent="PlanetCtrl"]
-offset_left = 383.0
-offset_top = 123.0
-offset_right = 783.0
-offset_bottom = 523.0
+layout_mode = 0
+offset_left = 86.4
+offset_top = 148.6
+offset_right = 1065.6
+offset_bottom = 699.4
 
 [node name="HellPlanet" type="MarginContainer" parent="PlanetCtrl/Planet"]
 unique_name_in_owner = true

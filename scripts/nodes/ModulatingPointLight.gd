@@ -69,7 +69,6 @@ func set_loop(l : bool) -> void:
 func _process(delta: float) -> void:
 	if loop_time <= 0.0: return
 	if not enable_in_editor and Engine.is_editor_hint(): return
-	print("Loop_Time: ", loop_time)
 	
 	_loop_offset += delta
 	modulation_offset = min(1.0, _loop_offset / loop_time)

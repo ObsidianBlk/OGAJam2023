@@ -1,7 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://d2oyfc4pd2por"]
+[gd_scene load_steps=21 format=3 uid="uid://d2oyfc4pd2por"]
 
 [ext_resource type="Texture2D" uid="uid://b7m7mnuo6pmcy" path="res://assets/graphics/TeenieXeenie/sprites/teenyxeenies_sprites_prime.png" id="1_5gxu1"]
 [ext_resource type="Script" path="res://objects/bullet_hit/bullet_hit.gd" id="1_nvr55"]
+[ext_resource type="Texture2D" uid="uid://b5f0bpjnhn8sa" path="res://assets/graphics/light_maps/door_light.png" id="3_etq2q"]
+[ext_resource type="Script" path="res://scripts/nodes/ModulatingPointLight.gd" id="4_8rkxm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u1nxj"]
 atlas = ExtResource("1_5gxu1")
@@ -114,6 +116,10 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="Curve" id="Curve_cd1v8"]
+_data = [Vector2(0, 0.284211), 0.0, 0.0, 0, 0, Vector2(0.494949, 1), 0.0, 0.0, 0, 0, Vector2(0.845118, 0.8), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
 [node name="BulletHit" type="Node2D"]
 script = ExtResource("1_nvr55")
 
@@ -121,5 +127,13 @@ script = ExtResource("1_nvr55")
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ngsvt")
 animation = &"xeno_hit"
+
+[node name="ModulatingPointLight" type="PointLight2D" parent="."]
+color = Color(1, 0.913725, 0.670588, 1)
+texture = ExtResource("3_etq2q")
+texture_scale = 2.0
+script = ExtResource("4_8rkxm")
+curve = SubResource("Curve_cd1v8")
+loop_time = 0.6
 
 [connection signal="animation_finished" from="ASprite" to="." method="_on_asprite_animation_finished"]
