@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c26y2jy8h4uc0"
+path="res://.godot/imported/Main Window Open.mp3-bd30bb91385d5285cf76a0405e5efdfc.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/HiTechButtons/Main Window Open.mp3"
+dest_files=["res://.godot/imported/Main Window Open.mp3-bd30bb91385d5285cf76a0405e5efdfc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

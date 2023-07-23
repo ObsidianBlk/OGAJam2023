@@ -7,10 +7,14 @@ func show_menu(menu_name : String) -> void:
 	super.show_menu(menu_name)
 	if visible:
 		send_request(&"background", &"MainMenu")
+	enable_audio_requests(visible)
 
 # ------------------------------------------------------------------------------
 # Handler Methods
 # ------------------------------------------------------------------------------
+func _on_audio_requested(audio_name : StringName, forced : bool) -> void:
+	request_audio(audio_name, forced)
+
 func _on_game_pressed() -> void:
 	send_request(&"start_game")
 

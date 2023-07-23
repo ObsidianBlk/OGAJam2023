@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b74d1c733j21r"
+path="res://.godot/imported/Button Sound 8.wav-cdb985839d7597152f865677af7d2897.sample"
+
+[deps]
+
+source_file="res://assets/sfx/HiTechButtons/Button Sound 8.wav"
+dest_files=["res://.godot/imported/Button Sound 8.wav-cdb985839d7597152f865677af7d2897.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

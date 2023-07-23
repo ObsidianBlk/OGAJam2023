@@ -14,10 +14,29 @@ enum CTRLMode {Mouse=0, Joypad=1}
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
+var _lock_control_mode : bool = false
 var _control_mode : CTRLMode = CTRLMode.Mouse:		set = set_control_mode
 
 var _xenos_killed : int = 0
 
+
+# ------------------------------------------------------------------------------
+# Override Methods
+# ------------------------------------------------------------------------------
+func _input(event: InputEvent) -> void:
+	if _lock_control_mode: return
+	
+	var nmode : CTRLMode = _control_mode
+	if is_instance_of(event, InputEventKey) or is_instance_of(event, InputEventMouse):
+		nmode = CTRLMode.Mouse
+	elif is_instance_of(event, InputEventJoypadButton):
+		nmode = CTRLMode.Joypad
+	elif is_instance_of(event, InputEventJoypadMotion):
+		if abs(event.axis_value) >= 0.5:
+			nmode = CTRLMode.Joypad
+	
+	if nmode != _control_mode:
+		_control_mode = nmode
 
 # ------------------------------------------------------------------------------
 # Public Methods
@@ -36,6 +55,12 @@ func set_control_mode(mode : CTRLMode) -> void:
 
 func get_control_mode() -> CTRLMode:
 	return _control_mode
+
+func lock_control_mode(lock : bool) -> void:
+	_lock_control_mode = lock
+
+func is_control_mode_locked() -> bool:
+	return _lock_control_mode
 
 func get_random_nav_point_in_group(nav_group : String, exclude : NavPoint = null) -> NavPoint:
 	if nav_group.is_empty(): return null

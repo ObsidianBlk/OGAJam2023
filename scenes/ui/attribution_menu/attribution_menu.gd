@@ -80,8 +80,15 @@ func reload_attrib_data() -> void:
 	else:
 		printerr("Failed to load ", attrib_json_path, " - File missing or invalid.")
 
+func show_menu(menu_name : String) -> void:
+	super.show_menu(menu_name)
+	enable_audio_requests(visible)
+
 # ------------------------------------------------------------------------------
 # Handler Methods
 # ------------------------------------------------------------------------------
+func _on_audio_requested(audio_name : StringName, forced : bool) -> void:
+	request_audio(audio_name, forced)
+
 func _on_btn_back_pressed():
 	send_request(&"show_menu", &"MainMenu")

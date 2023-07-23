@@ -10,6 +10,15 @@ signal requested(request)
 # ------------------------------------------------------------------------------
 @export_category("UI")
 @export var initial_menu : StringName = &""
+@export_subgroup("Audio")
+@export var audio_on_focus : AudioStream = null
+@export var audio_on_pressed : AudioStream = null
+
+# ------------------------------------------------------------------------------
+# Onready Variables
+# ------------------------------------------------------------------------------
+@onready var _audio_ui : AudioStreamPlayer = %AudioUI
+
 
 # ------------------------------------------------------------------------------
 # Override Methods
@@ -26,6 +35,18 @@ func _ConnectMenus() -> void:
 		if not is_instance_of(child, UIMenu): continue
 		if not child.requested.is_connected(_on_menu_requested):
 			child.requested.connect(_on_menu_requested)
+
+func _PlayUIAudio(audio_name : StringName) -> void:
+	_audio_ui.stream = null
+	match audio_name:
+		&"focused":
+			if audio_on_focus != null:
+				_audio_ui.stream = audio_on_focus
+		&"pressed":
+			if audio_on_pressed != null:
+				_audio_ui.stream = audio_on_pressed
+	if _audio_ui.stream != null:
+		_audio_ui.play()
 
 # ------------------------------------------------------------------------------
 # Public Methods
@@ -44,6 +65,9 @@ func _on_menu_requested(request : Dictionary) -> void:
 		&"show_menu":
 			if not "payload" in request: return
 			show_menu(request.payload)
+		&"play_ui_audio":
+			if not "payload" in request: return
+			_PlayUIAudio(request.payload)
 		_:
 			requested.emit(request)
 

@@ -28,7 +28,7 @@ func _ready() -> void:
 func _unhandled_input(event : InputEvent) -> void:
 	if _control == null: return
 	
-	_CheckControlModeFromEvent(event)
+	#_CheckControlModeFromEvent(event)
 	if not _control.visible: return
 	
 	if Game.get_control_mode() == Game.CTRLMode.Mouse:
@@ -58,11 +58,11 @@ func _unhandled_input(event : InputEvent) -> void:
 # ------------------------------------------------------------------------------
 # Private Methods
 # ------------------------------------------------------------------------------
-func _CheckControlModeFromEvent(event : InputEvent) -> void:
-	if is_instance_of(event, InputEventKey) or is_instance_of(event, InputEventMouse):
-		Game.set_control_mode(Game.CTRLMode.Mouse)
-	else:
-		Game.set_control_mode(Game.CTRLMode.Joypad)
+#func _CheckControlModeFromEvent(event : InputEvent) -> void:
+#	if is_instance_of(event, InputEventKey) or is_instance_of(event, InputEventMouse):
+#		Game.set_control_mode(Game.CTRLMode.Mouse)
+#	else:
+#		Game.set_control_mode(Game.CTRLMode.Joypad)
 
 func _UpdateControlNode() -> void:
 	if _control != null:
