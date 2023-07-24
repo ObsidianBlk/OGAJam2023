@@ -49,6 +49,13 @@ func _ready() -> void:
 	_planet_seed = _GetNicePlanetSeed()
 	if _background_request != &"":
 		_SetBackground(_background_request)
+	Game.load_config.call_deferred()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if _level != null and get_tree().paused == false:
+		if event.is_action_pressed("ui_cancel"):
+			get_tree().paused = true
+			_ui.show_menu(&"QuickMenu")
 
 # ------------------------------------------------------------------------------
 # Private Methods
@@ -129,6 +136,13 @@ func _on_ui_requested(request : Dictionary) -> void:
 				if _LoadLevel(request.payload) == OK:
 					_ui.show_menu(&"")
 					_SetBackground(&"")
+			&"quit_game":
+				_DropCurrentLevel()
+				_ui.show_menu(&"MainMenu")
+			&"resume_game":
+				if _level != null and get_tree().paused == true:
+					_ui.show_menu(&"")
+					get_tree().paused = false
 			&"background":
 				if not "payload" in request: return
 				_SetBackground(request.payload)

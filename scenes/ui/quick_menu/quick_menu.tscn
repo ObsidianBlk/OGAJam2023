@@ -1,0 +1,99 @@
+[gd_scene load_steps=5 format=3 uid="uid://bfkaukk1xrxl8"]
+
+[ext_resource type="Theme" uid="uid://8hqlogsadb8w" path="res://Main.theme" id="1_ta1a6"]
+[ext_resource type="Script" path="res://scenes/ui/quick_menu/quick_menu.gd" id="2_2usi5"]
+[ext_resource type="Texture2D" uid="uid://dk4yt2rvmpsa7" path="res://assets/graphics/asset_ui_scifi/TitlePanel02.png" id="2_o36oa"]
+[ext_resource type="Script" path="res://scenes/ui/ui_button.gd" id="3_ew63n"]
+
+[node name="QuickMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ta1a6")
+script = ExtResource("2_2usi5")
+
+[node name="HLayout" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Left_Spacer" type="Control" parent="HLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WindowContainer" type="VBoxContainer" parent="HLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = -12
+
+[node name="TitleBar" type="MarginContainer" parent="HLayout/WindowContainer"]
+z_index = 1
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HLayout/WindowContainer/TitleBar"]
+layout_mode = 2
+texture = ExtResource("2_o36oa")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="HLayout/WindowContainer/TitleBar"]
+layout_mode = 2
+theme_type_variation = &"Title_Label"
+text = "Paused..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CPanel" type="PanelContainer" parent="HLayout/WindowContainer"]
+layout_mode = 2
+theme_type_variation = &"Panel_SciFi_A"
+
+[node name="VLayout" type="VBoxContainer" parent="HLayout/WindowContainer/CPanel"]
+layout_mode = 2
+
+[node name="TopSpacer" type="Control" parent="HLayout/WindowContainer/CPanel/VLayout"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+
+[node name="Resume" type="Button" parent="HLayout/WindowContainer/CPanel/VLayout"]
+layout_mode = 2
+theme_type_variation = &"Button_SciFi_A"
+text = "Resume"
+script = ExtResource("3_ew63n")
+
+[node name="Options" type="Button" parent="HLayout/WindowContainer/CPanel/VLayout"]
+layout_mode = 2
+theme_type_variation = &"Button_SciFi_A"
+text = "Options"
+script = ExtResource("3_ew63n")
+
+[node name="QuitMenu" type="Button" parent="HLayout/WindowContainer/CPanel/VLayout"]
+layout_mode = 2
+theme_type_variation = &"Button_SciFi_A"
+text = "Quit"
+script = ExtResource("3_ew63n")
+
+[node name="QuitDesktop" type="Button" parent="HLayout/WindowContainer/CPanel/VLayout"]
+layout_mode = 2
+theme_type_variation = &"Button_SciFi_A"
+text = "Quit to Desktop"
+script = ExtResource("3_ew63n")
+
+[node name="Right_Spacer" type="Control" parent="HLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="audio_requested" from="HLayout/WindowContainer/CPanel/VLayout/Resume" to="." method="_on_audio_requested"]
+[connection signal="pressed" from="HLayout/WindowContainer/CPanel/VLayout/Resume" to="." method="_on_resume_pressed"]
+[connection signal="audio_requested" from="HLayout/WindowContainer/CPanel/VLayout/Options" to="." method="_on_audio_requested"]
+[connection signal="pressed" from="HLayout/WindowContainer/CPanel/VLayout/Options" to="." method="_on_options_pressed"]
+[connection signal="audio_requested" from="HLayout/WindowContainer/CPanel/VLayout/QuitMenu" to="." method="_on_audio_requested"]
+[connection signal="pressed" from="HLayout/WindowContainer/CPanel/VLayout/QuitMenu" to="." method="_on_quit_menu_pressed"]
+[connection signal="audio_requested" from="HLayout/WindowContainer/CPanel/VLayout/QuitDesktop" to="." method="_on_audio_requested"]
+[connection signal="pressed" from="HLayout/WindowContainer/CPanel/VLayout/QuitDesktop" to="." method="_on_quit_desktop_pressed"]

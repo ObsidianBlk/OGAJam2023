@@ -4,6 +4,11 @@ extends Node
 # Signals
 # ------------------------------------------------------------------------------
 signal control_mode_changed(mode)
+
+signal config_changed(config)
+signal config_update_requested(config)
+signal config_saved()
+
 signal xeno_kills_changed(count)
 
 # ------------------------------------------------------------------------------
@@ -11,14 +16,18 @@ signal xeno_kills_changed(count)
 # ------------------------------------------------------------------------------
 enum CTRLMode {Mouse=0, Joypad=1}
 
+const CONFIG_FILE_PATH : String = "user://game.conf"
+
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
 var _lock_control_mode : bool = false
 var _control_mode : CTRLMode = CTRLMode.Mouse:		set = set_control_mode
+var _active_joypad_device : int = 0
 
 var _xenos_killed : int = 0
 
+var _config : ConfigFile = null
 
 # ------------------------------------------------------------------------------
 # Override Methods
@@ -31,9 +40,11 @@ func _input(event: InputEvent) -> void:
 		nmode = CTRLMode.Mouse
 	elif is_instance_of(event, InputEventJoypadButton):
 		nmode = CTRLMode.Joypad
+		_active_joypad_device = event.device
 	elif is_instance_of(event, InputEventJoypadMotion):
 		if abs(event.axis_value) >= 0.5:
 			nmode = CTRLMode.Joypad
+			_active_joypad_device = event.device
 	
 	if nmode != _control_mode:
 		_control_mode = nmode
@@ -41,6 +52,23 @@ func _input(event: InputEvent) -> void:
 # ------------------------------------------------------------------------------
 # Public Methods
 # ------------------------------------------------------------------------------
+func load_config() -> void:
+	_config = ConfigFile.new()
+	var err : int = _config.load(CONFIG_FILE_PATH)
+	if err != OK:
+		save_config()
+	config_changed.emit(_config)
+
+func save_config() -> void:
+	if _config == null: return
+	config_update_requested.emit(_config)
+	var err : int = _config.save(CONFIG_FILE_PATH)
+	if err == OK:
+		config_saved.emit()
+
+func get_config() -> ConfigFile:
+	return _config
+
 func reset_xeno_count() -> void:
 	_xenos_killed = 0
 	xeno_kills_changed.emit(_xenos_killed)
@@ -55,6 +83,9 @@ func set_control_mode(mode : CTRLMode) -> void:
 
 func get_control_mode() -> CTRLMode:
 	return _control_mode
+
+func get_active_joypad_device() -> int:
+	return _active_joypad_device
 
 func lock_control_mode(lock : bool) -> void:
 	_lock_control_mode = lock

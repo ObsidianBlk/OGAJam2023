@@ -43,16 +43,17 @@ func _unhandled_input(event : InputEvent) -> void:
 		_control.face_position(_control.position + _fdir)
 	
 	var _dir : Vector2 = _control.get_direction()
-	if event.is_action("north") or event.is_action("south"):
-		_dir.y = event.get_action_strength("south") - event.get_action_strength("north")
-	elif event.is_action("east") or event.is_action("west"):
-		_dir.x = event.get_action_strength("east") - event.get_action_strength("west")
-	elif event.is_action_pressed("attack"):
-		_control.attack(true)
-	elif event.is_action_released("attack"):
-		_control.attack(false)
-	elif event.is_action_pressed("interact"):
-		_control.interact()
+	if _IsEventActiveDevice(event):
+		if event.is_action("north") or event.is_action("south"):
+			_dir.y = event.get_action_strength("south") - event.get_action_strength("north")
+		elif event.is_action("east") or event.is_action("west"):
+			_dir.x = event.get_action_strength("east") - event.get_action_strength("west")
+		elif event.is_action_pressed("attack"):
+			_control.attack(true)
+		elif event.is_action_released("attack"):
+			_control.attack(false)
+		elif event.is_action_pressed("interact"):
+			_control.interact()
 	_control.move(_dir)
 
 # ------------------------------------------------------------------------------
@@ -63,6 +64,11 @@ func _unhandled_input(event : InputEvent) -> void:
 #		Game.set_control_mode(Game.CTRLMode.Mouse)
 #	else:
 #		Game.set_control_mode(Game.CTRLMode.Joypad)
+
+func _IsEventActiveDevice(event : InputEvent) -> bool:
+	if is_instance_of(event, InputEventJoypadButton) or is_instance_of(event, InputEventJoypadMotion):
+		return event.device == Game.get_active_joypad_device()
+	return true
 
 func _UpdateControlNode() -> void:
 	if _control != null:

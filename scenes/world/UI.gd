@@ -15,6 +15,11 @@ signal requested(request)
 @export var audio_on_pressed : AudioStream = null
 
 # ------------------------------------------------------------------------------
+# Variables
+# ------------------------------------------------------------------------------
+var _breadcrumb : Array = []
+
+# ------------------------------------------------------------------------------
 # Onready Variables
 # ------------------------------------------------------------------------------
 @onready var _audio_ui : AudioStreamPlayer = %AudioUI
@@ -52,9 +57,17 @@ func _PlayUIAudio(audio_name : StringName) -> void:
 # Public Methods
 # ------------------------------------------------------------------------------
 func show_menu(menu_name : StringName) -> void:
+	if menu_name != &"":
+		_breadcrumb.append(menu_name)
+	
 	for child in get_children():
 		if not is_instance_of(child, UIMenu): continue
 		child.show_menu(menu_name)
+
+func menu_back() -> void:
+	if _breadcrumb.size() <= 1: return
+	_breadcrumb.pop_back()
+	show_menu(_breadcrumb[-1])
 
 # ------------------------------------------------------------------------------
 # Handler Methods
@@ -65,6 +78,8 @@ func _on_menu_requested(request : Dictionary) -> void:
 		&"show_menu":
 			if not "payload" in request: return
 			show_menu(request.payload)
+		&"menu_back":
+			menu_back()
 		&"play_ui_audio":
 			if not "payload" in request: return
 			_PlayUIAudio(request.payload)

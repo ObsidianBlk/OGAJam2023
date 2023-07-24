@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bhj8lgx54yvdt"]
+[gd_scene load_steps=14 format=3 uid="uid://bhj8lgx54yvdt"]
 
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_v32fp"]
 [ext_resource type="Texture2D" uid="uid://bx3gbb7o8rkyb" path="res://icon.svg" id="2_hom5a"]
@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://0juaa8x8tsoy" path="res://scenes/world/hud/hud.tscn" id="5_qjqg6"]
 [ext_resource type="AudioStream" uid="uid://cl6nyx7w8v352" path="res://assets/sfx/HiTechButtons/Button Sound 9.wav" id="7_lgpqm"]
 [ext_resource type="AudioStream" uid="uid://1lj7u833yheh" path="res://assets/sfx/HiTechButtons/Warm Digital Accept Button.wav" id="8_udhaf"]
+[ext_resource type="PackedScene" uid="uid://cms51cjmyx103" path="res://scenes/ui/options_menu/options_menu.tscn" id="11_mbrit"]
+[ext_resource type="PackedScene" uid="uid://bfkaukk1xrxl8" path="res://scenes/ui/quick_menu/quick_menu.tscn" id="12_55frr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_prkyi"]
 shader = ExtResource("3_lo2vw")
@@ -26,7 +28,7 @@ script = ExtResource("1_v32fp")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="CSubView" type="SubViewportContainer" parent="CanvasLayer"]
-process_mode = 2
+process_mode = 1
 texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -82,5 +84,9 @@ bus = &"SFX"
 
 [node name="AttributionMenu" parent="UI" instance=ExtResource("4_j7w8s")]
 attrib_json_path = "res://attribs.json"
+
+[node name="OptionsMenu" parent="UI" instance=ExtResource("11_mbrit")]
+
+[node name="QuickMenu" parent="UI" instance=ExtResource("12_55frr")]
 
 [connection signal="requested" from="UI" to="." method="_on_ui_requested"]
