@@ -463,8 +463,8 @@ polygon = PackedVector2Array(-4, -2.9375, -1.90625, -3, -2.03125, -4, 4, -4, 4, 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_l03rl"]
 polygon = PackedVector2Array(-4, -2.9375, -1.90625, -3, -2.03125, -4, 4, -4, 4, 0.0625, -1.96875, 0.125, -1.90625, -1, -4, -0.9375)
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_huubw"]
-polygon = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_jpbya"]
+polygon = PackedVector2Array(-2.09375, -4, 2.03125, -4, 1.96875, 4, -2.09375, 4)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_kbye2"]
 vertices = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
@@ -806,11 +806,11 @@ vertices = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)])
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_idxfa"]
-polygon = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_6wtvo"]
+polygon = PackedVector2Array(-2.09375, -4, 2.03125, -4, 1.96875, 0, 1.03125, 0, 1.03125, 4, -1.09375, 4, -1.09375, 0.0625, -2.09375, 0.0625)
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ewn3r"]
-polygon = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_gyd5t"]
+polygon = PackedVector2Array(-1.09375, -4, 0.90625, -4, 1.03125, 4, -1.09375, 4)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_vgitl"]
 polygon = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
@@ -834,8 +834,8 @@ polygon = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_14ax2"]
 polygon = PackedVector2Array(-2.03125, -4, 2.03125, -4, 1.96875, 4, -2.03125, 4)
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_tf7sa"]
-polygon = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_xibrx"]
+polygon = PackedVector2Array(-2.09375, -4, 2.03125, -4, 1.96875, 0, -2.09375, 0.0625)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_vmpsw"]
 vertices = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
@@ -1045,7 +1045,7 @@ texture_region_size = Vector2i(8, 8)
 1:1/0 = 0
 1:1/0/terrain_set = 1
 1:1/0/terrain = 0
-1:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_huubw")
+1:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_jpbya")
 1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 1:1/0/physics_layer_0/angular_velocity = 0.0
 1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
@@ -2173,12 +2173,12 @@ texture_region_size = Vector2i(8, 8)
 6:15/0/physics_layer_0/angular_velocity = 0.0
 6:15/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
 7:15/0 = 0
-7:15/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_idxfa")
+7:15/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_6wtvo")
 7:15/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 7:15/0/physics_layer_0/angular_velocity = 0.0
 7:15/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
 8:15/0 = 0
-8:15/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_tf7sa")
+8:15/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_xibrx")
 8:15/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 8:15/0/physics_layer_0/angular_velocity = 0.0
 8:15/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
@@ -2269,7 +2269,7 @@ texture_region_size = Vector2i(8, 8)
 8:16/0/physics_layer_0/angular_velocity = 0.0
 8:16/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_vmpsw")
 7:16/0 = 0
-7:16/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_ewn3r")
+7:16/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_gyd5t")
 7:16/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 7:16/0/physics_layer_0/angular_velocity = 0.0
 7:16/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)

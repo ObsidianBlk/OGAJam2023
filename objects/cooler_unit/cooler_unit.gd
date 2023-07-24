@@ -72,7 +72,7 @@ func _physics_process(delta: float) -> void:
 			var weight : float = min(1.0, _time / discharge_time)
 			_mpl.modulation_offset = weight
 			
-			coolant_discharged.emit(lerp(max_coolant_per_second, min_coolant_per_second, weight))
+			coolant_discharged.emit(lerp(max_coolant_per_second, min_coolant_per_second, weight) * delta)
 			
 			if abs(1.0 - weight) < 0.001:
 				_mpl.modulation_offset = 1.0

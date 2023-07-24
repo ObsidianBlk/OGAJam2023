@@ -5,11 +5,18 @@ class_name GameLevel
 # ------------------------------------------------------------------------------
 # Signals
 # ------------------------------------------------------------------------------
+signal requested(request)
 signal temprature_changed(temp)
-signal cooling_source_changed(source_name, absorbed_temp, max_absorption)
-signal cooling_source_removed(source_name)
-
+signal exit_timer_changed(time_passed, interval)
 signal player_health_changed(percentage)
+
+# ------------------------------------------------------------------------------
+# Constant
+# ------------------------------------------------------------------------------
+const MIN_TEMPERATURE : float = 80.0
+const MAX_TEMPERATURE : float = 200.0
+const DAMAGE_TEMPERATURE : float = 150.0
+const HEAT_DAMAGE_INTERVAL : float = 2.0
 
 # ------------------------------------------------------------------------------
 # Export Variables
@@ -17,17 +24,19 @@ signal player_health_changed(percentage)
 @export_category("Game Level")
 @export_node_path("CanvasModulate") var canvas_modulate_node_path : NodePath = ^""
 @export var color : Color = Color.WHITE
-@export var initial_temprature : float = 55.0
+@export_range(MIN_TEMPERATURE, MAX_TEMPERATURE) var initial_temprature : float = MIN_TEMPERATURE
 @export var temprature_dps : float = 1.0
 @export var player_respawn_delay : float = 3.0
+@export_file var next_level : String = ""
+@export var final_level : bool = false
 
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
-var _temprature : float = 0.0
-var _cooling_source : Dictionary = {}
+var _temprature : float = MIN_TEMPERATURE
 
 var _player : WeakRef = weakref(null)
+var _heat_damage_delay : float = 0.0
 
 # ------------------------------------------------------------------------------
 # Override Methods
@@ -41,27 +50,18 @@ func _ready() -> void:
 		#cm.visible = true
 
 func _physics_process(delta : float) -> void:
-	_temprature += temprature_dps * delta
-	
-	var source_keys : Array = _cooling_source.keys()
-	for source in source_keys:
-		var cool = _cooling_source[source]
-		if cool.current >= cool.max:
-			_cooling_source.erase(source)
-			cooling_source_removed.emit(source)
-			continue
-		
-		var cdps : float = (1.0 - (cool.current / cool.max)) * cool.dps
-		if cdps > 0.01:
-			cool.current += cdps * delta
-			_temprature -= cdps * delta
-		else:
-			var diff : float = cool.max - cool.current
-			cool.current = cool.max
-			_temprature -= diff
-		cooling_source_changed.emit(source, cool.current, cool.max)
-	
+	_temprature = min(_temprature + (temprature_dps * delta), MAX_TEMPERATURE)
 	temprature_changed.emit(_temprature)
+	if _temprature >= DAMAGE_TEMPERATURE:
+		_heat_damage_delay += delta
+		if _heat_damage_delay >= HEAT_DAMAGE_INTERVAL:
+			_heat_damage_delay -= HEAT_DAMAGE_INTERVAL
+			var player : CharacterBody2D = _player.get_ref()
+			if player == null: return
+			if player.has_method("damage"):
+				player.damage(1)
+	else:
+		_heat_damage_delay = 0.0
 
 # ------------------------------------------------------------------------------
 # Public Methods
@@ -80,16 +80,6 @@ func initialize() -> void:
 	
 	if _player.get_ref() == null:
 		printerr("Failed to find player node!!")
-
-
-func add_cooling_source(source_name : String, absorption_dps : float, max_absorption : float) -> void:
-	if source_name in _cooling_source: return
-	_cooling_source[source_name] = {
-		"dps": absorption_dps,
-		"max": max_absorption,
-		"current": 0.0
-	}
-
 
 # ------------------------------------------------------------------------------
 # Handler Methods
@@ -115,4 +105,17 @@ func _on_player_respawn_delay_timeout() -> void:
 	player.global_position = pos
 	player.revive()
 
+func _on_coolant_discharged(amount : float) -> void:
+	if amount > 0:
+		_temprature = max(_temprature - amount, MIN_TEMPERATURE)
 
+func _on_exit_timer_changed(time_passed : float, interval : float) -> void:
+	exit_timer_changed.emit(time_passed, interval)
+
+func _on_level_exited() -> void:
+	if final_level:
+		requested.emit({"action":&"game_won"})
+	elif next_level != "":
+		requested.emit({"action":&"load_level", "payload":next_level})
+	else:
+		printerr("Level Exit called but nothing to do.")

@@ -41,6 +41,7 @@ stretch_shrink = 4
 [node name="GameView" type="SubViewport" parent="CanvasLayer/CSubView"]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
+audio_listener_enable_2d = true
 size = Vector2i(288, 162)
 render_target_update_mode = 4
 

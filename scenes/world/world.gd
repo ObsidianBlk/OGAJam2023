@@ -88,6 +88,8 @@ func _DropCurrentLevel() -> void:
 	if _level == null or _game_view == null: return
 	if _level.temprature_changed.is_connected(_on_temprature_changed):
 		_level.temprature_changed.disconnect(_on_temprature_changed)
+	if _level.requested.is_connected(_on_level_requested):
+		_level.requested.disconnect(_on_level_requested)
 	_heat_haze.enable(false)
 	_game_view.remove_child(_level)
 	_level.queue_free()
@@ -109,6 +111,8 @@ func _LoadLevel(level_path : String) -> int:
 		_level = level
 		if not _level.temprature_changed.is_connected(_on_temprature_changed):
 			_level.temprature_changed.connect(_on_temprature_changed)
+		if not _level.requested.is_connected(_on_level_requested):
+			_level.requested.connect(_on_level_requested)
 		_game_view.add_child(_level)
 		_hud.set_level(_level)
 		_level.initialize()
@@ -124,16 +128,27 @@ func _on_temprature_changed(temprature : float) -> void:
 		_heat_haze.enable(true)
 	_heat_haze.set_temprature(temprature)
 
+func _on_level_requested(request : Dictionary) -> void:
+	if "action" in request:
+		match request.action:
+			&"load_level":
+				if not "payload" in request: return
+				if _LoadLevel(request.payload) == OK:
+					get_tree().paused = false
+					_ui.show_menu(&"")
+					_SetBackground(&"")
+			&"game_lost":
+				pass
+			&"game_won":
+				pass
+
+
 func _on_ui_requested(request : Dictionary) -> void:
 	if "action" in request:
 		match request.action:
 			&"start_game":
 				if _LoadLevel(INITIAL_LEVEL_PATH) == OK:
-					_ui.show_menu(&"")
-					_SetBackground(&"")
-			&"load_level":
-				if not "payload" in request: return
-				if _LoadLevel(request.payload) == OK:
+					get_tree().paused = false
 					_ui.show_menu(&"")
 					_SetBackground(&"")
 			&"quit_game":

@@ -27,3 +27,8 @@ func set_activated(a : bool) -> void:
 			activated.emit()
 		else:
 			deactivated.emit()
+
+func force_activated() -> void:
+	_activated = true
+	if Engine.is_editor_hint(): return
+	activated.emit()

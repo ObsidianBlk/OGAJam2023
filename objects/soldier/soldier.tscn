@@ -1,9 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://qx0q5hd2j2bf"]
+[gd_scene load_steps=18 format=3 uid="uid://qx0q5hd2j2bf"]
 
 [ext_resource type="Script" path="res://objects/soldier/soldier.gd" id="1_1xifx"]
 [ext_resource type="Texture2D" uid="uid://wj0w6cyvmryn" path="res://assets/graphics/TeenieXeenie/teenyxeenies-alpha.png" id="1_er0tb"]
 [ext_resource type="SpriteFrames" uid="uid://np0vexhcgjtk" path="res://objects/soldier/red_soldier.tres" id="2_mqvnr"]
 [ext_resource type="Texture2D" uid="uid://cslq4bqm0hcd" path="res://assets/graphics/light_maps/soldier_light.png" id="4_0ygbh"]
+[ext_resource type="Script" path="res://scripts/nodes/sfxer2D.gd" id="5_rl3d5"]
+[ext_resource type="AudioStream" uid="uid://cru1ipshfa8iy" path="res://assets/sfx/Futuristic Assault Rifle/Futuristic Assault Rifle Single Shot 01.wav" id="6_8e2yg"]
+[ext_resource type="AudioStream" uid="uid://c606jw75p0wtk" path="res://assets/sfx/Futuristic Assault Rifle/Futuristic Assault Rifle Single Shot 02.wav" id="7_u0kfq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n2n5v"]
 atlas = ExtResource("1_er0tb")
@@ -127,3 +130,11 @@ texture_filter = 1
 blend_mode = 2
 shadow_enabled = true
 texture = ExtResource("4_0ygbh")
+
+[node name="AttackSFX" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_rl3d5")
+bus = &"SFX"
+sample_names = Array[StringName]([&"att1", &"att2"])
+sample_streams = Array[AudioStream]([ExtResource("6_8e2yg"), ExtResource("7_u0kfq")])
+sample_groups = Array[String](["att,att1,att2"])
