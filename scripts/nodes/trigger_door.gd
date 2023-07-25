@@ -54,7 +54,7 @@ func set_input(i : Trigger) -> void:
 			if input.deactivated.is_connected(_on_deactivated):
 				input.deactivated.disconnect(_on_deactivated)
 		input = i
-		if input != null:
+		if input != null and not Engine.is_editor_hint():
 			if not input.activated.is_connected(_on_activated):
 				input.activated.connect(_on_activated)
 			if not input.deactivated.is_connected(_on_deactivated):

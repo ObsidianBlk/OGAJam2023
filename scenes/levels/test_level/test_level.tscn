@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bxj6ilf7kixh6"]
+[gd_scene load_steps=20 format=3 uid="uid://bxj6ilf7kixh6"]
 
 [ext_resource type="TileSet" uid="uid://5rssu1a6i47q" path="res://assets/graphics/TeenieXeenie/tilesets/tileset.tres" id="1_anjiu"]
 [ext_resource type="Script" path="res://scenes/levels/test_level/test_level.gd" id="1_qijd6"]
@@ -13,6 +13,8 @@
 [ext_resource type="Script" path="res://scripts/nodes/ExitArea2D.gd" id="7_kr1jm"]
 [ext_resource type="Texture2D" uid="uid://b5f0bpjnhn8sa" path="res://assets/graphics/light_maps/door_light.png" id="9_w0fq2"]
 [ext_resource type="Shader" path="res://shaders/Lava.gdshader" id="11_0pvo3"]
+[ext_resource type="Script" path="res://scripts/nodes/enemy_spawn_manager.gd" id="14_lto7u"]
+[ext_resource type="Script" path="res://scripts/nodes/enemy_spawn_point.gd" id="15_lnc01"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7r7ui"]
 size = Vector2(32, 32)
@@ -222,6 +224,32 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="EnemySpawnManager" type="Node2D" parent="."]
+script = ExtResource("14_lto7u")
+
+[node name="Spawn_Hall" type="Node2D" parent="EnemySpawnManager"]
+position = Vector2(204, 156)
+script = ExtResource("15_lnc01")
+color = Color(1, 0.717647, 0, 1)
+
+[node name="Spawn_SmallRoom" type="Node2D" parent="EnemySpawnManager"]
+position = Vector2(316, 108)
+script = ExtResource("15_lnc01")
+color = Color(1, 0.717647, 0, 1)
+
+[node name="Spawn_MainRoomNorth" type="Node2D" parent="EnemySpawnManager"]
+position = Vector2(404, 76)
+script = ExtResource("15_lnc01")
+color = Color(1, 0.717647, 0, 1)
+spawn_west = false
+
+[node name="Spawn_MainRoomSouth" type="Node2D" parent="EnemySpawnManager"]
+position = Vector2(468, 140)
+script = ExtResource("15_lnc01")
+color = Color(1, 0.717647, 0, 1)
+spawn_east = false
+spawn_south = false
 
 [connection signal="coolant_discharged" from="TileMap/OverlayMap/CoolerUnit" to="." method="_on_coolant_discharged"]
 [connection signal="coolant_discharged" from="TileMap/OverlayMap/CoolerUnit2" to="." method="_on_coolant_discharged"]

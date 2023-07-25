@@ -16,9 +16,10 @@ const MEM_SEARCHING : String = "searching"
 const MEM_PATROLLING : String = "patrolling"
 const MEM_HUNTING : String = "hunting"
 
+const SPAWN_TIME : float = 0.5
 const ATTACK_RATE : float = 1.0
 
-enum STATE {Nest = 0, Searching = 1, Patrolling = 2, Hunting = 3, Attacking = 4, Dead = 5}
+enum STATE {Spawning = 0, Nest = 1, Searching = 2, Patrolling = 3, Hunting = 4, Attacking = 5, Dead = 6}
 
 # ------------------------------------------------------------------------------
 # Export Variables
@@ -47,6 +48,7 @@ var _attack_delay : float = 0.0
 # ------------------------------------------------------------------------------
 # Onready Variables
 # ------------------------------------------------------------------------------
+@onready var _sprite: AnimatedSprite2D = $ASprite2D
 @onready var _nav_agent : EnemyNavigationAgent = $NavAgent
 @onready var _sight_area : Area2D = $SightArea
 @onready var _attack_area : Area2D = $AttackArea
@@ -285,7 +287,19 @@ func _CleanAttackableBodiesDict() -> void:
 # ------------------------------------------------------------------------------
 # Public Methods
 # ------------------------------------------------------------------------------
-
+func spawn_from(spawn_position : Vector2) -> void:
+	_state = STATE.Spawning
+	_nav_agent.activate(false)
+	var sprite_position : Vector2 = spawn_position - global_position
+	_sprite.position = sprite_position
+	_sprite.modulate = Color(1.0, 1.0, 1.0, 0.0)
+	var tween : Tween = create_tween()
+	tween.tween_property(_sprite, "position", Vector2.ZERO, SPAWN_TIME)
+	tween.parallel()
+	tween.tween_property(_sprite, "modulate", Color.WHITE, SPAWN_TIME)
+	await tween.finished
+	_state = STATE.Patrolling
+	
 
 
 # ------------------------------------------------------------------------------

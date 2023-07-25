@@ -6,6 +6,8 @@ class_name Enemy
 # Signals
 # ------------------------------------------------------------------------------
 signal collided(last_collision, collision_count)
+signal dead()
+signal despawned()
 
 # ------------------------------------------------------------------------------
 # Constants and ENUMS
@@ -81,6 +83,7 @@ func _Despawn() -> void:
 	var parent = get_parent()
 	if parent != null:
 		parent.remove_child(self)
+		despawned.emit()
 		queue_free()
 
 # ------------------------------------------------------------------------------
@@ -181,6 +184,7 @@ func damage(amount : int) -> void:
 	if _health <= 0:
 		_SpawnDeathBurst()
 		Game.xeno_killed()
+		dead.emit()
 		_Despawn.call_deferred()
 
 
