@@ -1,13 +1,17 @@
 shader_type canvas_item;
 
 uniform sampler2D screen_texture : hint_screen_texture;
+uniform sampler2D mask;
 uniform bool use_screen_texture = true;
-uniform bool enabled = false;
+uniform bool haze_enabled = false;
 uniform float strength = 0.005;
 uniform float speed = 0.125;
 uniform float density = 50;
 uniform float angle_offset = 30.0;
 uniform float angle_speed = 10.0;
+uniform float mask_progress : hint_range(0.0, 1.0);
+uniform float mask_smoothness : hint_range(0.0, 1.0);
+uniform float mask_alpha : hint_range(0.0, 1.0) = 1.0;
 
 
 // voronoi_random_noise() and voronoi() adapted from...
@@ -42,17 +46,24 @@ vec2 voronoi(vec2 uv, float angleOffset, float cellDensity){
 // https://gamedevbill.com/heat-haze-shader-graph/
 void fragment() {
 	float offset = 0.0;
-	if (enabled){
+	if (haze_enabled){
 		vec2 noiseUV = UV - vec2(0, TIME * speed);
 		float angle = angle_offset + sin(TIME) * angle_speed;
 		vec2 noise = voronoi(noiseUV, angle, density);
 		offset = noise.x * strength;
 	}
 	
+	float mask_value = (1.0 - texture(mask, vec2(UV.x + offset, UV.y)).r * mask_alpha) * (mask_smoothness);
+	float weight = smoothstep(mask_progress, mask_progress + mask_smoothness, mask_value + mask_smoothness);
+	//COLOR = mix(COLOR, screen_color, weight);
+	
+	vec4 tex_color = vec4(1);
 	if (use_screen_texture){
-		COLOR = texture(screen_texture, vec2(UV.x + offset, UV.y));
+		tex_color = texture(screen_texture, vec2(UV.x + offset, UV.y));
 	} else {
-		COLOR = texture(TEXTURE, vec2(UV.x + offset, UV.y));
+		tex_color = texture(TEXTURE, vec2(UV.x + offset, UV.y));
 	}
+	
+	COLOR = mix(COLOR, tex_color, weight);
 }
 

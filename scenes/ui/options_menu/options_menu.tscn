@@ -75,6 +75,22 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 
+[node name="HeadingGameplay" type="PanelContainer" parent="HLayout/WindowContainer/CPanel/PanelLayout"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_2yhvy")
+
+[node name="Label" type="Label" parent="HLayout/WindowContainer/CPanel/PanelLayout/HeadingGameplay"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Game Play"
+vertical_alignment = 1
+
+[node name="Check_DisableHeatHaze" type="CheckButton" parent="HLayout/WindowContainer/CPanel/PanelLayout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CheckButton_Option"
+text = "Disable Heat Haze Shader"
+
 [node name="HeadingAudio" type="PanelContainer" parent="HLayout/WindowContainer/CPanel/PanelLayout"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_2yhvy")
@@ -151,6 +167,7 @@ script = ExtResource("3_ew63n")
 layout_mode = 2
 size_flags_horizontal = 3
 
+[connection signal="toggled" from="HLayout/WindowContainer/CPanel/PanelLayout/Check_DisableHeatHaze" to="." method="_on_check_disable_heat_haze_toggled"]
 [connection signal="value_changed" from="HLayout/WindowContainer/CPanel/PanelLayout/AudioOptions/SliderMaster" to="." method="_on_slider_master_value_changed"]
 [connection signal="value_changed" from="HLayout/WindowContainer/CPanel/PanelLayout/AudioOptions/SliderMusic" to="." method="_on_slider_music_value_changed"]
 [connection signal="value_changed" from="HLayout/WindowContainer/CPanel/PanelLayout/AudioOptions/SliderSFX" to="." method="_on_slider_sfx_value_changed"]

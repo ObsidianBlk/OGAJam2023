@@ -68,6 +68,8 @@ script = ExtResource("3_osram")
 orientation = 1
 collision_mask = 34
 auto_open = true
+nav_point_group = "Inner_Area"
+nav_point_color = Color(0.686275, 0.341176, 0.839216, 1)
 
 [node name="ExitDoorTrigger1" type="Node2D" parent="TileMap" node_paths=PackedStringArray("input")]
 position = Vector2(500, 124)
@@ -165,9 +167,9 @@ script = ExtResource("6_q485d")
 [node name="Camera2D" type="Camera2D" parent="Entities/Soldier"]
 
 [node name="Xeno" parent="Entities" instance=ExtResource("3_la4sf")]
-position = Vector2(84, 117)
+position = Vector2(92, 121)
 nav_point_group = "Outer_Area"
-max_health = 1000
+max_health = 1500
 
 [node name="OuterArea_01" type="Node2D" parent="."]
 position = Vector2(116, 99)
@@ -225,31 +227,68 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="EnemySpawnManager" type="Node2D" parent="."]
+[node name="ESM_Outer_Area" type="Node2D" parent="." node_paths=PackedStringArray("spawn_container")]
 script = ExtResource("14_lto7u")
+spawn_container = NodePath("../Entities")
+nav_point_group = "Outer_Area"
 
-[node name="Spawn_Hall" type="Node2D" parent="EnemySpawnManager"]
+[node name="Spawn_Hall" type="Node2D" parent="ESM_Outer_Area"]
 position = Vector2(204, 156)
 script = ExtResource("15_lnc01")
 color = Color(1, 0.717647, 0, 1)
 
-[node name="Spawn_SmallRoom" type="Node2D" parent="EnemySpawnManager"]
+[node name="ESM_Inner_Area" type="Node2D" parent="." node_paths=PackedStringArray("spawn_container")]
+script = ExtResource("14_lto7u")
+spawn_container = NodePath("../Entities")
+nav_point_group = "Inner_Area"
+
+[node name="Spawn_SmallRoom" type="Node2D" parent="ESM_Inner_Area"]
 position = Vector2(316, 108)
 script = ExtResource("15_lnc01")
 color = Color(1, 0.717647, 0, 1)
 
-[node name="Spawn_MainRoomNorth" type="Node2D" parent="EnemySpawnManager"]
+[node name="Spawn_MainRoomNorth" type="Node2D" parent="ESM_Inner_Area"]
 position = Vector2(404, 76)
 script = ExtResource("15_lnc01")
 color = Color(1, 0.717647, 0, 1)
 spawn_west = false
 
-[node name="Spawn_MainRoomSouth" type="Node2D" parent="EnemySpawnManager"]
+[node name="Spawn_MainRoomSouth" type="Node2D" parent="ESM_Inner_Area"]
 position = Vector2(468, 140)
 script = ExtResource("15_lnc01")
 color = Color(1, 0.717647, 0, 1)
 spawn_east = false
 spawn_south = false
+
+[node name="InnerArea_01" type="Node2D" parent="."]
+position = Vector2(285, 100)
+script = ExtResource("4_e5s81")
+group_name = "Inner_Area"
+group_color = Color(0.684962, 0.342871, 0.838302, 1)
+
+[node name="InnerArea_02" type="Node2D" parent="."]
+position = Vector2(293, 52)
+script = ExtResource("4_e5s81")
+group_name = "Inner_Area"
+group_color = Color(0.684962, 0.342871, 0.838302, 1)
+
+[node name="InnerArea_03" type="Node2D" parent="."]
+position = Vector2(448, 52)
+script = ExtResource("4_e5s81")
+group_name = "Inner_Area"
+group_color = Color(0.684962, 0.342871, 0.838302, 1)
+
+[node name="InnerArea_04" type="Node2D" parent="."]
+position = Vector2(402, 146)
+script = ExtResource("4_e5s81")
+group_name = "Inner_Area"
+group_color = Color(0.684962, 0.342871, 0.838302, 1)
+
+[node name="InnerArea_05" type="Node2D" parent="."]
+position = Vector2(355, 96)
+script = ExtResource("4_e5s81")
+group_name = "Inner_Area"
+group_color = Color(0.684962, 0.342871, 0.838302, 1)
 
 [connection signal="coolant_discharged" from="TileMap/OverlayMap/CoolerUnit" to="." method="_on_coolant_discharged"]
 [connection signal="coolant_discharged" from="TileMap/OverlayMap/CoolerUnit2" to="." method="_on_coolant_discharged"]

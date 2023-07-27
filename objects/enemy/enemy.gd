@@ -1,4 +1,4 @@
-@tool
+#@tool
 extends CharacterBody2D
 class_name Enemy
 
@@ -21,7 +21,7 @@ const DIRECTIONAL_THRESHOLD : float = 0.1
 # ------------------------------------------------------------------------------
 @export_category("Enemy")
 @export var max_speed : float = 125.0
-@export var max_health : int = 200
+@export var max_health : int = 1500
 
 @export var max_damage_per_attack : int = 30
 @export_range(0.0, 1.0) var accuracy : float = 0.8

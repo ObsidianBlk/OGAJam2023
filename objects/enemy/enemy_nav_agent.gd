@@ -89,7 +89,8 @@ func activate(enable : bool) -> void:
 	if enable != _active:
 		_active = enable
 		if _active:
-			_timer.start(follow_update_interval)
+			if _timer != null and _timer.is_inside_tree():
+				_timer.start(follow_update_interval)
 		else:
 			if _owner.get_ref() != null:
 				_owner.get_ref().set_direction(Vector2.ZERO)

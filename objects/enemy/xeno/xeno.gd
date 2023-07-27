@@ -19,6 +19,9 @@ const MEM_HUNTING : String = "hunting"
 const SPAWN_TIME : float = 0.5
 const ATTACK_RATE : float = 1.0
 
+const SOUND_SPAWN : String = "alien"
+const SOUND_HIT : String = "hit"
+
 enum STATE {Spawning = 0, Nest = 1, Searching = 2, Patrolling = 3, Hunting = 4, Attacking = 5, Dead = 6}
 
 # ------------------------------------------------------------------------------
@@ -53,6 +56,7 @@ var _attack_delay : float = 0.0
 @onready var _sight_area : Area2D = $SightArea
 @onready var _attack_area : Area2D = $AttackArea
 @onready var _sight_system : SightSystemNode2D = $SightSystem
+@onready var _sfxer: sfxer2D = %sfxer2D
 
 
 # ------------------------------------------------------------------------------
@@ -297,9 +301,15 @@ func spawn_from(spawn_position : Vector2) -> void:
 	tween.tween_property(_sprite, "position", Vector2.ZERO, SPAWN_TIME)
 	tween.parallel()
 	tween.tween_property(_sprite, "modulate", Color.WHITE, SPAWN_TIME)
+	_sfxer.play_groupa(SOUND_SPAWN)
 	await tween.finished
 	_state = STATE.Patrolling
-	
+
+func damage(amount : int) -> void:
+	var ihp = _health
+	super.damage(amount)
+	if ihp > _health:
+		_sfxer.play_group(SOUND_HIT)
 
 
 # ------------------------------------------------------------------------------

@@ -1,9 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://cws5p1fsi2vup"]
+[gd_scene load_steps=13 format=3 uid="uid://cws5p1fsi2vup"]
 
 [ext_resource type="Script" path="res://objects/enemy/xeno/xeno.gd" id="1_x11lx"]
 [ext_resource type="SpriteFrames" uid="uid://bgrtcoupthhwj" path="res://objects/enemy/xeno/xeno_frames.tres" id="2_0ym2x"]
 [ext_resource type="Script" path="res://objects/enemy/sight_system_node2d.gd" id="2_xpqoh"]
 [ext_resource type="Script" path="res://objects/enemy/enemy_nav_agent.gd" id="4_ii3vo"]
+[ext_resource type="Script" path="res://scripts/nodes/sfxer2D.gd" id="5_rwe12"]
+[ext_resource type="AudioStream" uid="uid://6ch83tesq07v" path="res://assets/sfx/xeno/alien_01.ogg" id="6_0mbaj"]
+[ext_resource type="AudioStream" uid="uid://def7i766kbjha" path="res://assets/sfx/xeno/alien_02.ogg" id="7_fbx3a"]
+[ext_resource type="AudioStream" uid="uid://c8p6qfp55pofl" path="res://assets/sfx/xeno/alien_03.ogg" id="8_biwto"]
+[ext_resource type="AudioStream" uid="uid://bawdn02ytqh5y" path="res://assets/sfx/xeno/bug_01.ogg" id="9_owocg"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_cjp74"]
 light_mode = 1
@@ -19,6 +24,7 @@ collision_layer = 32
 collision_mask = 35
 motion_mode = 1
 script = ExtResource("1_x11lx")
+max_health = 200
 
 [node name="SightSystem" type="Node2D" parent="." node_paths=PackedStringArray("sight_area")]
 light_mask = 0
@@ -52,7 +58,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SightArea"]
-polygon = PackedVector2Array(-20, 0, 10, -30, 250, -80, 250, 80, 10, 30)
+polygon = PackedVector2Array(-100, 0, 10, -150, 250, -220, 250, 220, 10, 150)
 
 [node name="AttackArea" type="Area2D" parent="."]
 collision_layer = 0
@@ -60,6 +66,15 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
 shape = SubResource("CircleShape2D_04frt")
+
+[node name="sfxer2D" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_rwe12")
+bus = &"SFX"
+max_distance = 500.0
+sample_names = Array[StringName]([&"alien1", &"alien2", &"alien3", &"hit1"])
+sample_streams = Array[AudioStream]([ExtResource("6_0mbaj"), ExtResource("7_fbx3a"), ExtResource("8_biwto"), ExtResource("9_owocg")])
+sample_groups = Array[String](["alien,alien1,alien2,alien3", "hit,hit1"])
 
 [connection signal="detected" from="SightSystem" to="." method="_on_sight_system_detected"]
 [connection signal="lost_detection" from="SightSystem" to="." method="_on_sight_system_lost_detection"]

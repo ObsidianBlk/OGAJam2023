@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bhj8lgx54yvdt"]
+[gd_scene load_steps=15 format=3 uid="uid://bhj8lgx54yvdt"]
 
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_v32fp"]
 [ext_resource type="Texture2D" uid="uid://bx3gbb7o8rkyb" path="res://icon.svg" id="2_hom5a"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://biva8hem1kstm" path="res://scenes/ui/main_menu/main_menu.tscn" id="3_7vb7q"]
 [ext_resource type="Shader" path="res://shaders/HeatHaze_Voronoi.gdshader" id="3_y1k3g"]
 [ext_resource type="PackedScene" uid="uid://b0f8hpm088b0k" path="res://scenes/ui/attribution_menu/attribution_menu.tscn" id="4_j7w8s"]
+[ext_resource type="Texture2D" uid="uid://gjj2umua5vgl" path="res://assets/graphics/HeatMask.png" id="4_y4vnt"]
 [ext_resource type="Script" path="res://scenes/world/HeatHaze.gd" id="4_yvee6"]
 [ext_resource type="PackedScene" uid="uid://0juaa8x8tsoy" path="res://scenes/world/hud/hud.tscn" id="5_qjqg6"]
 [ext_resource type="AudioStream" uid="uid://cl6nyx7w8v352" path="res://assets/sfx/HiTechButtons/Button Sound 9.wav" id="7_lgpqm"]
@@ -16,12 +17,16 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_prkyi"]
 shader = ExtResource("3_y1k3g")
 shader_parameter/use_screen_texture = true
-shader_parameter/enabled = false
+shader_parameter/haze_enabled = false
 shader_parameter/strength = 0.005
 shader_parameter/speed = 0.125
 shader_parameter/density = 50.0
 shader_parameter/angle_offset = 30.0
 shader_parameter/angle_speed = 10.0
+shader_parameter/mask_progress = 0.0
+shader_parameter/mask_smoothness = 1.0
+shader_parameter/mask_alpha = 0.8
+shader_parameter/mask = ExtResource("4_y4vnt")
 
 [node name="World" type="Node2D"]
 process_mode = 3
@@ -65,6 +70,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+color = Color(1, 0.25098, 0, 1)
 script = ExtResource("4_yvee6")
 
 [node name="HUD" parent="CanvasLayer" instance=ExtResource("5_qjqg6")]

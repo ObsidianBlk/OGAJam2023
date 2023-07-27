@@ -7,11 +7,13 @@ extends UIMenu
 @onready var _slider_master: HSlider = %SliderMaster
 @onready var _slider_music: HSlider = %SliderMusic
 @onready var _slider_sfx: HSlider = %SliderSFX
+@onready var _check_disable_heat_haze: CheckButton = %Check_DisableHeatHaze
 
 # ------------------------------------------------------------------------------
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
+	Game.gameplay_option_changed.connect(_on_gameplay_option_changed)
 	GAS.audio_bus_volume_changed.connect(_on_audio_bus_volume_changed)
 
 # ------------------------------------------------------------------------------
@@ -48,6 +50,12 @@ func _on_audio_bus_volume_changed(_bus_name : String, bus_id : int, linear_volum
 		GAS.AUDIO_BUS.SFX:
 			_slider_sfx.value = vol
 
+func _on_gameplay_option_changed(gameplay_option : String, value : Variant) -> void:
+	match gameplay_option:
+		"disable_heat_haze":
+			if typeof(value) == TYPE_BOOL:
+				_check_disable_heat_haze.button_pressed = value
+
 func _on_slider_master_value_changed(value: float) -> void:
 	GAS.set_audio_volume(GAS.AUDIO_BUS.Master, value * 0.001)
 
@@ -56,6 +64,9 @@ func _on_slider_music_value_changed(value: float) -> void:
 
 func _on_slider_sfx_value_changed(value: float) -> void:
 	GAS.set_audio_volume(GAS.AUDIO_BUS.SFX, value * 0.001)
+
+func _on_check_disable_heat_haze_toggled(pressed : bool) -> void:
+	Game.gameplay_set_disable_heat_haze(pressed)
 
 func _on_apply_pressed() -> void:
 	Game.save_config()

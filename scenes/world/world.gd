@@ -46,6 +46,7 @@ var _level : GameLevel = null
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
+	_heat_haze.visible = false
 	_planet_seed = _GetNicePlanetSeed()
 	if _background_request != &"":
 		_SetBackground(_background_request)
@@ -90,7 +91,8 @@ func _DropCurrentLevel() -> void:
 		_level.temprature_changed.disconnect(_on_temprature_changed)
 	if _level.requested.is_connected(_on_level_requested):
 		_level.requested.disconnect(_on_level_requested)
-	_heat_haze.enable(false)
+	#_heat_haze.enable(false)
+	_heat_haze.visible = false
 	_game_view.remove_child(_level)
 	_level.queue_free()
 	_level = null
@@ -124,8 +126,8 @@ func _LoadLevel(level_path : String) -> int:
 # Handler Methods
 # ------------------------------------------------------------------------------
 func _on_temprature_changed(temprature : float) -> void:
-	if not _heat_haze.is_enabled():
-		_heat_haze.enable(true)
+	if not _heat_haze.visible:
+		_heat_haze.visible = true
 	_heat_haze.set_temprature(temprature)
 
 func _on_level_requested(request : Dictionary) -> void:

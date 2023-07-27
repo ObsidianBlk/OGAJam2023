@@ -9,6 +9,8 @@ signal config_changed(config)
 signal config_update_requested(config)
 signal config_saved()
 
+signal gameplay_option_changed(option_name, value)
+
 signal xeno_kills_changed(count)
 
 # ------------------------------------------------------------------------------
@@ -17,6 +19,8 @@ signal xeno_kills_changed(count)
 enum CTRLMode {Mouse=0, Joypad=1}
 
 const CONFIG_FILE_PATH : String = "user://game.conf"
+
+const SECTION_GAMEPLAY : String = "GamePlay"
 
 # ------------------------------------------------------------------------------
 # Variables
@@ -29,9 +33,12 @@ var _xenos_killed : int = 0
 
 var _config : ConfigFile = null
 
+var _gameplay_disable_heat_haze : bool = false
+
 # ------------------------------------------------------------------------------
 # Override Methods
 # ------------------------------------------------------------------------------
+
 func _input(event: InputEvent) -> void:
 	if _lock_control_mode: return
 	
@@ -50,6 +57,15 @@ func _input(event: InputEvent) -> void:
 		_control_mode = nmode
 
 # ------------------------------------------------------------------------------
+# Private Methods
+# ------------------------------------------------------------------------------
+func _UpdateHandledConfigValues() -> void:
+	gameplay_set_disable_heat_haze(
+		_config.get_value(SECTION_GAMEPLAY, "disable_heat_haze", false),
+		true
+	)
+
+# ------------------------------------------------------------------------------
 # Public Methods
 # ------------------------------------------------------------------------------
 func load_config() -> void:
@@ -57,6 +73,8 @@ func load_config() -> void:
 	var err : int = _config.load(CONFIG_FILE_PATH)
 	if err != OK:
 		save_config()
+	else:
+		_UpdateHandledConfigValues()
 	config_changed.emit(_config)
 
 func save_config() -> void:
@@ -68,6 +86,16 @@ func save_config() -> void:
 
 func get_config() -> ConfigFile:
 	return _config
+
+func gameplay_set_disable_heat_haze(disable : bool, ignore_config : bool = false) -> void:
+	if disable != _gameplay_disable_heat_haze:
+		_gameplay_disable_heat_haze = disable
+		if _config != null and not ignore_config:
+			_config.set_value(SECTION_GAMEPLAY, "disable_heat_haze", disable)
+		gameplay_option_changed.emit("disable_heat_haze", disable)
+
+func gameplay_get_disable_heat_haze() -> bool:
+	return _gameplay_disable_heat_haze
 
 func reset_xeno_count() -> void:
 	_xenos_killed = 0
