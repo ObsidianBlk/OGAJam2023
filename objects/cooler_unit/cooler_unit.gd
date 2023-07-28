@@ -40,6 +40,7 @@ var _time : float = 0.0
 # Onready Variables
 # ------------------------------------------------------------------------------
 @onready var _mpl: ModulatingPointLight = %MPL
+@onready var _wind_mas: MultiAudioStreamer2D = $WindMAS
 
 # ------------------------------------------------------------------------------
 # Setters
@@ -117,6 +118,7 @@ func _on_trigger_activated() -> void:
 	match _state:
 		STATE.Idle:
 			_state = STATE.Discharging
+			_wind_mas.play(&"", true)
 		STATE.Priming:
 			var offset : Vector2i = _GetTileOffset(_mpl.modulation_offset)
 			if offset == GREEN_OFFSET:

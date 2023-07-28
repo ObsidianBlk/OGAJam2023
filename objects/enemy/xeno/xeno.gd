@@ -301,7 +301,7 @@ func spawn_from(spawn_position : Vector2) -> void:
 	tween.tween_property(_sprite, "position", Vector2.ZERO, SPAWN_TIME)
 	tween.parallel()
 	tween.tween_property(_sprite, "modulate", Color.WHITE, SPAWN_TIME)
-	_sfxer.play_groupa(SOUND_SPAWN)
+	_sfxer.play_group(SOUND_SPAWN)
 	await tween.finished
 	_state = STATE.Patrolling
 

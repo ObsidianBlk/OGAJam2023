@@ -22,6 +22,27 @@
       "resource_url": "https://opengameart.org/content/hi-tech-button-sound-pack-i-non-themed",
       "license": "cc0",
       "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "name": "80 CC0 creature SFX",
+      "author": "rubberduck",
+      "resource_url": "https://opengameart.org/content/80-cc0-creature-sfx",
+      "license": "cc0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "name": "Chaingun, pistol, rifle, shotgun shots",
+      "author": "Michel Baradari",
+      "resource_url": "https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots",
+      "license": "cc-by 3.0",
+      "license_url": "http://creativecommons.org/licenses/by/3.0/"
+    },
+    {
+      "name": "Wind",
+      "author": "IgnasD",
+      "resource_url": "https://opengameart.org/content/wind",
+      "license": "cc0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/"
     }
   ],
   "music":[

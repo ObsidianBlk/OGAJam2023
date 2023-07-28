@@ -33,6 +33,7 @@ material = SubResource("CanvasItemMaterial_cjp74")
 script = ExtResource("2_xpqoh")
 sight_area = NodePath("../SightArea")
 collision_mask = 3
+detect_range_per_second = 50.0
 render_detection_lines = true
 
 [node name="ASprite2D" type="AnimatedSprite2D" parent="."]

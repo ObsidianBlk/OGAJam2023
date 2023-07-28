@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://b66rd02vw7a1k"]
+[gd_scene load_steps=9 format=3 uid="uid://b66rd02vw7a1k"]
 
 [ext_resource type="Texture2D" uid="uid://b5f0bpjnhn8sa" path="res://assets/graphics/light_maps/door_light.png" id="1_2nqta"]
 [ext_resource type="Script" path="res://objects/cooler_unit/cooler_unit.gd" id="1_wnpg3"]
 [ext_resource type="Script" path="res://scripts/nodes/ModulatingPointLight.gd" id="2_obhue"]
+[ext_resource type="Script" path="res://scripts/nodes/MultiAudioStreamer2D.gd" id="4_tmgcv"]
+[ext_resource type="AudioStream" uid="uid://cemwgww6infnp" path="res://assets/sfx/wind/Wind.ogg" id="5_oa6to"]
+[ext_resource type="AudioStream" uid="uid://c8la47ta63wrf" path="res://assets/sfx/wind/Wind2.ogg" id="6_pbhis"]
 
 [sub_resource type="Curve" id="Curve_uai5r"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.385135, 0.484211), 0.0, 0.0, 0, 0, Vector2(0.837838, 1), 0.0, 0.0, 0, 0]
@@ -27,3 +30,15 @@ gradient = SubResource("Gradient_2pp4q")
 modulation_offset = 0.5
 loop = false
 loop_time = 0.0
+
+[node name="WindMAS" type="Node2D" parent="."]
+script = ExtResource("4_tmgcv")
+bus = &"SFX"
+max_distance = 300.0
+sample_names = Array[StringName]([&"wind1", &"wind2"])
+sample_streams = Array[AudioStream]([ExtResource("5_oa6to"), ExtResource("6_pbhis")])
+default_volume_db = -10.0
+min_volume_db = -10.0
+max_volume_db = -10.0
+min_pitch_scale = 0.8
+max_pitch_scale = 1.2

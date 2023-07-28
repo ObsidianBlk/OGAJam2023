@@ -51,7 +51,8 @@ var _health : int = 0
 @onready var _body : AnimatedSprite2D = $Body
 @onready var _muzzle : AnimatedSprite2D = $Muzzle
 @onready var _hit_area : Area2D = $HitArea
-@onready var _attack_sfx: sfxer2D = %AttackSFX
+@onready var _attack_mas: MultiAudioStreamer2D = $AttackMAS
+
 
 # ------------------------------------------------------------------------------
 # Setters
@@ -174,7 +175,7 @@ func _attack_interval() -> void:
 	var ename : Array = _enemies.keys()
 	var visible_enemies : Array = []
 	
-	_attack_sfx.play_group(&"att", true)
+	_attack_mas.play(&"", true)
 	
 	for i in range(ename.size()):
 		if _enemies[ename[i]].get_ref() == null:
