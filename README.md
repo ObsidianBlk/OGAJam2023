@@ -28,11 +28,17 @@ In this section I will describe what the controls for the game are. At present, 
 **Author:** Emcee Flesher  
 **URL:** [https://opengameart.org/content/teeny-xeenies](https://opengameart.org/content/teeny-xeenies)  
 **License(s):** [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)  
-**Modified:** Yes
+**Modified:** Split tile and sprite graphics into seperate images. Duplicated a couple of tiles for easier use in tilemap setup.
 
 > **Title:** Assets: UI Minimalism SciFi
 **Author:** Wenrexa
 **URL:** [https://opengameart.org/content/assets-ui-minimalism-scifi](https://opengameart.org/content/assets-ui-minimalism-scifi)
+**License:** [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
+**Modified:** No
+
+> **Title:** Game icons
+**Author:** Kenney
+**URL:** [https://opengameart.org/content/game-icons](https://opengameart.org/content/game-icons)
 **License:** [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
 **Modified:** No
 
@@ -43,6 +49,23 @@ In this section I will describe what the controls for the game are. At present, 
 **License:** [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
 **Modified:** No
 
+> **Title:** 80 CC0 creature SFX
+**Author:** rubberduck
+**URL:** [https://opengameart.org/content/80-cc0-creature-sfx](https://opengameart.org/content/80-cc0-creature-sfx)
+**License:** [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
+**Modified:** No
+
+> **Title:** Chaingun, pistol, rifle, shotgun shots
+**Author:** Michel Baradari
+**URL:** [https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots](https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots)
+**License:** [CC-BY 3.0](http://creativecommons.org/licenses/by/3.0/)
+**Modified:** No
+
+> **Title:** Wind
+**Author:** IgnasD
+**URL:** [https://opengameart.org/content/wind](https://opengameart.org/content/wind)
+**License:** [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
+**Modified:** No
 
 ### Music
 
