@@ -27,6 +27,7 @@ var _attrib_data : Dictionary = {}
 func _ready() -> void:
 	if visible:
 		visible = false
+	_UpdateScrollBarTheme()
 	if not _attrib_data.is_empty():
 		_UpdateCards()
 	else:
@@ -35,6 +36,14 @@ func _ready() -> void:
 # ------------------------------------------------------------------------------
 # Private Methods
 # ------------------------------------------------------------------------------
+func _UpdateScrollBarTheme() -> void:
+	var hbar : HScrollBar = %CScroll.get_h_scroll_bar()
+	if hbar != null:
+		hbar.theme_type_variation = &"HScroll_SciFi"
+	var vbar : VScrollBar = %CScroll.get_v_scroll_bar()
+	if vbar != null:
+		vbar.theme_type_variation = &"VScroll_SciFi"
+
 func _ClearCards() -> void:
 	if _attrib_cards == null: return
 	for child in _attrib_cards.get_children():
@@ -46,10 +55,16 @@ func _UpdateCardSection(section : String) -> void:
 	if not section in _attrib_data: return
 	if typeof(_attrib_data[section]) != TYPE_ARRAY: return
 	
+	var type_id : int = 0 # "graphics"
+	match section:
+		"sfx": type_id = 1
+		"music": type_id = 2
+	
 	for item in _attrib_data[section]:
 		if typeof(item) != TYPE_DICTIONARY: continue
 		var card : Control = ATTRIB_CARD.instantiate()
 		if card != null and card.has_method("set_data"):
+			card.media_type = type_id
 			_attrib_cards.add_child(card)
 			card.set_data(item)
 

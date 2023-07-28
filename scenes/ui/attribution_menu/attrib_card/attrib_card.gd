@@ -19,6 +19,15 @@ const CC_BADGE : Dictionary = {
 }
 const OGA_CONTENT_BASE : String = "https://opengameart.org/content"
 
+const TEX_GRAPHIC_ICON : Texture = preload("res://assets/graphics/KennyIcons/tablet.png")
+const TEX_SFX_ICON : Texture = preload("res://assets/graphics/KennyIcons/audioOn.png")
+const TEX_MUSIC_ICON : Texture = preload("res://assets/graphics/KennyIcons/musicOn.png")
+
+# ------------------------------------------------------------------------------
+# Export Variables
+# ------------------------------------------------------------------------------
+@export var media_type : int = 0
+
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
@@ -34,17 +43,38 @@ var _node_ready : bool = false
 @onready var _texture_license_type : TextureRect = %TextureLicenseType
 @onready var _link_license : LinkButton = %LinkLicense
 @onready var _modification_notice : Control = %ModificationNotice
+@onready var _lbl_mod_description : Label = %LblModDescription
+@onready var _tex_asset_type : TextureRect = %TexAssetType
+
+# ------------------------------------------------------------------------------
+# Setters
+# ------------------------------------------------------------------------------
+func set_media_type(mt : int) -> void:
+	if mt >= 0 and mt <= 2:
+		media_type = mt
+		_UpdateMediaType()
 
 # ------------------------------------------------------------------------------
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
 	_node_ready = true
+	_UpdateMediaType()
 	_DisplayData()
 
 # ------------------------------------------------------------------------------
 # Private Methods
 # ------------------------------------------------------------------------------
+func _UpdateMediaType() -> void:
+	if _tex_asset_type == null: return
+	match media_type:
+		0: # Graphic
+			_tex_asset_type.texture = TEX_GRAPHIC_ICON
+		1: # SFX
+			_tex_asset_type.texture = TEX_SFX_ICON
+		2: # Music
+			_tex_asset_type.texture = TEX_MUSIC_ICON
+
 func _DisplayData() -> void:
 	if _data.is_empty() or not _node_ready: return
 
@@ -72,6 +102,11 @@ func _DisplayData() -> void:
 			_texture_license_type.texture = CC_BADGE[attribs]
 		else:
 			_texture_license_type.texture = null
+	if "mod_description" in _data:
+		_modification_notice.visible = true
+		_lbl_mod_description.text = _data.mod_description
+	else:
+		_modification_notice.visible = false
 
 # ------------------------------------------------------------------------------
 # Public Methods

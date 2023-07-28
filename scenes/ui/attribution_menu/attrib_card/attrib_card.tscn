@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://irwhgwl2d6pu"]
+[gd_scene load_steps=4 format=3 uid="uid://irwhgwl2d6pu"]
 
 [ext_resource type="Theme" uid="uid://8hqlogsadb8w" path="res://Main.theme" id="1_5s8vd"]
 [ext_resource type="Script" path="res://scenes/ui/attribution_menu/attrib_card/attrib_card.gd" id="1_qvoqd"]
+[ext_resource type="Texture2D" uid="uid://crmcfjweck3s" path="res://assets/graphics/KennyIcons/tablet.png" id="3_d03na"]
 
 [node name="AttribCard" type="PanelContainer"]
 offset_right = 40.0
@@ -10,53 +11,79 @@ theme = ExtResource("1_5s8vd")
 theme_type_variation = &"Panel_SciFi_C"
 script = ExtResource("1_qvoqd")
 
-[node name="VBC" type="VBoxContainer" parent="."]
+[node name="HBC" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="LblNameValue" type="Label" parent="VBC"]
+[node name="TexAssetType" type="TextureRect" parent="HBC"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("3_d03na")
+stretch_mode = 5
+
+[node name="VSeparator" type="VSeparator" parent="HBC"]
+layout_mode = 2
+
+[node name="VBC" type="VBoxContainer" parent="HBC"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LblNameValue" type="Label" parent="HBC/VBC"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"Title_Label"
 text = "No Name"
-horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBC"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBC/VBC"]
 layout_mode = 2
 
-[node name="LblAuthorValue" type="Label" parent="VBC/VBoxContainer"]
+[node name="LblAuthorValue" type="Label" parent="HBC/VBC/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "No Name"
 
-[node name="LinkResource" type="LinkButton" parent="VBC/VBoxContainer"]
+[node name="LinkResource" type="LinkButton" parent="HBC/VBC/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"Label_ThinItalic"
 text = "Google"
+underline = 1
 uri = "https://google.com"
 
-[node name="Layout" type="GridContainer" parent="VBC"]
+[node name="Layout" type="GridContainer" parent="HBC/VBC"]
 layout_mode = 2
 columns = 2
 
-[node name="TextureLicenseType" type="TextureRect" parent="VBC/Layout"]
+[node name="TextureLicenseType" type="TextureRect" parent="HBC/VBC/Layout"]
 unique_name_in_owner = true
 layout_mode = 2
 expand_mode = 3
 stretch_mode = 4
 
-[node name="LinkLicense" type="LinkButton" parent="VBC/Layout"]
+[node name="LinkLicense" type="LinkButton" parent="HBC/VBC/Layout"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"Label_ThinItalic"
 text = "CC0"
+underline = 1
 uri = "https://google.com"
 
-[node name="ModificationNotice" type="VBoxContainer" parent="VBC"]
+[node name="ModificationNotice" type="VBoxContainer" parent="HBC/VBC"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="VBC/ModificationNotice"]
+[node name="HSeparator" type="HSeparator" parent="HBC/VBC/ModificationNotice"]
 layout_mode = 2
 
-[node name="LbLModificationNotice" type="Label" parent="VBC/ModificationNotice"]
+[node name="LbLModificationNotice" type="Label" parent="HBC/VBC/ModificationNotice"]
 layout_mode = 2
-text = "This resource was modified for this project."
+theme_type_variation = &"Label_Light"
+theme_override_colors/font_color = Color(0.439216, 0.615686, 0.631373, 1)
+theme_override_font_sizes/font_size = 14
+text = "Resource modified for this project."
+
+[node name="LblModDescription" type="Label" parent="HBC/VBC/ModificationNotice"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Label_Light"
+text = "And now I will explain how! It's a complicated reason that I surely cannot explain in full but fuck I'll try anyway!!"
+autowrap_mode = 3

@@ -5,7 +5,8 @@
       "author": "Emcee Flesher",
       "resource_url": "https://opengameart.org/content/teeny-xeenies",
       "license": "cc-by 4.0",
-      "license_url": "https://creativecommons.org/licenses/by/4.0/"
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "mod_description": "Split tile and sprite graphics into seperate images. Duplicated a couple of tiles for easier use in tilemap setup."
     },
     {
       "name": "Assets: UI Minimalism SciFi",
@@ -13,6 +14,13 @@
       "resource_url": "https://opengameart.org/content/assets-ui-minimalism-scifi",
       "license": "cc0",
       "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "name": "Game icons",
+      "author": "Kenney",
+      "resource_url": "https://opengameart.org/content/game-icons",
+      "license": "cc0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/"
     }
   ],
   "sfx":[
