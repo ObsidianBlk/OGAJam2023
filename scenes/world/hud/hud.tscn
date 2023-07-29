@@ -1,7 +1,35 @@
-[gd_scene load_steps=3 format=3 uid="uid://0juaa8x8tsoy"]
+[gd_scene load_steps=11 format=3 uid="uid://0juaa8x8tsoy"]
 
 [ext_resource type="Theme" uid="uid://8hqlogsadb8w" path="res://Main.theme" id="1_b0tvt"]
 [ext_resource type="Script" path="res://scenes/world/hud/hud.gd" id="1_j1xua"]
+[ext_resource type="Texture2D" uid="uid://b7m7mnuo6pmcy" path="res://assets/graphics/TeenieXeenie/sprites/teenyxeenies_sprites_prime.png" id="3_3tnow"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_x0ptc"]
+load_path = "res://.godot/imported/teenyxeenies_sprites_prime.png-68c35b73cae173311a26bcfbfb6fa126.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iix5p"]
+atlas = SubResource("CompressedTexture2D_x0ptc")
+region = Rect2(40, 456, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6uw6a"]
+atlas = ExtResource("3_3tnow")
+region = Rect2(0, 456, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_72lxq"]
+atlas = ExtResource("3_3tnow")
+region = Rect2(8, 456, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ko5sj"]
+atlas = ExtResource("3_3tnow")
+region = Rect2(16, 456, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4yxhb"]
+atlas = ExtResource("3_3tnow")
+region = Rect2(24, 456, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kcg0f"]
+atlas = ExtResource("3_3tnow")
+region = Rect2(32, 456, 8, 8)
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -35,6 +63,7 @@ theme_override_constants/separation = 13
 
 [node name="Temperature" type="Label" parent="MC/Bar"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 text = "0°F"
 
@@ -49,3 +78,122 @@ layout_mode = 2
 size_flags_vertical = 1
 mouse_filter = 2
 show_percentage = false
+
+[node name="VSeparator2" type="VSeparator" parent="MC/Bar"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Ammo" type="HBoxContainer" parent="MC/Bar"]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MC/Bar/Ammo"]
+texture_filter = 3
+layout_mode = 2
+texture = SubResource("AtlasTexture_iix5p")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="AmmoCount" type="Label" parent="MC/Bar/Ammo"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+text = "0"
+
+[node name="VSeparator3" type="VSeparator" parent="MC/Bar"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="KeyRed" type="HBoxContainer" parent="MC/Bar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MC/Bar/KeyRed"]
+texture_filter = 3
+layout_mode = 2
+texture = SubResource("AtlasTexture_6uw6a")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="RedCount" type="Label" parent="MC/Bar/KeyRed"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "x2"
+
+[node name="KeyGreen" type="HBoxContainer" parent="MC/Bar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MC/Bar/KeyGreen"]
+texture_filter = 3
+layout_mode = 2
+texture = SubResource("AtlasTexture_72lxq")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="GreenCount" type="Label" parent="MC/Bar/KeyGreen"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "x2"
+
+[node name="KeyBlue" type="HBoxContainer" parent="MC/Bar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MC/Bar/KeyBlue"]
+texture_filter = 3
+layout_mode = 2
+texture = SubResource("AtlasTexture_ko5sj")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="BlueCount" type="Label" parent="MC/Bar/KeyBlue"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "x2"
+
+[node name="KeyOrange" type="HBoxContainer" parent="MC/Bar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MC/Bar/KeyOrange"]
+texture_filter = 3
+layout_mode = 2
+texture = SubResource("AtlasTexture_4yxhb")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="OrangeCount" type="Label" parent="MC/Bar/KeyOrange"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "x2"
+
+[node name="KeyYellow" type="HBoxContainer" parent="MC/Bar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MC/Bar/KeyYellow"]
+texture_filter = 3
+layout_mode = 2
+texture = SubResource("AtlasTexture_kcg0f")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="YellowCount" type="Label" parent="MC/Bar/KeyYellow"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+text = "x2"

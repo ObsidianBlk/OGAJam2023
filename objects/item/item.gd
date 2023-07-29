@@ -99,7 +99,7 @@ func _on_pickup_area_body_entered(body: Node2D) -> void:
 		_body.visible = false
 		_asp.play()
 	else:
-		_die()
+		_die.call_deferred()
 
 func _on_audio_stream_player_2d_finished() -> void:
-	_die()
+	_die.call_deferred()

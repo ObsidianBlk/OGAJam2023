@@ -39,6 +39,7 @@ size = Vector2(32, 32)
 script = ExtResource("1_qijd6")
 canvas_modulate_node_path = NodePath("CanvasModulate")
 color = Color(0, 0, 0, 1)
+next_level = "res://scenes/levels/level_001/level_001.tscn"
 
 [node name="Lava" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_uvq7x")
@@ -244,6 +245,32 @@ position = Vector2(27, 181)
 type = 5
 amount = 10
 pickup_sfx = ExtResource("18_sp8jw")
+
+[node name="Item_Red" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(41, 204)
+
+[node name="Item_Red2" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(273, 100)
+
+[node name="Item_Green" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(35, 234)
+type = 1
+
+[node name="Item_Blue" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(83, 224)
+type = 2
+
+[node name="Item_Blue2" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(299, 102)
+type = 2
+
+[node name="Item_Orange" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(159, 210)
+type = 3
+
+[node name="Item_Yellow" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(114, 176)
+type = 4
 
 [node name="OuterArea_01" type="Node2D" parent="."]
 position = Vector2(116, 99)
