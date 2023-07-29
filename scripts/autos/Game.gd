@@ -11,6 +11,7 @@ signal config_saved()
 
 signal gameplay_option_changed(option_name, value)
 
+signal inventory_changed(item, amount)
 signal xeno_kills_changed(count)
 
 # ------------------------------------------------------------------------------
@@ -29,10 +30,10 @@ var _lock_control_mode : bool = false
 var _control_mode : CTRLMode = CTRLMode.Mouse:		set = set_control_mode
 var _active_joypad_device : int = 0
 
+var _inventory : Dictionary = {}
 var _xenos_killed : int = 0
 
 var _config : ConfigFile = null
-
 var _gameplay_disable_heat_haze : bool = false
 
 # ------------------------------------------------------------------------------
@@ -104,6 +105,36 @@ func reset_xeno_count() -> void:
 func xeno_killed() -> void:
 	_xenos_killed += 1
 	xeno_kills_changed.emit(_xenos_killed)
+
+func set_inventory(item : String, amount : int) -> void:
+	if amount <= 0:
+		if item in _inventory:
+			_inventory.erase(item)
+			inventory_changed.emit(item, 0)
+		return
+	
+	_inventory[item] = amount
+
+func update_inventory(item : String, amount : int) -> void:
+	if amount == 0: return
+	if not item in _inventory:
+		_inventory[item] = amount
+	else:
+		_inventory[item] += amount
+		if _inventory[item] <= 0:
+			_inventory.erase(item)
+			inventory_changed.emit(item, 0)
+			return
+	inventory_changed.emit(item, _inventory[item])
+
+func remove_from_inventory(item : String) -> void:
+	if item in _inventory:
+		_inventory.erase(item)
+		inventory_changed.emit(item, 0)
+
+func get_inventory_item_count(item : String) -> int:
+	if not item in _inventory: return 0
+	return _inventory[item]
 
 func set_control_mode(mode : CTRLMode) -> void:
 	_control_mode = mode

@@ -17,7 +17,7 @@ enum STATE {Opened=0, Closed=1}
 @export var initial_state : STATE = STATE.Closed
 @export var radius : float = 10.0:								set = set_radius
 @export_flags_2d_physics var collision_mask : int = 1:			set = set_collision_mask
-@export var auto_open : bool = false
+@export var auto_open : bool = false:							set = set_auto_open
 @export var input : Trigger = null:								set = set_input
 @export var nav_point_group : String = "":						set = set_nav_point_group
 @export var nav_point_color : Color = Color.YELLOW_GREEN:		set = set_nav_point_color
@@ -46,6 +46,12 @@ func set_collision_mask(mask : int) -> void:
 		collision_mask = mask
 		_UpdateArea()
 
+func set_auto_open(a : bool) -> void:
+	if input != null:
+		auto_open = false
+	else:
+		auto_open = a
+
 func set_input(i : Trigger) -> void:
 	if i != input:
 		if input != null:
@@ -54,15 +60,17 @@ func set_input(i : Trigger) -> void:
 			if input.deactivated.is_connected(_on_deactivated):
 				input.deactivated.disconnect(_on_deactivated)
 		input = i
-		if input != null and not Engine.is_editor_hint():
-			if not input.activated.is_connected(_on_activated):
-				input.activated.connect(_on_activated)
-			if not input.deactivated.is_connected(_on_deactivated):
-				input.deactivated.connect(_on_deactivated)
-			if input.is_activated():
-				_on_activated()
-			else:
-				_on_deactivated()
+		if input != null:
+			auto_open = false
+			if not Engine.is_editor_hint():
+				if not input.activated.is_connected(_on_activated):
+					input.activated.connect(_on_activated)
+				if not input.deactivated.is_connected(_on_deactivated):
+					input.deactivated.connect(_on_deactivated)
+				if input.is_activated():
+					_on_activated()
+				else:
+					_on_deactivated()
 
 func set_nav_point_group(npg : String) -> void:
 	if npg != nav_point_group:
@@ -179,6 +187,7 @@ func _on_body_entered(body : Node2D) -> void:
 		if not body.name in _bodies:
 			_bodies[body.name] = body
 		if _state != STATE.Opened:
+			set_activated.call_deferred(true)
 			_on_interacted(body)
 	elif body.has_signal("interacted"):
 		if not body.interacted.is_connected(_on_interacted):
@@ -189,6 +198,7 @@ func _on_body_exited(body : Node2D) -> void:
 		if body.name in _bodies:
 			_bodies.erase(body.name)
 		if _bodies.is_empty() and _state != STATE.Closed:
+			set_activated.call_deferred(false)
 			_on_interacted(body)
 	elif body.has_signal("interacted"):
 		if body.interacted.is_connected(_on_interacted):

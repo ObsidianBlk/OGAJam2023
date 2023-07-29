@@ -24,11 +24,17 @@ signal finished()
 @export_range(0.01, 4.0) var default_pitch_scale : float = 1.0
 @export_range(0.01, 4.0) var min_pitch_scale : float = 1.0:		set = set_min_pitch_scale
 @export_range(0.01, 4.0) var max_pitch_scale : float = 1.0:		set = set_max_pitch_scale
+@export_subgroup("Trigger")
+@export var trigger : Trigger = null:							set = set_trigger
+@export var play_on_deactivate : bool = false
+@export var loop_while_active : bool = false
+@export var force_play : bool = false
 
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
 var _audio1 : AudioStreamPlayer2D = null
+var _trigger_active : bool = false
 
 # ------------------------------------------------------------------------------
 # Setters
@@ -67,6 +73,27 @@ func set_max_volume_db(v : float) -> void:
 		max_volume_db = v
 		if max_volume_db < min_volume_db:
 			min_volume_db = max_volume_db
+
+func set_trigger(t : Trigger) -> void:
+	if t != trigger:
+		if trigger != null:
+			if trigger.activated.is_connected(_on_trigger_activated):
+				trigger.activated.disconnect(_on_trigger_activated)
+			if trigger.deactivated.is_connected(_on_trigger_deactivated):
+				trigger.deactivated.disconnect(_on_trigger_deactivated)
+		trigger = t
+		if trigger != null:
+			if not trigger.activated.is_connected(_on_trigger_activated):
+				trigger.activated.connect(_on_trigger_activated)
+			if not trigger.deactivated.is_connected(_on_trigger_deactivated):
+				trigger.deactivated.connect(_on_trigger_deactivated)
+			
+			if _trigger_active and not trigger.is_activated():
+				_trigger_active = false
+			elif trigger.is_activated():
+				_on_trigger_activated()
+		else:
+			_trigger_active = false
 
 # ------------------------------------------------------------------------------
 # Override Methods
@@ -140,4 +167,17 @@ func is_playing() -> bool:
 # Handler Methods
 # ------------------------------------------------------------------------------
 func _on_audio_finished(_audio : AudioStreamPlayer2D) -> void:
-	finished.emit()
+	if loop_while_active:
+		if _audio1 != null and _audio1.stream != null:
+			_audio1.play()
+	else:
+		finished.emit()
+
+func _on_trigger_activated() -> void:
+	play(&"", force_play)
+	_trigger_active = true
+
+func _on_trigger_deactivated() -> void:
+	if play_on_deactivate:
+		play(&"", force_play)
+	_trigger_active = false

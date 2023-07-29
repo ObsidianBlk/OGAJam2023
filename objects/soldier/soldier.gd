@@ -33,6 +33,8 @@ enum SOLDIER {Green=0, Red=1}
 @export var max_damage_per_shot : int = 50
 @export_range(0.0, 1.0) var accuracy : float = 0.5
 
+@export var ground_tilemap : TileMap = null
+
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
@@ -52,6 +54,7 @@ var _health : int = 0
 @onready var _muzzle : AnimatedSprite2D = $Muzzle
 @onready var _hit_area : Area2D = $HitArea
 @onready var _attack_mas: MultiAudioStreamer2D = $AttackMAS
+@onready var _anim: AnimationPlayer = $Anim
 
 
 # ------------------------------------------------------------------------------
@@ -86,6 +89,7 @@ func _physics_process(_delta : float) -> void:
 	
 	_action = &"move" if velocity.length() > 0.1 else &"idle"
 	_UpdateViz()
+	_CheckOnTileMap()
 
 # ------------------------------------------------------------------------------
 # Private Methods
@@ -120,6 +124,18 @@ func _CastTo(pos : Vector2, coll_mask : int = 4294967295) -> Dictionary:
 		PhysicsRayQueryParameters2D.create(global_position, pos, coll_mask)
 	)
 
+func _CheckOnTileMap() -> void:
+	if ground_tilemap == null: return
+	if _health <= 0: return
+	var coords : Vector2i = ground_tilemap.local_to_map(global_position)
+	if ground_tilemap.get_cell_source_id(0, coords) < 0:
+		move(Vector2.ZERO)
+		_health = 0
+		_firing = false
+		_muzzle.visible = false
+		health_changed.emit(_health, max_health)
+		_anim.play("fall")
+
 func _SpawnDeathBurst() -> void:
 	var parent = get_parent()
 	if parent == null: return
@@ -138,24 +154,36 @@ func face_position(pos : Vector2) -> void:
 	_UpdateViz()
 
 func move(dir : Vector2) -> void:
+	if _health <= 0: return
 	_direction = dir
 
 func get_direction() -> Vector2:
 	return _direction
 
 func attack(active : bool = true) -> void:
+	if _health <= 0: return
 	_firing = active
 	_UpdateViz()
 	_attack_interval()
 
 func interact() -> void:
+	if _health <= 0: return
 	interacted.emit()
+
+func heal(amount : int) -> void:
+	if amount <= 0: return
+	if _health == max_health: return
+	
+	_health = min(_health + amount, max_health)
+	health_changed.emit(_health, max_health)
 
 func damage(_amount : int) -> void:
 	if _health <= 0: return
 	_health -= _amount
 	if _health <= 0:
 		visible = false
+		_direction = Vector2.ZERO
+		_firing = false
 		_SpawnDeathBurst()
 	health_changed.emit(_health, max_health)
 
@@ -165,6 +193,7 @@ func is_alive() -> bool:
 func revive() -> void:
 	visible = true
 	_health = max_health
+	_anim.play("normal")
 	health_changed.emit(_health, max_health)
 
 # ------------------------------------------------------------------------------
@@ -172,6 +201,8 @@ func revive() -> void:
 # ------------------------------------------------------------------------------
 func _attack_interval() -> void:
 	if not _firing: return
+	var ammo : int = Game.get_inventory_item_count("ammo")
+	
 	var ename : Array = _enemies.keys()
 	var visible_enemies : Array = []
 	
@@ -184,6 +215,12 @@ func _attack_interval() -> void:
 		var result : Dictionary = _CastTo(enemy.global_position, _hit_area.collision_mask)
 		if not result.is_empty() and result.collider == enemy:
 			visible_enemies.append(enemy)
+	
+	var bullets = 1
+	if ammo > 0:
+		bullets = min(ammo, bps)
+		ammo -= bullets
+		Game.update_inventory("ammo", -bullets)
 	
 	if visible_enemies.size() > 0:
 		for i in range(bps):
@@ -198,7 +235,11 @@ func _attack_interval() -> void:
 			hit.hit_type = 0
 			enemy.add_child(hit)
 	
-	get_tree().create_timer(rof).timeout.connect(_attack_interval, CONNECT_ONE_SHOT)
+	var mult = 1.0 if ammo > 0 else 4.0
+	_muzzle.speed_scale = 1.0 if mult <= 1.0 else 0.125
+	if mult > 1.0:
+		_muzzle.stop()
+	get_tree().create_timer(rof * mult).timeout.connect(_attack_interval, CONNECT_ONE_SHOT)
 
 func _on_body_entered(body : Node2D) -> void:
 	if not body.name in _enemies and body.has_method("damage"):

@@ -87,7 +87,7 @@ func initialize() -> void:
 func _on_player_health_changed(current_health : int, max_health : int) -> void:
 	var percent : float = max(0.0, min(1.0, float(current_health) / float(max_health)))
 	player_health_changed.emit(percent)
-	if current_health < 0:
+	if current_health <= 0:
 		get_tree().create_timer(player_respawn_delay).timeout.connect(
 			_on_player_respawn_delay_timeout, CONNECT_ONE_SHOT
 		)

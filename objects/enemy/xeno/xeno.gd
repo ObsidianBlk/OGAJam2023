@@ -189,17 +189,18 @@ func _State_Patrolling(_delta : float) -> void:
 
 
 func _State_Hunting(_delta : float) -> void:
-	print("Hunting")
 	set_speed_multiplier(1.0)
 	var target : Node2D = _hunt_target.get_ref()
 	if target == null:
-		print("Searching due to no target")
 		_ChangeState(STATE.Searching)
 		return
 	
-	if not _nav_agent.is_activated() and not _sight_system.can_see(target):
-		print("Searching due to unseeable target")
-		_ChangeState(STATE.Searching)
+	if not _nav_agent.is_activated():
+		if _sight_system.can_see(target):
+			_nav_agent.activate(true) # Keep me alive
+			# TODO: This is a stupid hack. There should be a better way.
+		else:
+			_ChangeState(STATE.Searching)
 		return
 	
 	# TODO: There seems to be a point where target following is lost

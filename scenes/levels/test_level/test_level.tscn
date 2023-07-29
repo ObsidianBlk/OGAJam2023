@@ -1,43 +1,50 @@
-[gd_scene load_steps=20 format=3 uid="uid://bxj6ilf7kixh6"]
+[gd_scene load_steps=26 format=3 uid="uid://bxj6ilf7kixh6"]
 
 [ext_resource type="TileSet" uid="uid://5rssu1a6i47q" path="res://assets/graphics/TeenieXeenie/tilesets/tileset.tres" id="1_anjiu"]
 [ext_resource type="Script" path="res://scenes/levels/test_level/test_level.gd" id="1_qijd6"]
+[ext_resource type="FastNoiseLite" uid="uid://bxi3xk06gmja3" path="res://assets/resources/lava_noise_001.tres" id="3_63e0a"]
 [ext_resource type="PackedScene" uid="uid://cws5p1fsi2vup" path="res://objects/enemy/xeno/xeno.tscn" id="3_la4sf"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_door.gd" id="3_osram"]
+[ext_resource type="Texture2D" uid="uid://bx3gbb7o8rkyb" path="res://icon.svg" id="4_54cp2"]
 [ext_resource type="PackedScene" uid="uid://b66rd02vw7a1k" path="res://objects/cooler_unit/cooler_unit.tscn" id="4_d7j3r"]
 [ext_resource type="Script" path="res://scripts/nodes/nav_point.gd" id="4_e5s81"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_interact.gd" id="4_fy37o"]
 [ext_resource type="PackedScene" uid="uid://qx0q5hd2j2bf" path="res://objects/soldier/soldier.tscn" id="5_f1l7d"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_timer.gd" id="6_krfhv"]
 [ext_resource type="Script" path="res://scripts/nodes/player.gd" id="6_q485d"]
+[ext_resource type="Script" path="res://scripts/nodes/MultiAudioStreamer2D.gd" id="6_w8it6"]
+[ext_resource type="AudioStream" uid="uid://b74d1c733j21r" path="res://assets/sfx/HiTechButtons/Button Sound 8.wav" id="7_1xns1"]
 [ext_resource type="Script" path="res://scripts/nodes/ExitArea2D.gd" id="7_kr1jm"]
+[ext_resource type="AudioStream" uid="uid://fvbbjnapa80e" path="res://assets/sfx/sfx_04a.ogg" id="8_jr10i"]
 [ext_resource type="Texture2D" uid="uid://b5f0bpjnhn8sa" path="res://assets/graphics/light_maps/door_light.png" id="9_w0fq2"]
 [ext_resource type="Shader" path="res://shaders/Lava.gdshader" id="11_0pvo3"]
 [ext_resource type="Script" path="res://scripts/nodes/enemy_spawn_manager.gd" id="14_lto7u"]
 [ext_resource type="Script" path="res://scripts/nodes/enemy_spawn_point.gd" id="15_lnc01"]
+[ext_resource type="PackedScene" uid="uid://cboymq7o1rmb" path="res://objects/item/item.tscn" id="17_pb51w"]
+[ext_resource type="AudioStream" uid="uid://bn47cn83kek5h" path="res://assets/sfx/clipload1.wav" id="18_sp8jw"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ufkky"]
+noise = ExtResource("3_63e0a")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uvq7x"]
+shader = ExtResource("11_0pvo3")
+shader_parameter/brightness = 0.071
+shader_parameter/timeScaleFactor = 0.005
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_ufkky")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7r7ui"]
 size = Vector2(32, 32)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_na485"]
-noise_type = 0
-seed = 12
-fractal_type = 3
-fractal_octaves = 2
-fractal_ping_pong_strength = 5.0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_iepeq"]
-noise = SubResource("FastNoiseLite_na485")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_61py4"]
-shader = ExtResource("11_0pvo3")
-shader_parameter/timeScaleFactor = 0.04
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_iepeq")
 
 [node name="TestLevel" type="Node2D"]
 script = ExtResource("1_qijd6")
 canvas_modulate_node_path = NodePath("CanvasModulate")
 color = Color(0, 0, 0, 1)
+
+[node name="Lava" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_uvq7x")
+position = Vector2(-86, 147)
+scale = Vector2(4, 4)
+texture = ExtResource("4_54cp2")
 
 [node name="TileMap" type="TileMap" parent="."]
 texture_filter = 1
@@ -55,6 +62,16 @@ collision_mask = 34
 auto_open = true
 nav_point_group = "Outer_Area"
 
+[node name="MASDoorSound" type="Node2D" parent="TileMap/OuterDoor" node_paths=PackedStringArray("trigger")]
+script = ExtResource("6_w8it6")
+bus = &"SFX"
+max_distance = 500.0
+sample_names = Array[StringName]([&"door"])
+sample_streams = Array[AudioStream]([ExtResource("8_jr10i")])
+trigger = NodePath("..")
+play_on_deactivate = true
+force_play = true
+
 [node name="HallDoor" type="Node2D" parent="TileMap" node_paths=PackedStringArray("input")]
 position = Vector2(292, 124)
 script = ExtResource("3_osram")
@@ -70,6 +87,17 @@ collision_mask = 34
 auto_open = true
 nav_point_group = "Inner_Area"
 nav_point_color = Color(0.686275, 0.341176, 0.839216, 1)
+
+[node name="MASDoorSound" type="Node2D" parent="TileMap/LargeChamberDoor" node_paths=PackedStringArray("trigger")]
+position = Vector2(-160, 96)
+script = ExtResource("6_w8it6")
+bus = &"SFX"
+max_distance = 500.0
+sample_names = Array[StringName]([&"door"])
+sample_streams = Array[AudioStream]([ExtResource("8_jr10i")])
+trigger = NodePath("..")
+play_on_deactivate = true
+force_play = true
 
 [node name="ExitDoorTrigger1" type="Node2D" parent="TileMap" node_paths=PackedStringArray("input")]
 position = Vector2(500, 124)
@@ -123,6 +151,27 @@ radius = 8.0
 collision_mask = 2
 links = [NodePath("../HallDoorB")]
 
+[node name="MASButtonSound" type="Node2D" parent="Triggers/HallDoorA" node_paths=PackedStringArray("trigger")]
+script = ExtResource("6_w8it6")
+bus = &"SFX"
+max_distance = 500.0
+sample_names = Array[StringName]([&"bleep"])
+sample_streams = Array[AudioStream]([ExtResource("7_1xns1")])
+trigger = NodePath("..")
+play_on_deactivate = true
+force_play = true
+
+[node name="MASDoorSound" type="Node2D" parent="Triggers/HallDoorA" node_paths=PackedStringArray("trigger")]
+position = Vector2(16, -9)
+script = ExtResource("6_w8it6")
+bus = &"SFX"
+max_distance = 500.0
+sample_names = Array[StringName]([&"door"])
+sample_streams = Array[AudioStream]([ExtResource("8_jr10i")])
+trigger = NodePath("..")
+play_on_deactivate = true
+force_play = true
+
 [node name="HallDoorB" type="Node2D" parent="Triggers" node_paths=PackedStringArray("links")]
 position = Vector2(276, 115)
 script = ExtResource("4_fy37o")
@@ -157,9 +206,10 @@ position = Vector2(17, 161)
 [node name="Entities" type="Node2D" parent="."]
 y_sort_enabled = true
 
-[node name="Soldier" parent="Entities" groups=["Player"] instance=ExtResource("5_f1l7d")]
+[node name="Soldier" parent="Entities" node_paths=PackedStringArray("ground_tilemap") groups=["Player"] instance=ExtResource("5_f1l7d")]
 position = Vector2(27, 163)
 max_damage_per_shot = 500
+ground_tilemap = NodePath("../../TileMap")
 
 [node name="Player" type="Node" parent="Entities/Soldier"]
 script = ExtResource("6_q485d")
@@ -170,6 +220,30 @@ script = ExtResource("6_q485d")
 position = Vector2(92, 121)
 nav_point_group = "Outer_Area"
 max_health = 1500
+
+[node name="Ammo_01" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(228, 152)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("18_sp8jw")
+
+[node name="Ammo_02" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(251, 152)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("18_sp8jw")
+
+[node name="Ammo_03" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(282, 152)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("18_sp8jw")
+
+[node name="Ammo_04" parent="Entities" instance=ExtResource("17_pb51w")]
+position = Vector2(27, 181)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("18_sp8jw")
 
 [node name="OuterArea_01" type="Node2D" parent="."]
 position = Vector2(116, 99)
@@ -218,17 +292,18 @@ texture = ExtResource("9_w0fq2")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -1
 
-[node name="Lava" type="ColorRect" parent="CanvasLayer"]
-material = SubResource("ShaderMaterial_61py4")
+[node name="Backdrop" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
 [node name="ESM_Outer_Area" type="Node2D" parent="." node_paths=PackedStringArray("spawn_container")]
 script = ExtResource("14_lto7u")
+max_enemies = 0
 spawn_container = NodePath("../Entities")
 nav_point_group = "Outer_Area"
 
@@ -239,6 +314,7 @@ color = Color(1, 0.717647, 0, 1)
 
 [node name="ESM_Inner_Area" type="Node2D" parent="." node_paths=PackedStringArray("spawn_container")]
 script = ExtResource("14_lto7u")
+max_enemies = 0
 spawn_container = NodePath("../Entities")
 nav_point_group = "Inner_Area"
 

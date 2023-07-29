@@ -39,6 +39,13 @@
       "license_url": "http://creativecommons.org/publicdomain/zero/1.0/"
     },
     {
+      "name": "60 CC0 Sci-Fi SFX",
+      "author": "rubberduck",
+      "resource_url": "https://opengameart.org/content/60-cc0-sci-fi-sfx",
+      "license": "cc0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
       "name": "Chaingun, pistol, rifle, shotgun shots",
       "author": "Michel Baradari",
       "resource_url": "https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots",
@@ -49,6 +56,13 @@
       "name": "Wind",
       "author": "IgnasD",
       "resource_url": "https://opengameart.org/content/wind",
+      "license": "cc0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "name": "Gun Reload Sound Effects",
+      "author": "BMacZero",
+      "resource_url": "https://opengameart.org/content/gun-reload-sound-effects",
       "license": "cc0",
       "license_url": "http://creativecommons.org/publicdomain/zero/1.0/"
     }

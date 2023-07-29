@@ -1,10 +1,11 @@
 shader_type canvas_item;
+render_mode unshaded;
 
 /*
 * Lava shader obtained from...
 * https://godotshaders.com/shader/lava-shader/
 */
-
+uniform float brightness : hint_range(0.0, 1.0) = 1.0;
 uniform float timeScaleFactor = .04;
 
 // Make sure to use a seamless noise texture
@@ -52,7 +53,8 @@ float flow(vec2 p) {
 }
 
 void fragment() {
-	vec2 resolution = 1. / SCREEN_PIXEL_SIZE;
+	//vec2 resolution = 1. / SCREEN_PIXEL_SIZE;
+	vec2 resolution = 1. / TEXTURE_PIXEL_SIZE;
 	vec2 fragCoord = FRAGCOORD.xy;
 	fragCoord = vec2(fragCoord.x, resolution.y - fragCoord.y);
 	vec2 p = fragCoord / resolution - 0.5;
@@ -60,9 +62,9 @@ void fragment() {
 	p.x *= resolution.x / resolution.y;
 	p *= 3.;
 	
-	float rz = flow(p);
+	float rz = flow(UV * 3.);
 	vec3 col = vec3(.2, .07, .01) / rz;
-	col = pow(col, vec3(1.4));
+	col = mix(vec3(0.0), pow(col, vec3(1.4)), brightness);
 	
 	COLOR = vec4(col, 1.0);
 }

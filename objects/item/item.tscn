@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://cboymq7o1rmb"]
+
+[ext_resource type="Script" path="res://objects/item/item.gd" id="1_v3uj3"]
+[ext_resource type="Texture2D" uid="uid://b7m7mnuo6pmcy" path="res://assets/graphics/TeenieXeenie/sprites/teenyxeenies_sprites_prime.png" id="2_f401f"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ycvff"]
+radius = 4.0
+
+[node name="Item" type="Node2D"]
+script = ExtResource("1_v3uj3")
+
+[node name="Body" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -1.24315)
+texture = ExtResource("2_f401f")
+centered = false
+offset = Vector2(-4, -8)
+region_enabled = true
+region_rect = Rect2(0, 456, 8, 8)
+
+[node name="PickupArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_ycvff")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+bus = &"SFX"
+
+[connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]
+[connection signal="finished" from="AudioStreamPlayer2D" to="." method="_on_audio_stream_player_2d_finished"]
