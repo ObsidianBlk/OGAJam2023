@@ -32,6 +32,7 @@ func set_inputs(ip : Array[Trigger]) -> void:
 # ------------------------------------------------------------------------------
 func _ready() -> void:
 	_UpdateInputConnections()
+	_CheckActiveState.call_deferred()
 
 # ------------------------------------------------------------------------------
 # Private Methods
@@ -72,6 +73,9 @@ func _UpdateInputConnections() -> void:
 			# Remove the entry from the dictionary.
 			_input_states.erase(key)
 
+func _DeferCallSetActivated(a : bool) -> void:
+	super.set_activated(a)
+
 func _CheckActiveState() -> void:
 	var state : Variant = null
 	match binary_operation:
@@ -83,12 +87,13 @@ func _CheckActiveState() -> void:
 			state = _CheckXor()
 	
 	if typeof(state) == TYPE_BOOL:
-		if state != _activated:
-			_activated = state
-			if _activated:
-				activated.emit()
-			else:
-				deactivated.emit()
+		_DeferCallSetActivated.call_deferred(state)
+#		if state != _activated:
+#			_activated = state
+#			if _activated:
+#				activated.emit()
+#			else:
+#				deactivated.emit()
 
 func _CheckAnd(negate : bool) -> bool:
 	for key in _input_states:
