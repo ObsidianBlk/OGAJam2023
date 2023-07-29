@@ -13,6 +13,8 @@ signal link_state_changed(state)
 @export_category("Interact Trigger")
 @export var radius : float = 10.0:							set = set_radius
 @export_flags_2d_physics var collision_mask : int = 1:		set = set_collision_mask
+@export var key_name : String = ""
+@export var consume_key_on_use : bool = false
 @export var links : Array[TriggerInteract] = []
 @export var once : bool = false
 @export var reset_delay : float = 0.0
@@ -162,6 +164,12 @@ func _on_body_exited(body : Node2D) -> void:
 
 func _on_interacted() -> void:
 	if _blocked: return
+	if not key_name.is_empty():
+		var count : int = Game.get_inventory_item_count(key_name)
+		if count <= 0: return
+		if consume_key_on_use:
+			Game.update_inventory(key_name, -1)
+	
 	_triggered = true
 	if once:
 		if _area.body_entered.is_connected(_on_body_entered):

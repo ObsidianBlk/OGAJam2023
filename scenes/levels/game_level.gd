@@ -80,6 +80,9 @@ func initialize() -> void:
 	
 	if _player.get_ref() == null:
 		printerr("Failed to find player node!!")
+	
+	for key in ["key_red", "key_green", "key_blue", "key_orange", "key_yellow"]:
+		Game.remove_from_inventory(key)
 
 # ------------------------------------------------------------------------------
 # Handler Methods

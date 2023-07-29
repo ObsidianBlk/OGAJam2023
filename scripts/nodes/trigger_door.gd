@@ -14,6 +14,7 @@ enum STATE {Opened=0, Closed=1}
 # ------------------------------------------------------------------------------
 @export_category("Door Trigger")
 @export var orientation : ORIENTATION = ORIENTATION.Horizontal
+@export var single_cell : bool = false
 @export var initial_state : STATE = STATE.Closed
 @export var radius : float = 10.0:								set = set_radius
 @export_flags_2d_physics var collision_mask : int = 1:			set = set_collision_mask
@@ -152,13 +153,14 @@ func _ToggleDoorState() -> void:
 				body.position = parent.map_to_local(body_cell + dir)
 	
 	_ChangeTilemapCell(parent, cell, dir)
-	match orientation:
-		ORIENTATION.Horizontal:
-			_ChangeTilemapCell(parent, cell + Vector2i.LEFT, dir)
-			_ChangeTilemapCell(parent, cell + Vector2i.RIGHT, dir)
-		ORIENTATION.Vertical:
-			_ChangeTilemapCell(parent, cell + Vector2i.UP, dir)
-			_ChangeTilemapCell(parent, cell + Vector2i.DOWN, dir)
+	if not single_cell:
+		match orientation:
+			ORIENTATION.Horizontal:
+				_ChangeTilemapCell(parent, cell + Vector2i.LEFT, dir)
+				_ChangeTilemapCell(parent, cell + Vector2i.RIGHT, dir)
+			ORIENTATION.Vertical:
+				_ChangeTilemapCell(parent, cell + Vector2i.UP, dir)
+				_ChangeTilemapCell(parent, cell + Vector2i.DOWN, dir)
 	_state = STATE.Closed if _state == STATE.Opened else STATE.Opened
 
 # ------------------------------------------------------------------------------
