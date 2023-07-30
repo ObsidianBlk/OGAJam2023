@@ -8,8 +8,11 @@ const BACKGROUNDS : Dictionary = {
 	"MainMenu": preload("res://scenes/menu_background/menu_background.tscn")
 }
 
+const DIALOGUE_BALLOON : PackedScene = preload("res://scenes/ui/balloon/balloon.tscn")
+
 #const INITIAL_LEVEL_PATH : String = "res://scenes/levels/test_level/test_level.tscn"
-const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_002/level_002.tscn"
+const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_001/level_001.tscn"
+#const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_002/level_002.tscn"
 
 const NICE_PLANET_SEEDS : Array = [
 	1.0, 1.192, 1.448, 1.704,
@@ -47,6 +50,8 @@ var _level : GameLevel = null
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
+	Game.dialogue_requested.connect(_on_dialog_requested)
+	DialogueManager.dialogue_ended.connect(_on_dialog_ended)
 	_heat_haze.visible = false
 	_planet_seed = _GetNicePlanetSeed()
 	if _background_request != &"":
@@ -130,6 +135,17 @@ func _on_temprature_changed(temprature : float) -> void:
 	if not _heat_haze.visible:
 		_heat_haze.visible = true
 	_heat_haze.set_temprature(temprature)
+
+func _on_dialog_requested(dialogue : DialogueResource, start : String) -> void:
+	if dialogue == null or start.is_empty(): return
+	var balloon : Node = DIALOGUE_BALLOON.instantiate()
+	if balloon == null: return
+	add_child(balloon)
+	get_tree().paused = true
+	balloon.start(dialogue, start)
+
+func _on_dialog_ended(_dialogue : DialogueResource) -> void:
+	get_tree().paused = false
 
 func _on_level_requested(request : Dictionary) -> void:
 	if "action" in request:

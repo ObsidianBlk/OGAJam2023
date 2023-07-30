@@ -11,6 +11,8 @@ signal config_saved()
 
 signal gameplay_option_changed(option_name, value)
 
+signal dialogue_requested(dialogue, start)
+
 signal inventory_changed(item, amount)
 signal xeno_kills_changed(count)
 
@@ -135,6 +137,9 @@ func remove_from_inventory(item : String) -> void:
 func get_inventory_item_count(item : String) -> int:
 	if not item in _inventory: return 0
 	return _inventory[item]
+
+func request_dialog(dialogue : DialogueResource, start : String) -> void:
+	dialogue_requested.emit(dialogue, start)
 
 func set_control_mode(mode : CTRLMode) -> void:
 	_control_mode = mode

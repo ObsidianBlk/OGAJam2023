@@ -20,6 +20,11 @@ config/icon="res://icon.svg"
 
 Game="*res://scripts/autos/Game.gd"
 GAS="*res://scripts/autos/GAS.gd"
+DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
 
 [input]
 
@@ -80,6 +85,10 @@ interact={
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":0,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
+
+[internationalization]
+
+locale/translations_pot_files=PackedStringArray("res://dialogue/test.dialogue", "res://dialogue/level_001.dialogue", "res://dialogue/lifts.dialogue")
 
 [layer_names]
 

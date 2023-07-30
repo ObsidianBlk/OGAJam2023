@@ -12,8 +12,11 @@ class_name Player
 # Variables
 # ------------------------------------------------------------------------------
 var _control : CharacterBody2D = null
+var _pause_reset : bool = false
 
-
+# ------------------------------------------------------------------------------
+# Setters Methods
+# ------------------------------------------------------------------------------
 func set_control_node_path(path : NodePath) -> void:
 	if path != control_node_path:
 		control_node_path = path
@@ -23,7 +26,17 @@ func set_control_node_path(path : NodePath) -> void:
 # Override Methods
 # ------------------------------------------------------------------------------
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_UpdateControlNode()
+
+func _process(_delta: float) -> void:
+	if get_tree().paused:
+		_pause_reset = true
+	elif _pause_reset:
+		_pause_reset = false
+		if _control != null:
+			_control.move(Vector2.ZERO)
+			_control.attack(false)
 
 func _unhandled_input(event : InputEvent) -> void:
 	if _control == null: return

@@ -1,0 +1,9 @@
+~ short_lift
+Situation: You can hear lift machinery rumbling, but it may take a few seconds to show up.
+=> END
+
+~ dead_lift
+% Situation: Pressing the console for this lift results in an error.
+% Situation: The lift console barks an error at you.
+% Situation: According to the console, this lift is dead.
+=> END

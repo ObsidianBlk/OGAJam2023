@@ -1,4 +1,22 @@
-[gd_resource type="AudioBusLayout" format=3 uid="uid://cd4ud0es4du72"]
+[gd_resource type="AudioBusLayout" load_steps=4 format=3 uid="uid://cd4ud0es4du72"]
+
+[sub_resource type="AudioEffectChorus" id="AudioEffectChorus_xo656"]
+resource_name = "Chorus"
+voice_count = 3
+wet = 0.43
+voice/3/delay_ms = 12.0
+voice/3/rate_hz = 1.0
+voice/3/depth_ms = 0.0
+voice/3/level_db = 0.0
+voice/3/cutoff_hz = 16000.0
+voice/3/pan = 0.0
+
+[sub_resource type="AudioEffectNotchFilter" id="AudioEffectNotchFilter_h5sqf"]
+resource_name = "NotchFilter"
+
+[sub_resource type="AudioEffectLimiter" id="AudioEffectLimiter_u051r"]
+resource_name = "Limiter"
+ceiling_db = -6.8
 
 [resource]
 bus/1/name = &"SFX"
@@ -13,3 +31,21 @@ bus/2/mute = false
 bus/2/bypass_fx = false
 bus/2/volume_db = 0.0
 bus/2/send = &"Master"
+bus/3/name = &"Outside"
+bus/3/solo = false
+bus/3/mute = false
+bus/3/bypass_fx = false
+bus/3/volume_db = 0.0
+bus/3/send = &"SFX"
+bus/3/effect/0/effect = SubResource("AudioEffectChorus_xo656")
+bus/3/effect/0/enabled = true
+bus/3/effect/1/effect = SubResource("AudioEffectNotchFilter_h5sqf")
+bus/3/effect/1/enabled = true
+bus/4/name = &"Inside"
+bus/4/solo = false
+bus/4/mute = false
+bus/4/bypass_fx = false
+bus/4/volume_db = -2.11474
+bus/4/send = &"SFX"
+bus/4/effect/0/effect = SubResource("AudioEffectLimiter_u051r")
+bus/4/effect/0/enabled = true

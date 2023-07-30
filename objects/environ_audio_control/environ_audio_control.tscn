@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c72wsf6hlayd5"]
+
+[ext_resource type="AudioStream" uid="uid://dy0jjetqh8qtf" path="res://assets/sfx/cooking_without_cover_01.ogg" id="1_noq68"]
+[ext_resource type="Script" path="res://objects/environ_audio_control/environ_audio_control.gd" id="1_qiqf3"]
+
+[node name="EnvironAudioControl" type="Node2D"]
+script = ExtResource("1_qiqf3")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("1_noq68")
+pitch_scale = 0.2
+autoplay = true
+bus = &"Outside"

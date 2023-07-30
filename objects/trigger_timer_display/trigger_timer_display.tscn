@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://bucwvi4w00yyy"]
+
+[ext_resource type="FontFile" uid="uid://c88lsjqyy0q32" path="res://assets/fonts/simpletix.otf" id="1_jpr1t"]
+[ext_resource type="Script" path="res://objects/trigger_timer_display/trigger_timer_display.gd" id="1_m0jq7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xprg"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0, 0, 0, 0.784314)
+
+[node name="TriggerTimerDisplay" type="Node2D"]
+script = ExtResource("1_m0jq7")
+
+[node name="CPanel" type="PanelContainer" parent="."]
+offset_right = 26.0
+offset_bottom = 14.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5xprg")
+
+[node name="TimerLabel" type="Label" parent="CPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_jpr1t")
+theme_override_font_sizes/font_size = 8
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1

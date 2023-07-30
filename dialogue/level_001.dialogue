@@ -1,0 +1,31 @@
+~ initial_dialog
+Situation: You had just managed to find some time for some much needed R&R when suddenly, the lights within the complex went dark.
+Situation: The background hum of the station's many massive cooling units slowly whir down.
+Situation: With the cooling units inactive, you can just make out the faint roiling and boiling of the hellish external environment starting to encroach on the now dead silence around you. 
+- I got this! => END
+- What can I do? (Controls) => how_to
+=> END
+
+~ how_to
+Controls: The game can be controlled with either a keyboard and mouse or a gamepad.
+- Keyboard and mouse for the win!
+	Controls: Player can use the WASD keys for movement.
+	Controls: (E) to interact with the environment (operate consoles and open key-locked doors), and (SPACE) or (LMB) to fire weapons.
+	Controls: Player will always face and fire weapons in the direction of the mouse cursor.
+	- Let's Rock! => END
+	- Other options? => how_to
+- Gamepad for this total CHAD!
+	Controls: Player will move in the direction of the Left Thumbstick.
+	Controls: Player will face and fire weapons in the direction of the Right Thumbstick
+	Controls: Weapons can be fired with (RT). Press (A) to interact with the environment (press consoles and open key-locked doors).
+	- I got this! => END
+	- Other options? => how_to
+=> END
+
+~ emergency_message
+Automated Announcement: EMERGENCY! Facility core power systems compromised. Critical power only. All personel must egress station as soon as possible.
+=> END
+
+~ cliff_message
+Situation: Looking over the edge of this platform you can make out the surface in the distance below. The fall alone would kill you, let alone into the now slowly moving magma forming with the cooling units dead or dying.
+=> END

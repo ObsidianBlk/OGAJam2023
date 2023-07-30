@@ -5,7 +5,10 @@ class_name TriggerTimer
 # ------------------------------------------------------------------------------
 # Signal
 # ------------------------------------------------------------------------------
+signal timer_started()
+signal timer_ended()
 signal timer_changed(time_passed, interval)
+
 
 # ------------------------------------------------------------------------------
 # Export Variables
@@ -38,6 +41,7 @@ func set_continuous(c : bool) -> void:
 	continuous = c
 	if continuous:
 		_timer_active = true
+		timer_started.emit()
 
 # ------------------------------------------------------------------------------
 # Override Methods
@@ -45,6 +49,7 @@ func set_continuous(c : bool) -> void:
 func _ready() -> void:
 	if continuous:
 		_timer_active = true
+		timer_started.emit()
 
 
 func _process(delta: float) -> void:
@@ -57,6 +62,16 @@ func _process(delta: float) -> void:
 			if not continuous:
 				_timer_active = false
 				_time_passed -= interval
+				timer_ended.emit()
+
+# ------------------------------------------------------------------------------
+# Public Methods
+# ------------------------------------------------------------------------------
+func is_timer_active() -> bool:
+	return _timer_active
+
+func get_time_passed() -> float:
+	return _time_passed
 
 # ------------------------------------------------------------------------------
 # Handler Methods
@@ -66,3 +81,4 @@ func _on_activated() -> void:
 	set_activated(false)
 	_time_passed = 0.0
 	_timer_active = true
+	timer_started.emit()

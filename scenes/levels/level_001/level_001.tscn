@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dg2lo0bye28wq"]
+[gd_scene load_steps=38 format=3 uid="uid://dg2lo0bye28wq"]
 
 [ext_resource type="Script" path="res://scenes/levels/game_level.gd" id="1_t3n8d"]
 [ext_resource type="TileSet" uid="uid://5rssu1a6i47q" path="res://assets/graphics/TeenieXeenie/tilesets/tileset.tres" id="2_m5qqn"]
@@ -21,6 +21,12 @@
 [ext_resource type="AudioStream" uid="uid://bfpay2imhwho6" path="res://assets/sfx/HiTechButtons/Button Sound 44.wav" id="17_5a3de"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_timer.gd" id="18_11dnu"]
 [ext_resource type="Script" path="res://scripts/nodes/ExitArea2D.gd" id="19_y0hwo"]
+[ext_resource type="Resource" uid="uid://b8qw0lc5a1v3j" path="res://dialogue/lifts.dialogue" id="22_1s53w"]
+[ext_resource type="Script" path="res://scripts/nodes/trigger_area.gd" id="22_04yi1"]
+[ext_resource type="PackedScene" uid="uid://bucwvi4w00yyy" path="res://objects/trigger_timer_display/trigger_timer_display.tscn" id="23_2oxxx"]
+[ext_resource type="Script" path="res://scripts/nodes/trigger_dialogue.gd" id="23_4lnmv"]
+[ext_resource type="Resource" uid="uid://dlhh3xkt5h3qx" path="res://dialogue/level_001.dialogue" id="24_lkyx4"]
+[ext_resource type="PackedScene" uid="uid://c72wsf6hlayd5" path="res://objects/environ_audio_control/environ_audio_control.tscn" id="26_a5t4p"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nbe5l"]
 noise = ExtResource("3_c6p3h")
@@ -34,11 +40,32 @@ shader_parameter/noise_texture = SubResource("NoiseTexture2D_nbe5l")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vn7bi"]
 size = Vector2(32, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bt4vq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x76ed"]
+size = Vector2(4, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_obs31"]
+size = Vector2(96, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0mf6p"]
+size = Vector2(56, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u5l6x"]
+size = Vector2(24, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_njnj0"]
+size = Vector2(64, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6fu5l"]
+size = Vector2(55, 128)
+
 [node name="Level_001" type="Node2D"]
 script = ExtResource("1_t3n8d")
 canvas_modulate_node_path = NodePath("GlobalLightLevel")
 color = Color(0, 0, 0, 1)
 temprature_dps = 0.0
+next_level = "res://scenes/levels/level_002/level_002.tscn"
 
 [node name="Lava" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_0ykxh")
@@ -422,6 +449,7 @@ inputs = [NodePath("../SideRoomConsoleTrigger"), NodePath("../MidRoomConsoleTrig
 position = Vector2(355, 389)
 script = ExtResource("9_mxb6c")
 collision_mask = 2
+reset_delay = 0.5
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="Triggers/Bay1ElevatorConsole" node_paths=PackedStringArray("trigger")]
 script = ExtResource("7_i52rb")
@@ -433,10 +461,23 @@ trigger = NodePath("..")
 play_on_deactivate = true
 force_play = true
 
+[node name="TriggerTimer" type="Node2D" parent="Triggers/Bay1ElevatorConsole" node_paths=PackedStringArray("input")]
+script = ExtResource("18_11dnu")
+interval = 0.5
+input = NodePath("..")
+
+[node name="TriggerDialog" type="Node2D" parent="Triggers/Bay1ElevatorConsole/TriggerTimer" node_paths=PackedStringArray("input_trigger")]
+script = ExtResource("23_4lnmv")
+dialogue = ExtResource("22_1s53w")
+start = "dead_lift"
+input_trigger = NodePath("..")
+once = true
+
 [node name="Bay2ElevatorConsole" type="Node2D" parent="Triggers"]
 position = Vector2(355, 349)
 script = ExtResource("9_mxb6c")
 collision_mask = 2
+reset_delay = 0.5
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="Triggers/Bay2ElevatorConsole" node_paths=PackedStringArray("trigger")]
 script = ExtResource("7_i52rb")
@@ -448,10 +489,23 @@ trigger = NodePath("..")
 play_on_deactivate = true
 force_play = true
 
+[node name="TriggerTimer" type="Node2D" parent="Triggers/Bay2ElevatorConsole" node_paths=PackedStringArray("input")]
+script = ExtResource("18_11dnu")
+interval = 0.5
+input = NodePath("..")
+
+[node name="TriggerDialog" type="Node2D" parent="Triggers/Bay2ElevatorConsole/TriggerTimer" node_paths=PackedStringArray("input_trigger")]
+script = ExtResource("23_4lnmv")
+dialogue = ExtResource("22_1s53w")
+start = "dead_lift"
+input_trigger = NodePath("..")
+once = true
+
 [node name="Bay3ElevatorConsole" type="Node2D" parent="Triggers"]
 position = Vector2(355, 309)
 script = ExtResource("9_mxb6c")
 collision_mask = 2
+once = true
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="Triggers/Bay3ElevatorConsole" node_paths=PackedStringArray("trigger")]
 script = ExtResource("7_i52rb")
@@ -468,6 +522,22 @@ script = ExtResource("18_11dnu")
 interval = 10.0
 input = NodePath("..")
 
+[node name="DialogTriggerTimer" type="Node2D" parent="Triggers/Bay3ElevatorConsole" node_paths=PackedStringArray("input")]
+script = ExtResource("18_11dnu")
+interval = 0.5
+input = NodePath("..")
+
+[node name="TriggerDialog" type="Node2D" parent="Triggers/Bay3ElevatorConsole/DialogTriggerTimer" node_paths=PackedStringArray("input_trigger")]
+script = ExtResource("23_4lnmv")
+dialogue = ExtResource("22_1s53w")
+start = "short_lift"
+input_trigger = NodePath("..")
+once = true
+
+[node name="TriggerTimerDisplay" parent="Triggers/Bay3ElevatorConsole" node_paths=PackedStringArray("trigger_timer") instance=ExtResource("23_2oxxx")]
+position = Vector2(-19, -20)
+trigger_timer = NodePath("../Bay3TriggerTimer")
+
 [node name="ExitArea2D" type="Area2D" parent="Triggers"]
 position = Vector2(384, 296)
 collision_layer = 0
@@ -476,5 +546,140 @@ script = ExtResource("19_y0hwo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/ExitArea2D"]
 shape = SubResource("RectangleShape2D_vn7bi")
+
+[node name="DialogueTriggerArea" type="Node2D" parent="Triggers"]
+position = Vector2(228, 398)
+script = ExtResource("22_04yi1")
+trigger_delay = 0.0
+
+[node name="Area2D" type="Area2D" parent="Triggers/DialogueTriggerArea"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/DialogueTriggerArea/Area2D"]
+shape = SubResource("RectangleShape2D_bt4vq")
+
+[node name="TriggerDialog" type="Node2D" parent="Triggers/DialogueTriggerArea" node_paths=PackedStringArray("input_trigger")]
+script = ExtResource("23_4lnmv")
+dialogue = ExtResource("24_lkyx4")
+start = "emergency_message"
+input_trigger = NodePath("..")
+once = true
+
+[node name="InitDialogTriggerTimer" type="Node2D" parent="Triggers"]
+script = ExtResource("18_11dnu")
+interval = 0.5
+continuous = true
+
+[node name="TriggerDialog" type="Node2D" parent="Triggers/InitDialogTriggerTimer" node_paths=PackedStringArray("input_trigger")]
+script = ExtResource("23_4lnmv")
+dialogue = ExtResource("24_lkyx4")
+start = "initial_dialog"
+input_trigger = NodePath("..")
+once = true
+
+[node name="CliffDialogueTriggerArea" type="Node2D" parent="Triggers"]
+position = Vector2(254, 431)
+script = ExtResource("22_04yi1")
+trigger_delay = 0.0
+
+[node name="Area2D" type="Area2D" parent="Triggers/CliffDialogueTriggerArea"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/CliffDialogueTriggerArea/Area2D"]
+position = Vector2(8, -3)
+shape = SubResource("RectangleShape2D_x76ed")
+
+[node name="TriggerDialog" type="Node2D" parent="Triggers/CliffDialogueTriggerArea" node_paths=PackedStringArray("input_trigger")]
+script = ExtResource("23_4lnmv")
+dialogue = ExtResource("24_lkyx4")
+start = "cliff_message"
+input_trigger = NodePath("..")
+once = true
+
+[node name="EnvironAudioControl" parent="." node_paths=PackedStringArray("indoor_trigger") instance=ExtResource("26_a5t4p")]
+indoor_trigger = NodePath("TriggerBinOp")
+
+[node name="Room6" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(333, 349)
+script = ExtResource("22_04yi1")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room6"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnvironAudioControl/Room6/Area2D"]
+position = Vector2(19, -5)
+shape = SubResource("RectangleShape2D_obs31")
+
+[node name="Room5" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(392, 473)
+script = ExtResource("22_04yi1")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room5"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="EnvironAudioControl/Room5/Area2D"]
+polygon = PackedVector2Array(-16, -25, -16, 8, -31, 8, -31, 23, 17, 23, 17, -25)
+
+[node name="Room4" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(300, 472)
+script = ExtResource("22_04yi1")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room4"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnvironAudioControl/Room4/Area2D"]
+shape = SubResource("RectangleShape2D_0mf6p")
+
+[node name="Room3" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(228, 549)
+script = ExtResource("22_04yi1")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room3"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnvironAudioControl/Room3/Area2D"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_u5l6x")
+
+[node name="Room2" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(169, 450)
+script = ExtResource("22_04yi1")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room2"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnvironAudioControl/Room2/Area2D"]
+position = Vector2(-1, -2)
+shape = SubResource("RectangleShape2D_njnj0")
+
+[node name="Room1" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(229, 340)
+script = ExtResource("22_04yi1")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room1"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnvironAudioControl/Room1/Area2D"]
+position = Vector2(-0.5, 4)
+shape = SubResource("RectangleShape2D_6fu5l")
+
+[node name="TriggerBinOp" type="Node2D" parent="EnvironAudioControl" node_paths=PackedStringArray("inputs")]
+script = ExtResource("15_jr3ex")
+binary_operation = 1
+inputs = [NodePath("../Room1"), NodePath("../Room2"), NodePath("../Room3"), NodePath("../Room4"), NodePath("../Room5"), NodePath("../Room6")]
 
 [connection signal="level_exited" from="Triggers/ExitArea2D" to="." method="_on_level_exited"]

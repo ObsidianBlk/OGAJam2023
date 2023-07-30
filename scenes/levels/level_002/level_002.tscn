@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cyk7f8ebjbxdy"]
+[gd_scene load_steps=32 format=3 uid="uid://cyk7f8ebjbxdy"]
 
 [ext_resource type="Script" path="res://scenes/levels/game_level.gd" id="1_y23at"]
 [ext_resource type="Shader" path="res://shaders/Lava.gdshader" id="2_weqby"]
@@ -21,6 +21,9 @@
 [ext_resource type="Script" path="res://scripts/nodes/enemy_spawn_point.gd" id="19_bhfke"]
 [ext_resource type="Script" path="res://scripts/nodes/nav_point.gd" id="20_4lavd"]
 [ext_resource type="Script" path="res://scripts/nodes/ExitArea2D.gd" id="21_r04wc"]
+[ext_resource type="PackedScene" uid="uid://c72wsf6hlayd5" path="res://objects/environ_audio_control/environ_audio_control.tscn" id="22_2ecmj"]
+[ext_resource type="Script" path="res://scripts/nodes/trigger_area.gd" id="23_1fsbc"]
+[ext_resource type="Script" path="res://scripts/nodes/trigger_binop.gd" id="24_kk61f"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fj4i0"]
 noise = ExtResource("3_l7lj1")
@@ -32,6 +35,18 @@ shader_parameter/timeScaleFactor = 0.001
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_fj4i0")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k3ylx"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k0g6u"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nrr6p"]
+size = Vector2(42, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dtw4k"]
+size = Vector2(80, 56)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k03vg"]
 size = Vector2(32, 32)
 
 [node name="Level_002" type="Node2D"]
@@ -709,5 +724,94 @@ script = ExtResource("21_r04wc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea2D"]
 shape = SubResource("RectangleShape2D_k3ylx")
+
+[node name="EnvironAudioControl" parent="." node_paths=PackedStringArray("indoor_trigger") instance=ExtResource("22_2ecmj")]
+indoor_trigger = NodePath("TriggerBinOp")
+
+[node name="Base" type="Node2D" parent="EnvironAudioControl"]
+script = ExtResource("23_1fsbc")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Base"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Room6" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(358, 428)
+script = ExtResource("23_1fsbc")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room6"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="EnvironAudioControl/Room6/Area2D"]
+polygon = PackedVector2Array(-46, -28, -46, 44, 146, 44, 146, -52, 121, -52, 121, -28)
+
+[node name="Room5" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(415, 320)
+script = ExtResource("23_1fsbc")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room5"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="EnvironAudioControl/Room5/Area2D"]
+polygon = PackedVector2Array(-79, -64, -79, -24, -31, -24, -31, 56, 89, 56, 89, 24, 33, 24, 33, -64)
+
+[node name="Room4" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(472, 128)
+script = ExtResource("23_1fsbc")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room4"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnvironAudioControl/Room4/Area2D"]
+shape = SubResource("RectangleShape2D_k0g6u")
+
+[node name="Room3" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(772, 260)
+script = ExtResource("23_1fsbc")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room3"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnvironAudioControl/Room3/Area2D"]
+shape = SubResource("RectangleShape2D_nrr6p")
+
+[node name="Room2" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(605, 260)
+script = ExtResource("23_1fsbc")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room2"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnvironAudioControl/Room2/Area2D"]
+position = Vector2(-5, 0)
+shape = SubResource("RectangleShape2D_dtw4k")
+
+[node name="Room1" type="Node2D" parent="EnvironAudioControl"]
+position = Vector2(336, 152)
+script = ExtResource("23_1fsbc")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="EnvironAudioControl/Room1"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnvironAudioControl/Room1/Area2D"]
+shape = SubResource("RectangleShape2D_k03vg")
+
+[node name="TriggerBinOp" type="Node2D" parent="EnvironAudioControl" node_paths=PackedStringArray("inputs")]
+script = ExtResource("24_kk61f")
+binary_operation = 1
+inputs = [NodePath("../Room1"), NodePath("../Room2"), NodePath("../Room3"), NodePath("../Room4"), NodePath("../Room5"), NodePath("../Room6")]
 
 [connection signal="level_exited" from="ExitArea2D" to="." method="_on_level_exited"]
