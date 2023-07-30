@@ -92,6 +92,8 @@ func _on_pickup_area_body_entered(body: Node2D) -> void:
 	if not _body.visible: return
 	if type == ITEM_TYPE.Health:
 		if body.has_method("heal"):
+			if body.has_method("is_max_health"):
+				if body.is_max_health(): return
 			body.heal(amount)
 	else:
 		Game.update_inventory(LOOKUP[type], amount)

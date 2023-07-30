@@ -93,7 +93,6 @@ func _draw() -> void:
 		1: # Vertical
 			var dest : Vector2 = source + Vector2(0, travel_distance)
 			draw_line(source, dest, DRAW_COLOR, 1.0)
-			print("Rect: ", Rect2(Vector2.ZERO, Vector2(16, travel_distance + 16)))
 			draw_rect(Rect2(Vector2.ZERO, Vector2(16, travel_distance + 16)), DRAW_COLOR, false, 1.0)
 
 # ------------------------------------------------------------------------------

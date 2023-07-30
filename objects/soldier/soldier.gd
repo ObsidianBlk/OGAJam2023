@@ -179,6 +179,12 @@ func move(dir : Vector2) -> void:
 func get_direction() -> Vector2:
 	return _direction
 
+func get_health() -> int:
+	return _health
+
+func is_max_health() -> bool:
+	return _health == max_health
+
 func attack(active : bool = true) -> void:
 	if _health <= 0: return
 	_firing = active

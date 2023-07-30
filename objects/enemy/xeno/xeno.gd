@@ -308,7 +308,6 @@ func spawn_from(spawn_position : Vector2) -> void:
 
 func damage(amount : int) -> void:
 	var ihp = _health
-	print("Ouch: ", amount, " | Health: ", _health)
 	super.damage(amount)
 	if ihp > _health:
 		_sfxer.play_group(SOUND_HIT)

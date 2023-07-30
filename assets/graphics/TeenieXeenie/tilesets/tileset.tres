@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=241 format=3 uid="uid://5rssu1a6i47q"]
+[gd_resource type="TileSet" load_steps=244 format=3 uid="uid://5rssu1a6i47q"]
 
 [ext_resource type="Texture2D" uid="uid://cc2yc7jw2xlye" path="res://assets/graphics/TeenieXeenie/tilesets/teenyxeenies-tileset_prime.png" id="1_et0wg"]
 [ext_resource type="Texture2D" uid="uid://8safniwq5qa0" path="res://assets/graphics/TeenieXeenie/tilesets/teenyxeenies-tileset_alt1.png" id="2_5talq"]
@@ -14,6 +14,15 @@ tile_data = PackedInt32Array(0, 0, 4, 65536, 458752, 15, 131072, 458752, 16, 196
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_nqy1i"]
 tile_data = PackedInt32Array(0, 458752, 6, 65536, 458752, 7, 131072, 393216, 8)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_kglxp"]
+tile_data = PackedInt32Array(0, 196608, 10, 65536, 262144, 11, 1, 458752, 6, 65537, 131072, 10, 2, 131072, 11, 65538, 327680, 11)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_mu0a5"]
+tile_data = PackedInt32Array(0, 65536, 5, 65536, 131072, 12, 131072, 131072, 14, 1, 458752, 6, 65537, 458752, 7, 131073, 393216, 8, 2, 65536, 5, 65538, 262144, 12, 131074, 262144, 14)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_ycg6y"]
+tile_data = PackedInt32Array(0, 0, 10, 65536, 131072, 11, 131072, 131072, 12, 196608, 131072, 14, 262144, 0, 11, 1, 131072, 10, 65537, 458752, 6, 131073, 458752, 7, 196609, 393216, 8, 262145, 196608, 11, 2, 65536, 10, 65538, 196608, 10, 131074, 262144, 12, 196610, 262144, 14, 262146, 65536, 11)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_taomc"]
 polygon = PackedVector2Array(-2.03125, -4, 2.03125, -4, 1.90625, 0, -2.09375, 0.0625)
@@ -5669,3 +5678,6 @@ sources/4 = SubResource("TileSetAtlasSource_f64rx")
 pattern_0 = SubResource("TileMapPattern_o37um")
 pattern_1 = SubResource("TileMapPattern_5wiqo")
 pattern_2 = SubResource("TileMapPattern_nqy1i")
+pattern_3 = SubResource("TileMapPattern_kglxp")
+pattern_4 = SubResource("TileMapPattern_mu0a5")
+pattern_5 = SubResource("TileMapPattern_ycg6y")
