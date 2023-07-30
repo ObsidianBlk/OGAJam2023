@@ -47,6 +47,8 @@ var _direction : Vector2 = Vector2.ZERO
 var _enemies : Dictionary = {}
 var _health : int = 0
 
+var _on_platform : bool = false
+
 # ------------------------------------------------------------------------------
 # Onready Variables
 # ------------------------------------------------------------------------------
@@ -89,7 +91,8 @@ func _physics_process(_delta : float) -> void:
 	
 	_action = &"move" if velocity.length() > 0.1 else &"idle"
 	_UpdateViz()
-	_CheckOnTileMap()
+	if not _on_platform:
+		_CheckOnTileMap()
 
 # ------------------------------------------------------------------------------
 # Private Methods
@@ -124,11 +127,27 @@ func _CastTo(pos : Vector2, coll_mask : int = 4294967295) -> Dictionary:
 		PhysicsRayQueryParameters2D.create(global_position, pos, coll_mask)
 	)
 
+func _OnMapInZone(radius : float) -> bool:
+	var poslist : Array = [
+		global_position,
+		global_position + (Vector2.UP * radius),
+		global_position + (Vector2.DOWN * radius),
+		global_position + (Vector2.LEFT * radius),
+		global_position + (Vector2.RIGHT * radius)
+	]
+	
+	for pos in poslist:
+		var coords : Vector2i = ground_tilemap.local_to_map(pos)
+		if ground_tilemap.get_cell_source_id(0, coords) >= 0:
+			return true
+	return false
+
 func _CheckOnTileMap() -> void:
 	if ground_tilemap == null: return
 	if _health <= 0: return
-	var coords : Vector2i = ground_tilemap.local_to_map(global_position)
-	if ground_tilemap.get_cell_source_id(0, coords) < 0:
+	#var coords : Vector2i = ground_tilemap.local_to_map(global_position)
+	#if ground_tilemap.get_cell_source_id(0, coords) < 0:
+	if not _OnMapInZone(4.0):
 		move(Vector2.ZERO)
 		_health = 0
 		_firing = false
@@ -195,6 +214,9 @@ func revive() -> void:
 	_health = max_health
 	_anim.play("normal")
 	health_changed.emit(_health, max_health)
+
+func set_on_platform(on : bool) -> void:
+	_on_platform = on
 
 # ------------------------------------------------------------------------------
 # Handler Methods

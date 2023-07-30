@@ -57,7 +57,7 @@ func _SpawnEnemy() -> int:
 		return ERR_CANT_CREATE
 	
 	var e : Enemy = XENO.instantiate()
-	e.max_health = 1500
+	e.max_health = 200
 	spawn_container.add_child(e)
 	e.global_position = spawn.position
 	# WARNING: Currently nav_point_group is Xeno specific... Yay

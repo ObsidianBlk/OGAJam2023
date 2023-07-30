@@ -1,0 +1,81 @@
+[gd_scene load_steps=9 format=3 uid="uid://bmodf001iy8lq"]
+
+[ext_resource type="Texture2D" uid="uid://cc2yc7jw2xlye" path="res://assets/graphics/TeenieXeenie/tilesets/teenyxeenies-tileset_prime.png" id="1_48akm"]
+[ext_resource type="Script" path="res://objects/platform/platform.gd" id="1_f6t77"]
+[ext_resource type="Script" path="res://scripts/nodes/trigger_interact.gd" id="3_x61p2"]
+[ext_resource type="Script" path="res://scripts/nodes/MultiAudioStreamer2D.gd" id="4_kf7xg"]
+[ext_resource type="AudioStream" uid="uid://b74d1c733j21r" path="res://assets/sfx/HiTechButtons/Button Sound 8.wav" id="5_3e83p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a5hkl"]
+size = Vector2(8, 8)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_6edm6"]
+vertices = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)])
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uqa7u"]
+size = Vector2(16, 16)
+
+[node name="Platform" type="Node2D"]
+script = ExtResource("1_f6t77")
+
+[node name="Body" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Body"]
+texture_filter = 1
+texture = ExtResource("1_48akm")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 120, 16, 16)
+
+[node name="Console" type="StaticBody2D" parent="Body"]
+unique_name_in_owner = true
+position = Vector2(-4, 4)
+collision_mask = 34
+
+[node name="Sprite2D" type="Sprite2D" parent="Body/Console"]
+texture_filter = 1
+texture = ExtResource("1_48akm")
+region_enabled = true
+region_rect = Rect2(48, 64, 8, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body/Console"]
+shape = SubResource("RectangleShape2D_a5hkl")
+
+[node name="ToggleTrigger" type="Node2D" parent="Body/Console"]
+position = Vector2(2, 1)
+script = ExtResource("3_x61p2")
+radius = 6.0
+collision_mask = 2
+reset_delay = 1.0
+
+[node name="MultiAudioStreamer2D" type="Node2D" parent="Body/Console/ToggleTrigger" node_paths=PackedStringArray("trigger")]
+script = ExtResource("4_kf7xg")
+bus = &"SFX"
+max_distance = 300.0
+sample_names = Array[StringName]([&"Buzz"])
+sample_streams = Array[AudioStream]([ExtResource("5_3e83p")])
+trigger = NodePath("..")
+force_play = true
+
+[node name="EntityContainer" type="Node2D" parent="Body"]
+unique_name_in_owner = true
+y_sort_enabled = true
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="Body"]
+position = Vector2(8, 8)
+navigation_polygon = SubResource("NavigationPolygon_6edm6")
+
+[node name="EntityPickupArea" type="Area2D" parent="Body"]
+collision_layer = 0
+collision_mask = 34
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body/EntityPickupArea"]
+position = Vector2(8, 8)
+shape = SubResource("RectangleShape2D_uqa7u")
+
+[connection signal="activated" from="Body/Console/ToggleTrigger" to="." method="_on_toggle_trigger_activated"]
+[connection signal="body_entered" from="Body/EntityPickupArea" to="." method="_on_entity_pickup_area_body_entered"]
+[connection signal="body_exited" from="Body/EntityPickupArea" to="." method="_on_entity_pickup_area_body_exited"]
