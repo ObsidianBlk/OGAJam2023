@@ -12,8 +12,8 @@ const DIALOGUE_BALLOON : PackedScene = preload("res://scenes/ui/balloon/balloon.
 
 #const INITIAL_LEVEL_PATH : String = "res://scenes/levels/test_level/test_level.tscn"
 #const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_001/level_001.tscn"
-#const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_002/level_002.tscn"
-const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_escape/level_escape.tscn"
+const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_002/level_002.tscn"
+#const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_escape/level_escape.tscn"
 
 const NICE_PLANET_SEEDS : Array = [
 	1.0, 1.192, 1.448, 1.704,
@@ -160,7 +160,7 @@ func _on_level_requested(request : Dictionary) -> void:
 			&"game_lost":
 				pass
 			&"game_won":
-				pass
+				print("Game Won!!")
 
 
 func _on_ui_requested(request : Dictionary) -> void:

@@ -27,3 +27,5 @@ func _on_attributions_pressed():
 func _on_quit_pressed() -> void:
 	send_request(&"quit_application")
 
+func _on_obs_logo_pressed() -> void:
+	OS.shell_open("https://obsidianblk.itch.io/")

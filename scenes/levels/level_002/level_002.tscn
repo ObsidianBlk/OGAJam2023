@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://cyk7f8ebjbxdy"]
+[gd_scene load_steps=37 format=3 uid="uid://cyk7f8ebjbxdy"]
 
 [ext_resource type="Script" path="res://scenes/levels/game_level.gd" id="1_y23at"]
 [ext_resource type="Shader" path="res://shaders/Lava.gdshader" id="2_weqby"]
@@ -27,6 +27,7 @@
 [ext_resource type="Script" path="res://scripts/nodes/trigger_binop.gd" id="24_kk61f"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_dialogue.gd" id="26_riuu0"]
 [ext_resource type="Resource" uid="uid://c1c5rpbb5mvwe" path="res://dialogue/level_002.dialogue" id="27_nj4eg"]
+[ext_resource type="AudioStream" uid="uid://bfpay2imhwho6" path="res://assets/sfx/HiTechButtons/Button Sound 44.wav" id="28_1662t"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2bsp1"]
 noise = ExtResource("3_l7lj1")
@@ -1078,6 +1079,33 @@ shape = SubResource("RectangleShape2D_lpwig")
 script = ExtResource("26_riuu0")
 dialogue = ExtResource("27_nj4eg")
 start = "alien_warning"
+input_trigger = NodePath("..")
+once = true
+
+[node name="CoolerTriggerInteract" type="Node2D" parent="."]
+position = Vector2(524, 309)
+script = ExtResource("7_lg4gg")
+collision_mask = 2
+once = true
+
+[node name="MultiAudioStreamer2D" type="Node2D" parent="CoolerTriggerInteract" node_paths=PackedStringArray("trigger")]
+script = ExtResource("8_rmtk3")
+bus = &"SFX"
+max_distance = 300.0
+sample_names = Array[StringName]([&"chime"])
+sample_streams = Array[AudioStream]([ExtResource("28_1662t")])
+trigger = NodePath("..")
+force_play = true
+
+[node name="TriggerTimer" type="Node2D" parent="CoolerTriggerInteract" node_paths=PackedStringArray("input")]
+script = ExtResource("10_ws2ll")
+interval = 0.2
+input = NodePath("..")
+
+[node name="TriggerDialog" type="Node2D" parent="CoolerTriggerInteract/TriggerTimer" node_paths=PackedStringArray("input_trigger")]
+script = ExtResource("26_riuu0")
+dialogue = ExtResource("27_nj4eg")
+start = "broken_cooler"
 input_trigger = NodePath("..")
 once = true
 

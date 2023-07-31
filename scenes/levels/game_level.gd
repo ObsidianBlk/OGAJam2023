@@ -15,7 +15,6 @@ signal player_health_changed(percentage)
 # ------------------------------------------------------------------------------
 const MIN_TEMPERATURE : float = 80.0
 const MAX_TEMPERATURE : float = 200.0
-const DAMAGE_TEMPERATURE : float = 150.0
 const HEAT_DAMAGE_INTERVAL : float = 2.0
 
 # ------------------------------------------------------------------------------
@@ -26,6 +25,8 @@ const HEAT_DAMAGE_INTERVAL : float = 2.0
 @export var color : Color = Color.WHITE
 @export_range(MIN_TEMPERATURE, MAX_TEMPERATURE) var initial_temprature : float = MIN_TEMPERATURE
 @export var temprature_dps : float = 1.0
+@export var damage_temprature : float = 95.0
+@export_range(0.001, 1.0) var damage_multiplier : float = 0.01
 @export var player_respawn_delay : float = 3.0
 @export_file var next_level : String = ""
 @export var final_level : bool = false
@@ -36,7 +37,7 @@ const HEAT_DAMAGE_INTERVAL : float = 2.0
 var _temprature : float = MIN_TEMPERATURE
 
 var _player : WeakRef = weakref(null)
-var _heat_damage_delay : float = 0.0
+var _heat_dmg_accume : float = 0.0
 
 # ------------------------------------------------------------------------------
 # Override Methods
@@ -52,16 +53,17 @@ func _ready() -> void:
 func _physics_process(delta : float) -> void:
 	_temprature = min(_temprature + (temprature_dps * delta), MAX_TEMPERATURE)
 	temprature_changed.emit(_temprature)
-	if _temprature >= DAMAGE_TEMPERATURE:
-		_heat_damage_delay += delta
-		if _heat_damage_delay >= HEAT_DAMAGE_INTERVAL:
-			_heat_damage_delay -= HEAT_DAMAGE_INTERVAL
-			var player : CharacterBody2D = _player.get_ref()
-			if player == null: return
+	if _temprature >= damage_temprature:
+		var player : CharacterBody2D = _player.get_ref()
+		if player == null: return
+		_heat_dmg_accume += (_temprature - damage_temprature) * delta * damage_multiplier
+		var actual : int = floor(_heat_dmg_accume)
+		if actual > 0:
+			_heat_dmg_accume -= float(actual)
 			if player.has_method("damage"):
-				player.damage(1)
+				player.damage(actual)
 	else:
-		_heat_damage_delay = 0.0
+		_heat_dmg_accume = 0.0
 
 # ------------------------------------------------------------------------------
 # Public Methods

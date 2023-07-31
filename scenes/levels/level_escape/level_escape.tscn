@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dpopo7ohmm0we"]
+[gd_scene load_steps=36 format=3 uid="uid://dpopo7ohmm0we"]
 
 [ext_resource type="Script" path="res://scenes/levels/game_level.gd" id="1_qn6q5"]
 [ext_resource type="Shader" path="res://shaders/Lava.gdshader" id="1_tqbaq"]
@@ -17,7 +17,16 @@
 [ext_resource type="PackedScene" uid="uid://cboymq7o1rmb" path="res://objects/item/item.tscn" id="14_o8jkq"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_area.gd" id="15_a8pct"]
 [ext_resource type="AudioStream" uid="uid://wr3syn4rn7co" path="res://assets/sfx/HiTechButtons/Button Sound 12.wav" id="15_ecpjf"]
+[ext_resource type="AudioStream" uid="uid://bn47cn83kek5h" path="res://assets/sfx/clipload1.wav" id="16_5g3m1"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_binop.gd" id="16_sea48"]
+[ext_resource type="Script" path="res://scripts/nodes/enemy_spawn_manager.gd" id="19_c746g"]
+[ext_resource type="Script" path="res://scripts/nodes/enemy_spawn_point.gd" id="20_gfmti"]
+[ext_resource type="Script" path="res://scripts/nodes/nav_point.gd" id="21_igrl6"]
+[ext_resource type="Script" path="res://scripts/nodes/ExitArea2D.gd" id="23_1l1tt"]
+[ext_resource type="Script" path="res://scripts/nodes/trigger_timer.gd" id="24_eslyi"]
+[ext_resource type="PackedScene" uid="uid://bucwvi4w00yyy" path="res://objects/trigger_timer_display/trigger_timer_display.tscn" id="25_k1bwn"]
+[ext_resource type="Script" path="res://scripts/nodes/trigger_dialogue.gd" id="26_yrcs2"]
+[ext_resource type="Resource" uid="uid://ebgpcerbhaqs" path="res://dialogue/level_escape.dialogue" id="27_11j88"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fj4i0"]
 noise = ExtResource("2_di0c3")
@@ -40,11 +49,18 @@ size = Vector2(264, 104)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8gq7w"]
 size = Vector2(160, 208)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hu1wb"]
+size = Vector2(48, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p8cgf"]
+size = Vector2(16, 4)
+
 [node name="Level_Escape" type="Node2D"]
 script = ExtResource("1_qn6q5")
 canvas_modulate_node_path = NodePath("GlobalLightLevel")
 color = Color(0.211765, 0, 0.0509804, 1)
 temprature_dps = 2.0
+final_level = true
 
 [node name="Lava" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_so058")
@@ -202,6 +218,8 @@ position = Vector2(244, 108)
 script = ExtResource("8_lcyfv")
 collision_mask = 34
 auto_open = true
+nav_point_group = "Escape"
+nav_point_color = Color(1, 0.816667, 0, 1)
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="TileMap/BasicDoor_003" node_paths=PackedStringArray("trigger")]
 script = ExtResource("9_benyh")
@@ -266,6 +284,8 @@ position = Vector2(380, 140)
 script = ExtResource("8_lcyfv")
 collision_mask = 34
 auto_open = true
+nav_point_group = "Escape"
+nav_point_color = Color(1, 0.816667, 0, 1)
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="TileMap/BasicDoor_007" node_paths=PackedStringArray("trigger")]
 script = ExtResource("9_benyh")
@@ -298,6 +318,8 @@ position = Vector2(444, 140)
 script = ExtResource("8_lcyfv")
 collision_mask = 34
 auto_open = true
+nav_point_group = "Escape"
+nav_point_color = Color(1, 0.816667, 0, 1)
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="TileMap/BasicDoor_009" node_paths=PackedStringArray("trigger")]
 script = ExtResource("9_benyh")
@@ -314,6 +336,8 @@ position = Vector2(444, 284)
 script = ExtResource("8_lcyfv")
 collision_mask = 34
 auto_open = true
+nav_point_group = "Escape"
+nav_point_color = Color(1, 0.816667, 0, 1)
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="TileMap/BasicDoor_010" node_paths=PackedStringArray("trigger")]
 script = ExtResource("9_benyh")
@@ -346,6 +370,8 @@ position = Vector2(380, 284)
 script = ExtResource("8_lcyfv")
 collision_mask = 34
 auto_open = true
+nav_point_group = "Escape"
+nav_point_color = Color(1, 0.816667, 0, 1)
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="TileMap/BasicDoor_012" node_paths=PackedStringArray("trigger")]
 script = ExtResource("9_benyh")
@@ -362,6 +388,8 @@ position = Vector2(413, 316)
 script = ExtResource("8_lcyfv")
 collision_mask = 34
 auto_open = true
+nav_point_group = "Escape"
+nav_point_color = Color(1, 0.816667, 0, 1)
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="TileMap/BasicDoor_013" node_paths=PackedStringArray("trigger")]
 script = ExtResource("9_benyh")
@@ -378,6 +406,8 @@ position = Vector2(244, 308)
 script = ExtResource("8_lcyfv")
 collision_mask = 34
 auto_open = true
+nav_point_group = "Escape"
+nav_point_color = Color(1, 0.816667, 0, 1)
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="TileMap/BasicDoor_014" node_paths=PackedStringArray("trigger")]
 script = ExtResource("9_benyh")
@@ -396,6 +426,8 @@ orientation = 1
 single_cell = true
 collision_mask = 34
 auto_open = true
+nav_point_group = "Escape"
+nav_point_color = Color(1, 0.816667, 0, 1)
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="TileMap/BasicDoorV_01" node_paths=PackedStringArray("trigger")]
 script = ExtResource("9_benyh")
@@ -414,6 +446,8 @@ orientation = 1
 single_cell = true
 collision_mask = 34
 auto_open = true
+nav_point_group = "Escape"
+nav_point_color = Color(1, 0.816667, 0, 1)
 
 [node name="MultiAudioStreamer2D" type="Node2D" parent="TileMap/BasicDoorV_02" node_paths=PackedStringArray("trigger")]
 script = ExtResource("9_benyh")
@@ -673,6 +707,210 @@ pickup_sfx = ExtResource("15_ecpjf")
 position = Vector2(507, 254)
 pickup_sfx = ExtResource("15_ecpjf")
 
+[node name="Ammo_001" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(-28, 201)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_002" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(-27, 223)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_003" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(-59, 222)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_004" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(-59, 211)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_005" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(-59, 200)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_006" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(-20, 183)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_007" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(-27, 166)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_008" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(12, 264)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_009" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(35, 278)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_010" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(-10, 280)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_011" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(46, 258)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_012" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(44, 216)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_013" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(69, 232)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_014" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(69, 192)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_015" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(27, 168)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_016" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(-4, 158)
+type = 5
+amount = 150
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_017" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(19, 135)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_018" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(208, 83)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_019" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(280, 83)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_020" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(244, 20)
+type = 5
+amount = 100
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_021" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(209, 25)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_022" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(209, 12)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_023" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(309, 12)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_024" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(309, 25)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_025" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(487, 252)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_026" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(497, 252)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_027" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(487, 240)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_028" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(497, 240)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_029" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(507, 240)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_030" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(444, 334)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_031" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(380, 377)
+type = 5
+amount = 100
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_032" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(310, 382)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_033" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(320, 382)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
+[node name="Ammo_034" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(331, 382)
+type = 5
+amount = 10
+pickup_sfx = ExtResource("16_5g3m1")
+
 [node name="EnvironAudioControl" parent="." node_paths=PackedStringArray("indoor_trigger") instance=ExtResource("14_jo6o1")]
 indoor_trigger = NodePath("TriggerBinOp")
 
@@ -721,9 +959,255 @@ script = ExtResource("16_sea48")
 binary_operation = 1
 inputs = [NodePath("../EntryLiftArea"), NodePath("../UpperBuildingArea"), NodePath("../LowerBuildingArea"), NodePath("../MidBuildingArea")]
 
+[node name="ESM_Escape" type="Node2D" parent="." node_paths=PackedStringArray("spawn_container")]
+script = ExtResource("19_c746g")
+max_enemies = 6
+min_spawn_delay = 5.0
+spawn_container = NodePath("../Entities")
+nav_point_group = "Escape"
+
+[node name="EnemySpawnPoint" type="Node2D" parent="ESM_Escape"]
+position = Vector2(187, 172)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+
+[node name="EnemySpawnPoint2" type="Node2D" parent="ESM_Escape"]
+position = Vector2(268, 261)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+
+[node name="EnemySpawnPoint3" type="Node2D" parent="ESM_Escape"]
+position = Vector2(323, 156)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+
+[node name="EnemySpawnPoint4" type="Node2D" parent="ESM_Escape"]
+position = Vector2(180, 252)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+
+[node name="EnemySpawnPoint5" type="Node2D" parent="ESM_Escape"]
+position = Vector2(236, 60)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+
+[node name="EnemySpawnPoint6" type="Node2D" parent="ESM_Escape"]
+position = Vector2(388, 124)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+
+[node name="EnemySpawnPoint7" type="Node2D" parent="ESM_Escape"]
+position = Vector2(436, 116)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+
+[node name="EnemySpawnPoint8" type="Node2D" parent="ESM_Escape"]
+position = Vector2(460, 180)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+spawn_north = false
+spawn_east = false
+
+[node name="EnemySpawnPoint9" type="Node2D" parent="ESM_Escape"]
+position = Vector2(364, 253)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+spawn_south = false
+spawn_west = false
+
+[node name="EnemySpawnPoint10" type="Node2D" parent="ESM_Escape"]
+position = Vector2(388, 299)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+spawn_north = false
+spawn_south = false
+spawn_west = false
+
+[node name="EnemySpawnPoint11" type="Node2D" parent="ESM_Escape"]
+position = Vector2(412, 372)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+spawn_east = false
+spawn_west = false
+
+[node name="EnemySpawnPoint12" type="Node2D" parent="ESM_Escape"]
+position = Vector2(332, 412)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+spawn_south = false
+
+[node name="EnemySpawnPoint13" type="Node2D" parent="ESM_Escape"]
+position = Vector2(348, 371)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+spawn_north = false
+spawn_east = false
+spawn_south = false
+
+[node name="EnemySpawnPoint14" type="Node2D" parent="ESM_Escape"]
+position = Vector2(276, 404)
+script = ExtResource("20_gfmti")
+color = Color(1, 0.815686, 0, 1)
+spawn_south = false
+spawn_west = false
+
+[node name="NP_Escape" type="Node2D" parent="."]
+
+[node name="NavPoint" type="Node2D" parent="NP_Escape"]
+position = Vector2(248, 208)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint2" type="Node2D" parent="NP_Escape"]
+position = Vector2(192, 205)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint3" type="Node2D" parent="NP_Escape"]
+position = Vector2(249, 154)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint4" type="Node2D" parent="NP_Escape"]
+position = Vector2(303, 208)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint5" type="Node2D" parent="NP_Escape"]
+position = Vector2(327, 253)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint6" type="Node2D" parent="NP_Escape"]
+position = Vector2(205, 283)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint7" type="Node2D" parent="NP_Escape"]
+position = Vector2(294, 132)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint8" type="Node2D" parent="NP_Escape"]
+position = Vector2(267, 52)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint9" type="Node2D" parent="NP_Escape"]
+position = Vector2(204, 52)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint10" type="Node2D" parent="NP_Escape"]
+position = Vector2(352, 83)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint11" type="Node2D" parent="NP_Escape"]
+position = Vector2(412, 122)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint12" type="Node2D" parent="NP_Escape"]
+position = Vector2(364, 195)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint13" type="Node2D" parent="NP_Escape"]
+position = Vector2(459, 232)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint14" type="Node2D" parent="NP_Escape"]
+position = Vector2(412, 340)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint15" type="Node2D" parent="NP_Escape"]
+position = Vector2(380, 404)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="NavPoint16" type="Node2D" parent="NP_Escape"]
+position = Vector2(278, 374)
+script = ExtResource("21_igrl6")
+group_name = "Escape"
+group_color = Color(1, 0.816667, 0, 1)
+
+[node name="ExitArea2D" type="Area2D" parent="." node_paths=PackedStringArray("trigger")]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("23_1l1tt")
+trigger = NodePath("../Triggers/ExitTriggerInteract/ExitTriggerTimer")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea2D"]
+position = Vector2(248, 208)
+shape = SubResource("RectangleShape2D_hu1wb")
+
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="ExitTriggerInteract" type="Node2D" parent="Triggers"]
+position = Vector2(244, 410)
+script = ExtResource("7_x88bj")
+collision_mask = 2
+once = true
+
+[node name="MultiAudioStreamer2D" type="Node2D" parent="Triggers/ExitTriggerInteract" node_paths=PackedStringArray("trigger")]
+script = ExtResource("9_benyh")
+bus = &"SFX"
+max_distance = 300.0
+sample_names = Array[StringName]([&"Chime"])
+sample_streams = Array[AudioStream]([ExtResource("10_lp347")])
+trigger = NodePath("..")
+force_play = true
+
+[node name="ExitTriggerTimer" type="Node2D" parent="Triggers/ExitTriggerInteract" node_paths=PackedStringArray("input")]
+script = ExtResource("24_eslyi")
+interval = 300.0
+input = NodePath("..")
+
+[node name="TriggerTimerDisplay" parent="Triggers/ExitTriggerInteract/ExitTriggerTimer" node_paths=PackedStringArray("trigger_timer") instance=ExtResource("25_k1bwn")]
+position = Vector2(-13, -16)
+trigger_timer = NodePath("..")
+
+[node name="DialogTriggerArea" type="Node2D" parent="Triggers"]
+position = Vector2(244, 387)
+script = ExtResource("15_a8pct")
+trigger_delay = 0.0
+
+[node name="Area2D" type="Area2D" parent="Triggers/DialogTriggerArea"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/DialogTriggerArea/Area2D"]
+shape = SubResource("RectangleShape2D_p8cgf")
+
+[node name="TriggerDialog" type="Node2D" parent="Triggers/DialogTriggerArea" node_paths=PackedStringArray("input_trigger")]
+script = ExtResource("26_yrcs2")
+dialogue = ExtResource("27_11j88")
+start = "escape"
+input_trigger = NodePath("..")
+once = true
+
 [connection signal="coolant_discharged" from="TileMap/Detail/CoolerUnit" to="." method="_on_coolant_discharged"]
 [connection signal="coolant_discharged" from="TileMap/Detail/CoolerUnit2" to="." method="_on_coolant_discharged"]
 [connection signal="coolant_discharged" from="TileMap/Detail/CoolerUnit3" to="." method="_on_coolant_discharged"]
 [connection signal="coolant_discharged" from="TileMap/Detail/CoolerUnit4" to="." method="_on_coolant_discharged"]
 [connection signal="coolant_discharged" from="TileMap/Detail/CoolerUnit5" to="." method="_on_coolant_discharged"]
 [connection signal="coolant_discharged" from="TileMap/Detail/CoolerUnit6" to="." method="_on_coolant_discharged"]
+[connection signal="level_exited" from="ExitArea2D" to="." method="_on_level_exited"]
