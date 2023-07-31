@@ -75,6 +75,13 @@
     }
   ],
   "music":[
-
+    {
+      "name": "Menacing Otherworld",
+      "author": "Ruskerdax",
+      "resource_url": "https://opengameart.org/content/menacing-otherworld",
+      "license": "cc0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "mod_description": "Coverted to OGG Vorbis format."
+    }
   ]
 }

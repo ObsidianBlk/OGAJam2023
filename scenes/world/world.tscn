@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bhj8lgx54yvdt"]
+[gd_scene load_steps=17 format=3 uid="uid://bhj8lgx54yvdt"]
 
 [ext_resource type="Script" path="res://scenes/world/world.gd" id="1_v32fp"]
 [ext_resource type="Texture2D" uid="uid://bx3gbb7o8rkyb" path="res://icon.svg" id="2_hom5a"]
@@ -13,6 +13,8 @@
 [ext_resource type="AudioStream" uid="uid://1lj7u833yheh" path="res://assets/sfx/HiTechButtons/Warm Digital Accept Button.wav" id="8_udhaf"]
 [ext_resource type="PackedScene" uid="uid://cms51cjmyx103" path="res://scenes/ui/options_menu/options_menu.tscn" id="11_mbrit"]
 [ext_resource type="PackedScene" uid="uid://bfkaukk1xrxl8" path="res://scenes/ui/quick_menu/quick_menu.tscn" id="12_55frr"]
+[ext_resource type="PackedScene" uid="uid://dxomokkksds81" path="res://scenes/ui/victory_screen/victory_screen.tscn" id="14_tcnd6"]
+[ext_resource type="AudioStream" uid="uid://ti1sf6724urf" path="res://assets/music/ruskerdax_-_menacing_otherworld.ogg" id="15_4e7qq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_prkyi"]
 shader = ExtResource("3_y1k3g")
@@ -96,5 +98,13 @@ attrib_json_path = "res://attribs.json"
 [node name="OptionsMenu" parent="UI" instance=ExtResource("11_mbrit")]
 
 [node name="QuickMenu" parent="UI" instance=ExtResource("12_55frr")]
+
+[node name="VictoryScreen" parent="UI" instance=ExtResource("14_tcnd6")]
+
+[node name="ASP_Music" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+stream = ExtResource("15_4e7qq")
+bus = &"Music"
 
 [connection signal="requested" from="UI" to="." method="_on_ui_requested"]

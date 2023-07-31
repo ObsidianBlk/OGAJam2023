@@ -80,7 +80,11 @@ In this section I will describe what the controls for the game are. At present, 
 **Modified:** No  
 
 ### Music
-
+> **Title:** Menacing Otherworld  
+**Author:** Ruskerdax  
+**URL:** [https://opengameart.org/content/menacing-otherworld](https://opengameart.org/content/menacing-otherworld)  
+**License:** [CC0](https://creativecommons.org/publicdomain/zero/1.0/)  
+**Modified:** Yes, Converted to OGG Vorbis format.  
 
 ## License
 

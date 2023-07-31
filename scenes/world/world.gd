@@ -12,10 +12,10 @@ const BACKGROUNDS : Dictionary = {
 const DIALOGUE_BALLOON : PackedScene = preload("res://scenes/ui/balloon/balloon.tscn")
 
 #const INITIAL_LEVEL_PATH : String = "res://scenes/levels/test_level/test_level.tscn"
-#const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_001/level_001.tscn"
+const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_001/level_001.tscn"
 #const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_002/level_002.tscn"
 #const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_003/level_003.tscn"
-const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_escape/level_escape.tscn"
+#const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_escape/level_escape.tscn"
 
 const NICE_PLANET_SEEDS : Array = [
 	1.0, 1.192, 1.448, 1.704,
@@ -47,6 +47,7 @@ var _level : GameLevel = null
 @onready var _ui : CanvasLayer = $UI
 @onready var _heat_haze : ColorRect = %HeatHaze
 @onready var _hud : Control = %HUD
+@onready var _asp_music: AudioStreamPlayer = %ASP_Music
 
 
 # ------------------------------------------------------------------------------
@@ -60,6 +61,7 @@ func _ready() -> void:
 	if _background_request != &"":
 		_SetBackground(_background_request)
 	Game.load_config.call_deferred()
+	_MusicFadeIn()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _level != null and get_tree().paused == false:
@@ -131,6 +133,20 @@ func _LoadLevel(level_path : String) -> int:
 		return OK
 	return ERR_FILE_NOT_FOUND
 
+func _MusicFadeIn() -> void:
+	if _asp_music.playing: return
+	_asp_music.volume_db = -80.0
+	_asp_music.play()
+	var tween : Tween = create_tween()
+	tween.tween_property(_asp_music, "volume_db", 0.0, 3.0)
+
+func _MusicFadeOut() -> void:
+	if not _asp_music.playing: return
+	var tween : Tween = create_tween()
+	tween.tween_property(_asp_music, "volume_db", -80.0, 3.0)
+	await tween.finished
+	_asp_music.stop()
+
 # ------------------------------------------------------------------------------
 # Handler Methods
 # ------------------------------------------------------------------------------
@@ -163,7 +179,8 @@ func _on_level_requested(request : Dictionary) -> void:
 				pass
 			&"game_won":
 				_DropCurrentLevel()
-				_SetBackground(&"Victory")
+				get_tree().paused = true
+				_ui.show_menu(&"VictoryScreen")
 
 
 func _on_ui_requested(request : Dictionary) -> void:
@@ -171,12 +188,14 @@ func _on_ui_requested(request : Dictionary) -> void:
 		match request.action:
 			&"start_game":
 				if _LoadLevel(INITIAL_LEVEL_PATH) == OK:
+					_MusicFadeOut()
 					get_tree().paused = false
 					_ui.show_menu(&"")
 					_SetBackground(&"")
 			&"quit_game":
 				_DropCurrentLevel()
 				_ui.show_menu(&"MainMenu")
+				_MusicFadeIn()
 			&"resume_game":
 				if _level != null and get_tree().paused == true:
 					_ui.show_menu(&"")
