@@ -690,8 +690,9 @@ position = Vector2(16, 208)
 
 [node name="Entities" type="Node2D" parent="."]
 
-[node name="Soldier" parent="Entities" groups=["Player"] instance=ExtResource("6_m6xi8")]
+[node name="Soldier" parent="Entities" node_paths=PackedStringArray("ground_tilemap") groups=["Player"] instance=ExtResource("6_m6xi8")]
 position = Vector2(16, 208)
+ground_tilemap = NodePath("../../TileMap")
 
 [node name="Player" type="Node" parent="Entities/Soldier"]
 script = ExtResource("7_q7qki")
