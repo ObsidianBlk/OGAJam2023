@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://cyk7f8ebjbxdy"]
+[gd_scene load_steps=38 format=3 uid="uid://cyk7f8ebjbxdy"]
 
 [ext_resource type="Script" path="res://scenes/levels/game_level.gd" id="1_y23at"]
 [ext_resource type="Shader" path="res://shaders/Lava.gdshader" id="2_weqby"]
@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://fvbbjnapa80e" path="res://assets/sfx/sfx_04a.ogg" id="8_klrcf"]
 [ext_resource type="Script" path="res://scripts/nodes/MultiAudioStreamer2D.gd" id="8_rmtk3"]
 [ext_resource type="AudioStream" uid="uid://b74d1c733j21r" path="res://assets/sfx/HiTechButtons/Button Sound 8.wav" id="9_g2hb7"]
+[ext_resource type="Texture2D" uid="uid://b5f0bpjnhn8sa" path="res://assets/graphics/light_maps/door_light.png" id="10_hs1a7"]
 [ext_resource type="Script" path="res://scripts/nodes/trigger_timer.gd" id="10_ws2ll"]
 [ext_resource type="PackedScene" uid="uid://bucwvi4w00yyy" path="res://objects/trigger_timer_display/trigger_timer_display.tscn" id="12_1kcan"]
 [ext_resource type="PackedScene" uid="uid://cboymq7o1rmb" path="res://objects/item/item.tscn" id="14_unmjn"]
@@ -213,6 +214,18 @@ trigger = NodePath("..")
 play_on_deactivate = true
 force_play = true
 
+[node name="PointLight2D" type="PointLight2D" parent="TileMap/MidRoomAmmoDoor"]
+position = Vector2(0, -9)
+color = Color(1, 0.852667, 0.32, 1)
+texture = ExtResource("10_hs1a7")
+height = 10.0
+
+[node name="PointLight2D2" type="PointLight2D" parent="TileMap/MidRoomAmmoDoor"]
+position = Vector2(0, 7)
+color = Color(1, 0.852667, 0.32, 1)
+texture = ExtResource("10_hs1a7")
+height = 10.0
+
 [node name="MidRoomAmmoDoor2" type="Node2D" parent="TileMap" node_paths=PackedStringArray("input")]
 position = Vector2(580, 292)
 script = ExtResource("6_aig2u")
@@ -235,6 +248,18 @@ sample_streams = Array[AudioStream]([ExtResource("8_klrcf")])
 trigger = NodePath("..")
 play_on_deactivate = true
 force_play = true
+
+[node name="PointLight2D" type="PointLight2D" parent="TileMap/MidRoomAmmoDoor2"]
+position = Vector2(-8, -2)
+color = Color(1, 0.85098, 0.321569, 1)
+texture = ExtResource("10_hs1a7")
+height = 10.0
+
+[node name="PointLight2D2" type="PointLight2D" parent="TileMap/MidRoomAmmoDoor2"]
+position = Vector2(8, -2)
+color = Color(1, 0.85098, 0.321569, 1)
+texture = ExtResource("10_hs1a7")
+height = 10.0
 
 [node name="ExitLiftAmmoryMainDoor" type="Node2D" parent="TileMap"]
 position = Vector2(588, 91)
@@ -296,6 +321,18 @@ collision_mask = 2
 key_name = "key_yellow"
 reset_delay = 3.0
 
+[node name="PointLight2D" type="PointLight2D" parent="TileMap/ExitLiftAmmoryInnerYDoor"]
+position = Vector2(-8, -2)
+color = Color(1, 0.852667, 0.32, 1)
+texture = ExtResource("10_hs1a7")
+height = 10.0
+
+[node name="PointLight2D2" type="PointLight2D" parent="TileMap/ExitLiftAmmoryInnerYDoor"]
+position = Vector2(8, -2)
+color = Color(1, 0.852667, 0.32, 1)
+texture = ExtResource("10_hs1a7")
+height = 10.0
+
 [node name="ExitLiftAmmoryInnerRDoor" type="Node2D" parent="TileMap" node_paths=PackedStringArray("input")]
 position = Vector2(660, 36)
 script = ExtResource("6_aig2u")
@@ -319,6 +356,18 @@ script = ExtResource("7_lg4gg")
 collision_mask = 2
 key_name = "key_red"
 reset_delay = 3.0
+
+[node name="PointLight2D" type="PointLight2D" parent="TileMap/ExitLiftAmmoryInnerRDoor"]
+position = Vector2(-8, -2)
+color = Color(1, 0, 0, 1)
+texture = ExtResource("10_hs1a7")
+height = 10.0
+
+[node name="PointLight2D2" type="PointLight2D" parent="TileMap/ExitLiftAmmoryInnerRDoor"]
+position = Vector2(8, -2)
+color = Color(1, 0, 0, 1)
+texture = ExtResource("10_hs1a7")
+height = 10.0
 
 [node name="ExitLiftDoor" type="Node2D" parent="TileMap" node_paths=PackedStringArray("input")]
 position = Vector2(492, 124)
