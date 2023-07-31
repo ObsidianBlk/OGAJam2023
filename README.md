@@ -1,8 +1,14 @@
 # Planet F451
 
+A hellish nightmare planet. So hot, its surface is molten rock. If it wasn't for the vast resources this hellscape provided, you doubt the Union would have ever built a facility anywhere near it... but they did, and you're stationed on it!
+
+After a long week of handling security for this crap-tastic rock, you were just about to take a little R&R... that's when everything started going wrong!
+
+---
+
 A top down twin stick survival game written in [Godot Engine 4](https://godotengine.org) and utilizing assets from [OpenGameArt.org](https://opengameart.org).
 
-This game is being made over the course of one month *(July 2023)* for the [OpenGameArt's Summer Game Jam 2023](https://itch.io/jam/opengamearts-summer-game-jam-2023)
+This game was being made over the course of one month *(July 2023)* for the [OpenGameArt's Summer Game Jam 2023](https://itch.io/jam/opengamearts-summer-game-jam-2023)
 
 ## Table of Contents (Optional)
 
@@ -19,8 +25,17 @@ This game is being made over the course of one month *(July 2023)* for the [Open
 Once downloaded simply start the executable.
 
 ## Usage
+### Keyboard
+> **Movement:** W,A,S,D  
+**Interact:** E  
+**Fire Weapon:** SPACE or Left-Mouse-Button  
+Player character will always face and shoot in the direction of the mouse cursor.
 
-In this section I will describe what the controls for the game are. At present, not enough of the game is written to be able to put anything in this section.
+### Gamepad
+> **Movement:** Left Thumb Stick  
+**Facing:** Player will face and fire in the direction of the Right Thumb Stick  
+**Interact:** XBox-A  
+**Fire Weapon:** Right Trigger
 
 ## Credits
 ### Graphics
