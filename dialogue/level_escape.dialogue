@@ -1,6 +1,21 @@
+~ really_hot
+
+Situation: As you exit the lift you see signs for a nearby landing pad. Maybe there's some place to request a rescure.
+Situation: While contemplating this, you can feel the heat rising quite a bit and you can hear those creatures scurring about even more. Hopefully rescue won't take too long once you call them!
+- BRING 'EM ON! => END
+
+=> END
+
 ~ escape
 
 Situation: Climbing down into this nook, you can see a terminal just ahead that will call for an evacuation ship. It may take some time for it to arrive, but it's the only chance there is!
 - I can do this! => END
+
+=> END
+
+~ evac_arrived
+
+Situation: You can just make out the approaching engines of a rescue shuttle. Time to run to the landing platform!
+- Right! And stand right in the middle! => END
 
 => END

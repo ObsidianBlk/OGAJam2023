@@ -51,6 +51,7 @@ func _GetRandomSpawnPoint() -> Dictionary:
 	}
 
 func _SpawnEnemy() -> int:
+	if spawn_container == null: return ERR_CANT_CREATE
 	if _enemies.size() >= max_enemies: return ERR_CANT_CREATE
 	var spawn : Dictionary = _GetRandomSpawnPoint()
 	if spawn.is_empty():

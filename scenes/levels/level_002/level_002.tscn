@@ -61,6 +61,7 @@ script = ExtResource("1_y23at")
 canvas_modulate_node_path = NodePath("GlobalLightLevel")
 color = Color(0, 0, 0, 1)
 temprature_dps = 0.0
+next_level = "res://scenes/levels/level_003/level_003.tscn"
 
 [node name="Lava" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_oq75f")

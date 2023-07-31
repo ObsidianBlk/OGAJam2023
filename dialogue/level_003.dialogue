@@ -1,0 +1,20 @@
+~ entry_lift
+
+Situation: As you step out of the lift you can feel the temperature rising dangerously high.
+- Right, it's hot in here. Got it... Moving on! => END
+- How should I handle this heat?
+	Tutorial: When the heat rises above 95 degrees fahrenheit, you will begin to take damage. The hotter is gets the more damage over time you will take.
+	Tutorial: Find cooling units to lower the over all temperature by a few degrees.
+	- Hot shit! => END
+
+=> END
+
+~ first_cooler
+
+Situation: The door to your north has the label "Emergency Cooling Unit".
+- Chill! I got it! => END
+- I wonder how the Cooling Unit works...
+	Tutorial: Press the console in front of the Cooling Unit. When triggered the light above the unit will go from blue (max cooling) to red (minimum cooling). Once all the coolant is discharged the Cooling Unit will fill back up at which point it can be triggered again.
+	- Nice! => END
+
+=> END

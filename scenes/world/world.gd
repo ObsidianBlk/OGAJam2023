@@ -5,7 +5,8 @@ extends Node2D
 # Constants
 # ------------------------------------------------------------------------------
 const BACKGROUNDS : Dictionary = {
-	"MainMenu": preload("res://scenes/menu_background/menu_background.tscn")
+	"MainMenu": preload("res://scenes/menu_background/menu_background.tscn"),
+	"Victory": preload("res://scenes/victory_background/victory_background.tscn")
 }
 
 const DIALOGUE_BALLOON : PackedScene = preload("res://scenes/ui/balloon/balloon.tscn")
@@ -13,8 +14,8 @@ const DIALOGUE_BALLOON : PackedScene = preload("res://scenes/ui/balloon/balloon.
 #const INITIAL_LEVEL_PATH : String = "res://scenes/levels/test_level/test_level.tscn"
 #const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_001/level_001.tscn"
 #const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_002/level_002.tscn"
-const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_003/level_003.tscn"
-#const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_escape/level_escape.tscn"
+#const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_003/level_003.tscn"
+const INITIAL_LEVEL_PATH : String = "res://scenes/levels/level_escape/level_escape.tscn"
 
 const NICE_PLANET_SEEDS : Array = [
 	1.0, 1.192, 1.448, 1.704,
@@ -161,7 +162,8 @@ func _on_level_requested(request : Dictionary) -> void:
 			&"game_lost":
 				pass
 			&"game_won":
-				print("Game Won!!")
+				_DropCurrentLevel()
+				_SetBackground(&"Victory")
 
 
 func _on_ui_requested(request : Dictionary) -> void:

@@ -36,7 +36,7 @@ shader_parameter/pixels = 550.8
 shader_parameter/size = 8.0
 shader_parameter/OCTAVES = 4
 shader_parameter/seed = 9.519
-shader_parameter/time = 11.0903
+shader_parameter/time = 37.6386
 shader_parameter/time_speed = 0.04
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_11wgw"]
@@ -54,7 +54,7 @@ shader_parameter/pixels = 550.8
 shader_parameter/size = 8.0
 shader_parameter/OCTAVES = 5
 shader_parameter/seed = 9.519
-shader_parameter/time = 11.0903
+shader_parameter/time = 37.6386
 shader_parameter/time_speed = 0.04
 shader_parameter/light_border = 0.4
 
@@ -73,7 +73,7 @@ shader_parameter/pixels = 550.8
 shader_parameter/size = 10.0
 shader_parameter/OCTAVES = 5
 shader_parameter/seed = 9.519
-shader_parameter/time = 11.0903
+shader_parameter/time = 37.6386
 shader_parameter/time_speed = 0.04
 shader_parameter/river_cutoff = 0.443
 

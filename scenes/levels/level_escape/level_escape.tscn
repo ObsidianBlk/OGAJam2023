@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://dpopo7ohmm0we"]
+[gd_scene load_steps=37 format=3 uid="uid://dpopo7ohmm0we"]
 
 [ext_resource type="Script" path="res://scenes/levels/game_level.gd" id="1_qn6q5"]
 [ext_resource type="Shader" path="res://shaders/Lava.gdshader" id="1_tqbaq"]
@@ -55,11 +55,13 @@ size = Vector2(48, 48)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p8cgf"]
 size = Vector2(16, 4)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e5bg4"]
+
 [node name="Level_Escape" type="Node2D"]
 script = ExtResource("1_qn6q5")
 canvas_modulate_node_path = NodePath("GlobalLightLevel")
 color = Color(0.211765, 0, 0.0509804, 1)
-temprature_dps = 2.0
+temprature_dps = 1.5
 final_level = true
 
 [node name="Lava" type="Sprite2D" parent="."]
@@ -912,6 +914,76 @@ type = 5
 amount = 10
 pickup_sfx = ExtResource("16_5g3m1")
 
+[node name="Health_01" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(234, 19)
+type = 6
+amount = 50
+
+[node name="Health_02" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(254, 20)
+type = 6
+amount = 50
+
+[node name="Health_03" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(243, 10)
+type = 6
+amount = 50
+
+[node name="Health_04" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(244, 30)
+type = 6
+amount = 50
+
+[node name="Health_05" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(485, 178)
+type = 6
+amount = 50
+
+[node name="Health_06" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(495, 178)
+type = 6
+amount = 50
+
+[node name="Health_07" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(330, 367)
+type = 6
+amount = 50
+
+[node name="Health_08" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(387, 363)
+type = 6
+amount = 50
+
+[node name="Health_09" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(373, 362)
+type = 6
+amount = 50
+
+[node name="Health_10" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(197, 391)
+type = 6
+amount = 50
+
+[node name="Health_11" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(196, 415)
+type = 6
+amount = 50
+
+[node name="Health_12" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(197, 368)
+type = 6
+amount = 50
+
+[node name="Health_13" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(19, 288)
+type = 6
+amount = 50
+
+[node name="Health_14" parent="Entities" instance=ExtResource("14_o8jkq")]
+position = Vector2(109, 152)
+type = 6
+amount = 50
+
 [node name="EnvironAudioControl" parent="." node_paths=PackedStringArray("indoor_trigger") instance=ExtResource("14_jo6o1")]
 indoor_trigger = NodePath("TriggerBinOp")
 
@@ -1182,6 +1254,14 @@ script = ExtResource("24_eslyi")
 interval = 300.0
 input = NodePath("..")
 
+[node name="TriggerDialog" type="Node2D" parent="Triggers/ExitTriggerInteract/ExitTriggerTimer" node_paths=PackedStringArray("input_trigger")]
+position = Vector2(-13, -16)
+script = ExtResource("26_yrcs2")
+dialogue = ExtResource("27_11j88")
+start = "evac_arrived"
+input_trigger = NodePath("..")
+once = true
+
 [node name="TriggerTimerDisplay" parent="Triggers/ExitTriggerInteract/ExitTriggerTimer" node_paths=PackedStringArray("trigger_timer") instance=ExtResource("25_k1bwn")]
 position = Vector2(-13, -16)
 trigger_timer = NodePath("..")
@@ -1202,6 +1282,25 @@ shape = SubResource("RectangleShape2D_p8cgf")
 script = ExtResource("26_yrcs2")
 dialogue = ExtResource("27_11j88")
 start = "escape"
+input_trigger = NodePath("..")
+once = true
+
+[node name="EntryDialogTriggerArea" type="Node2D" parent="Triggers"]
+position = Vector2(-10, 208)
+script = ExtResource("15_a8pct")
+trigger_delay = 0.1
+
+[node name="Area2D" type="Area2D" parent="Triggers/EntryDialogTriggerArea"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/EntryDialogTriggerArea/Area2D"]
+shape = SubResource("RectangleShape2D_e5bg4")
+
+[node name="TriggerDialog" type="Node2D" parent="Triggers/EntryDialogTriggerArea" node_paths=PackedStringArray("input_trigger")]
+script = ExtResource("26_yrcs2")
+dialogue = ExtResource("27_11j88")
+start = "really_hot"
 input_trigger = NodePath("..")
 once = true
 
