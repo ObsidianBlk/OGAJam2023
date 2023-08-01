@@ -10,6 +10,11 @@ A top down twin stick survival game written in [Godot Engine 4](https://godoteng
 
 This game was being made over the course of one month *(July 2023)* for the [OpenGameArt's Summer Game Jam 2023](https://itch.io/jam/opengamearts-summer-game-jam-2023)
 
+## Author
+Bryan "ObsidianBlk" Miller
+[Github](https://github.com/ObsidianBlk)
+[Itch.io](https://obsidianblk.itch.io/)
+
 ## Table of Contents (Optional)
 
 -  [Installation](#installation)
